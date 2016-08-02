@@ -1,1 +1,19 @@
 * text=auto !eol
+simDTS/arrangement_parameters_mng.h -text
+simDTS/controler_parameters_mng.c -text
+simDTS/controler_parameters_mng.h -text
+simDTS/display_convert.c -text
+simDTS/display_convert.h -text
+simDTS/g_parameters_mng.c -text
+simDTS/g_parameters_mng.h -text
+simDTS/instr_mapping.c -text
+simDTS/instr_mapping.h -text
+simDTS/metadata_parameters_mng.h -text
+simDTS/midi_parameters_mng.c -text
+simDTS/midi_parameters_mng.h -text
+simDTS/music_parameters_mng.c -text
+simDTS/music_parameters_mng.h -text
+simDTS/parameters_mng.c -text
+simDTS/parameters_mng.h -text
+simDTS/sound_parameters_mng.c -text
+simDTS/sound_parameters_mng.h -text

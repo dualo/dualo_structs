@@ -10,6 +10,7 @@
 
 // includes
 #include "parameters_mng.h"
+#include "g_parameters_mng.h"
 
 // define
 
@@ -21,9 +22,22 @@
 
 #define INSTR_NEWMAPPING	1 //1
 
-#define NUM_NOTE_MAP		4
+#define NUM_NOTE_MAP		32 //8//4
+
+#define DUSOUND_HW_VERSION	0
+#define DUSOUND_SW_VERSION	2 //0
+
+#define INSTRUMENT_MAPPING_MAX  31
 
 // structure
+enum INSTRUMENT_TYPE {
+	INSTR_HARMONIC,
+	INSTR_PERCU,
+	INSTR_SAMPLE,
+	NUM_INSTR_TYPE
+};
+
+#if 0
 typedef struct
 {
 	uint8_t instr_name[NAME_CARACT];
@@ -39,17 +53,71 @@ typedef struct
 	uint8_t instr_relvolume;
 	uint8_t instr_type;
 	uint8_t instr_dummy[21];
-} s_instr;
+} info_instr;
 
-#define INSTR_INFO_SIZE (NAME_CARACT + 16 + 36)
+#define INSTR_INFO_SIZE (NAME_CARACT + 16 + 36) // 64
+
+#else
 
 
-enum INSTRUMENT_TYPE {
-	INSTR_HARMONIC,
-	INSTR_PERCU,
-	INSTR_SAMPLE,
-	NUM_INSTR_TYPE
-};
+#define INSTR_INFO_DUMMY 0//4
+
+typedef struct
+{
+    uint8_t instr_name[NAME_CARACT];
+
+    uint8_t instr_midi_pc;
+    uint8_t instr_midi_C0;
+    uint8_t instr_key_map;
+    uint8_t instr_octave;
+
+    uint32_t instr_user_id; // =1 pour du-sound Dualo
+    uint32_t instr_id;
+    uint32_t sample_address;
+
+    uint8_t instr_noteoff;  // 0 or 1
+
+    uint8_t instr_cat[NAME_CARACT];
+
+    uint8_t instr_relvolume;
+
+    uint8_t format_id;
+    uint8_t nb_layer;
+
+    uint16_t ip_size;
+    uint16_t sp_size;
+    uint32_t sample_size;
+
+    uint8_t instr_type; // INSTRUMENT_TYPE
+    uint8_t instr_preset; // Gestion First Fit des PRESETs
+    uint8_t instr_mapping;  // Gestion First Fit des MAPPINGs
+	uint8_t align;
+
+    uint16_t HW_instr_version;
+    uint16_t SW_instr_version;
+
+    uint32_t instr_version;
+    //uint8_t instr_dummy[INSTR_INFO_DUMMY];
+} info_instr;
+
+#define INSTR_INFO_SIZE 64 //(NAME_CARACT*2 + 4*4 + 2*2 + 8*1 + INSTR_INFO_DUMMY)
+
+#define INSTR_PC_OFFSET         NAME_CARACT
+#define INSTR_PC_SIZE           1
+
+#define INSTR_USER_ID_OFFSET    INSTR_PC_OFFSET + 4
+#define INSTR_USER_ID_SIZE      4
+
+#define INSTR_ID_OFFSET         INSTR_USER_ID_OFFSET + 4
+#define INSTR_ID_SIZE           4
+
+#define INSTR_TYPE_OFFSET       INSTR_ID_OFFSET + 2*4 + 1 + NAME_CARACT + 3 + 2*2 + 4
+#define INSTR_TYPE_SIZE         1
+
+#define INSTR_VERSION_OFFSET    INSTR_TYPE_OFFSET + 4 + 2*2
+#define INSTR_VERSION_SIZE      4
+
+#endif
 
 
 
@@ -65,6 +133,9 @@ typedef struct
 	uint8_t cat_name[NAME_CARACT];
 } s_note;
 
+//#define S_NOTE_SIZE (NAME_CARACT*2 + 4*1)
+#define S_NOTE_SIZE (NOTE_NAME_CARACT + NAME_CARACT + 4*1)
+#define MAPPING_SIZE (NUM_BUTTON_KEYBOARD * 2 * S_NOTE_SIZE)
 /*
 typedef struct
 {

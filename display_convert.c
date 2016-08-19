@@ -31,7 +31,7 @@
 
 
 extern struct_controler controler_tab;
-extern struct_instr instr_tab[];
+extern sound_instr instr_tab[];
 extern music_song music_tab[];
 extern struct_miditable midi_tab[MIDITABLE_MAX];
 
@@ -370,7 +370,7 @@ void display8khzfreqwah(param_struct *param, int32_t value, uint32_t rec)
 	uint32_t val_display;
 
 	// Linear Conversion [0 ; 127] => [0 ; 8000]Hz
-	val_display = ((127 - value) * 8000) / 127;
+	val_display = (value * 8000) / 127;
 	val_display &= 0x0000FFFF;
 
 
@@ -442,7 +442,7 @@ void displaychorusrate(param_struct *param, int32_t value, uint32_t rec)
 	uint32_t mode;
 
 	temp = controler_tab.c_param.c_instr;
-	mode = instr_tab[temp].s_chorus[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_chorus_preset].c_mode;
+	mode = instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_chorus[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_chorus_preset-1].c_mode;
 
 
 	if (mode == 2) {
@@ -966,75 +966,12 @@ void displaypreset_onoff(param_struct *param, int32_t value, uint32_t rec)
 						controler_tab.c_param.c_equalizer_preset = 1;
 				}
 				setgeneraleq( param, controler_tab.c_param.c_equalizer_preset, rec);
+				displaypreset( param, controler_tab.c_param.c_equalizer_preset, rec);
 			}
 		}
 		if(param->p_struct == INSTR_PRESET)
 		{
-			if(param->p_param == SOUND_PRESET_DISTORTION)
-			{
-				if(value != 0)
-				{
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_onoff = value;
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_preset = 0;
-				}
-				else
-				{
-					if(instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_onoff)
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_preset = instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_onoff;
-					else
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_preset = 1;
-				}
-				setinstrdistortion( param, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_COMPRESSOR)
-			{
-				if(value != 0)
-				{
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_onoff = value;
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_preset = 0;
-				}
-				else
-				{
-					if(instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_onoff)
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_preset = instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_onoff;
-					else
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_preset = 1;
-				}
-				setinstrcompressor( param, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_EQ)
-			{
-				if(value != 0)
-				{
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_onoff = value;
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_preset = 0;
-				}
-				else
-				{
-					if(instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_onoff)
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_preset = instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_onoff;
-					else
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_preset = 1;
-				}
-				setinstreq( param, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_DELAY)
-			{
-				if(value != 0)
-				{
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_onoff = value;
-					instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_preset = 0;
-				}
-				else
-				{
-					if(instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_onoff)
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_preset = instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_onoff;
-					else
-						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_preset = 1;
-				}
-				setinstrdelay( param, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_CHORUS)
+			if(param->p_param == SOUND_PRESET_CHORUS)
 			{
 				if(value != 0)
 				{
@@ -1049,6 +986,7 @@ void displaypreset_onoff(param_struct *param, int32_t value, uint32_t rec)
 						instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_chorus_preset = 1;
 				}
 				setinstrchorus( param, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_chorus_preset, rec);
+				display_value(instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_chorus_preset, param->p_screen, rec);
 			}
 			else if(param->p_param == SOUND_PRESET_SENDTOREVERB)
 			{
@@ -1066,75 +1004,12 @@ void displaypreset_onoff(param_struct *param, int32_t value, uint32_t rec)
 				}
 				value = instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_sendtorev;
 				setinstrsendtorev( param, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_sendtorev, rec);
+				displaypercent( param, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_sendtorev, rec);
 			}
 		}
 		else if(param->p_struct == MUSIC_INSTR_PRESET)
 		{
-			if(param->p_param == SOUND_PRESET_DISTORTION)
-			{
-				if(value != 0)
-				{
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion_onoff = value;
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion_preset = 0;
-				}
-				else
-				{
-					if(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion_onoff)
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion_preset = music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion_onoff;
-					else
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion_preset = 1;
-				}
-				setinstrdistortion( param, music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_COMPRESSOR)
-			{
-				if(value != 0)
-				{
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor_onoff = value;
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor_preset = 0;
-				}
-				else
-				{
-					if(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor_onoff)
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor_preset = music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor_onoff;
-					else
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor_preset = 1;
-				}
-				setinstrcompressor( param, music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_EQ)
-			{
-				if(value != 0)
-				{
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_eq_onoff = value;
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_eq_preset = 0;
-				}
-				else
-				{
-					if(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_eq_onoff)
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_eq_preset = music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_eq_onoff;
-					else
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_eq_preset = 1;
-				}
-				setinstreq( param, music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_eq_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_DELAY)
-			{
-				if(value != 0)
-				{
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay_onoff = value;
-					music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay_preset = 0;
-				}
-				else
-				{
-					if(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay_onoff)
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay_preset = music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay_onoff;
-					else
-						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay_preset = 1;
-				}
-				setinstrdelay( param, music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay_preset, rec);
-			}
-			else if(param->p_param == SOUND_PRESET_CHORUS)
+			if(param->p_param == SOUND_PRESET_CHORUS)
 			{
 				if(value != 0)
 				{
@@ -1149,6 +1024,7 @@ void displaypreset_onoff(param_struct *param, int32_t value, uint32_t rec)
 						music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_chorus_preset = 1;
 				}
 				setinstrchorus( param, music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_chorus_preset, rec);
+				display_value(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_chorus_preset, param->p_screen, rec);
 			}
 			else if(param->p_param == SOUND_PRESET_SENDTOREVERB)
 			{
@@ -1166,14 +1042,19 @@ void displaypreset_onoff(param_struct *param, int32_t value, uint32_t rec)
 				}
 				value = music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_sendtorev;
 				setinstrsendtorev( param, music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_sendtorev, rec);
+				displaypercent( param, music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_sendtorev, rec);
 			}
 		}
 	}
 
-	if(param->p_param == SOUND_PRESET_SENDTOREVERB)
-		displaypercent( param, value, rec);
+//	if(param->p_param == SOUND_PRESET_SENDTOREVERB)
+//		displaypercent( param, value, rec);
+	else if ((param->p_param == SOUND_PRESET_CHORUS)&&(param->p_struct == MUSIC_INSTR_PRESET))
+		display_value(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_chorus_preset, param->p_screen, rec);
+	else if ((param->p_param == SOUND_PRESET_CHORUS)&&(param->p_struct == INSTR_PRESET))
+		display_value(instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_chorus_preset, param->p_screen, rec);
 	else
-		displaypreset( param, value, rec);
+		displaypreset( param, controler_tab.c_param.c_equalizer_preset, rec);
 }
 
 

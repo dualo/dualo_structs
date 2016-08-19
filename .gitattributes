@@ -4,6 +4,8 @@
 /controler_parameters_mng.h -text
 /display_convert.c -text
 /display_convert.h -text
+/du-music.grammar -text
+/du-sound.grammar -text
 /g_parameters_mng.c -text
 /g_parameters_mng.h -text
 /instr_mapping.c -text
@@ -11,8 +13,11 @@
 /metadata_parameters_mng.h -text
 /midi_parameters_mng.c -text
 /midi_parameters_mng.h -text
+/music_migration.c -text
+/music_migration.h -text
 /music_parameters_mng.c -text
 /music_parameters_mng.h -text
+/old_sound_parameters_mng.h -text
 /parameters_mng.c -text
 /parameters_mng.h -text
 /sound_parameters_mng.c -text

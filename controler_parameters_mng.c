@@ -41,7 +41,7 @@
 //extern uint32_t gyro_activation_zone;
 
 extern struct_controler controler_tab;
-extern struct_instr instr_tab[];
+extern sound_instr instr_tab[];
 extern music_song music_tab[];
 
 
@@ -122,10 +122,11 @@ void init_controler(struct_controler *control_struct)
 		control_struct->c_param.c_circle_time = 0; //1;
 
 		control_struct->c_param.c_midiout_channel = 0;
+		control_struct->c_param.c_midiout_keysens = KEYS_CURVES_DEFAULTVALUE;
 
 		for(i = 0; i<FX_NUM_FX_INTR; i++)
 		{
-			set_equalizerpreset(&(control_struct->c_equalizer[i]), i);
+			set_equalizergenpreset(&(control_struct->c_equalizer[i]), i);
 			set_reverbpreset(&(control_struct->c_reverb[i]), i);
 		}
 
@@ -157,10 +158,14 @@ void init_controler(struct_controler *control_struct)
 	if(control_struct->c_param.c_song>(dt_config.nb_key))
 		control_struct->c_param.c_song = 0;
 
-	mem_cpy((uint8_t *)&(control_struct->c_equalizer[control_struct->c_param.c_equalizer_preset]), (uint8_t *)&(temp_eqmain), FX_EQ_SIZE);
+	memcpy((uint8_t *)&(temp_eqmain), (uint8_t *)&(control_struct->c_equalizer[control_struct->c_param.c_equalizer_preset]), FX_EQ_SIZE);
 	//mem_cpy((uint8_t *)&(control_struct->c_reverb[control_struct->c_param.c_reverb_preset]), (uint8_t *)&(temp_reverb), FX_REVERB_SIZE);
 
 	setdiatonic(NULL, control_struct->c_param.c_diatonic, 0);
+
+#ifdef TEST_KEYBOARD_S
+	control_struct->c_param.c_led_display = 1;
+#endif
 
 #if CONFIG_FOR_FACTORYTEST == 1
 	control_struct->c_param.c_screen_mode = DISPLAY_NOTE_MODE;
@@ -222,6 +227,15 @@ void setmainvolume(param_struct *param, int32_t value, uint32_t rec)
 #endif
 
 #endif
+}
+
+void setaccesibility(param_struct *param, int32_t value, uint32_t rec)
+{
+	//init channel to not keep last param for accesibility
+	uint32_t channel = recordTask_getfreechannel();
+	if(channel)
+		init_metronome(channel);
+
 }
 
 void setgyro(param_struct *param, int32_t value, uint32_t rec)
@@ -404,11 +418,11 @@ void setdiatonic(param_struct *param, int32_t value, uint32_t rec)
 
 	if(instr_tab[controler_tab.c_param.c_instr].s_instrument.instr_key_map) // is a drum
 	{
-		Set_LedPlaySong( instr_tab[controler_tab.c_param.c_instr].s_leds, instr_tab[controler_tab.c_param.c_instr].s_instrument.instr_key_map, 0, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_displayled, music_tab[controler_tab.c_param.c_song].s_scaletonality);
+		Set_LedPlaySong( instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_leds, instr_tab[controler_tab.c_param.c_instr].s_instrument.instr_key_map, 0, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_displayled, music_tab[controler_tab.c_param.c_song].s_scaletonality);
 	}
 	else
 	{
-		Set_LedPlaySong( music_tab[controler_tab.c_param.c_song].s_leds, 0, 0, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_displayled, music_tab[controler_tab.c_param.c_song].s_scaletonality);
+		Set_LedPlaySong( music_tab[controler_tab.c_param.c_song].s_leds, 0, 0, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_displayled, music_tab[controler_tab.c_param.c_song].s_scaletonality);
 	}
 }
 

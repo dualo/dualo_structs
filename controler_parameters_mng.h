@@ -57,9 +57,9 @@ typedef struct
 	uint8_t gyro_angle;
 	//int8_t gyro_direction;
 	uint8_t	c_pressure_curve;
-
 	uint8_t	c_circle_time;
-	uint8_t dummy[6];
+	uint8_t c_midiout_keysens;
+	uint8_t dummy[5];
 
 }param_controler;
 
@@ -90,6 +90,7 @@ enum{
 	CONTROLER_IMU_ANGLE,
 	CONTROLER_PRESSURECURVE,
 	CONTROLER_CIRCLETIME,
+	CONTROLER_MIDIOUTKEYSENSIBILITY,
 };
 
 #define CONTROLER_PARAM_SIZE	32
@@ -100,13 +101,13 @@ typedef struct
 	param_controler	c_param;
 
     // FX
-	FX_equalizer	c_equalizer[FX_NUM_FX_INTR];
+	FX_equalizer_gen	c_equalizer[FX_NUM_FX_INTR];
 	FX_reverb		c_reverb[FX_NUM_FX_INTR];
 
 }struct_controler;
 
 
-#define CONTROLER_STRUCT_SIZE	(CONTROLER_PARAM_SIZE + (FX_NUM_FX_INTR*( FX_EQ_SIZE + FX_REVERB_SIZE)))
+#define CONTROLER_STRUCT_SIZE	(CONTROLER_PARAM_SIZE + (FX_NUM_FX_INTR*( FX_EQ_SIZE_GEN + FX_REVERB_SIZE)))
 
 
 // defines
@@ -214,6 +215,7 @@ void erase_controler(void);
 
 void setusbmode(param_struct *param, int32_t value, uint32_t rec);
 void setmainvolume(param_struct *param, int32_t value, uint32_t rec);
+void setaccesibility(param_struct *param, int32_t value, uint32_t rec);
 void setrffreq(param_struct *param, int32_t value, uint32_t rec);
 void setrfmode(param_struct *param, int32_t value, uint32_t rec);
 void setfinetuning(param_struct *param, int32_t value, uint32_t rec);

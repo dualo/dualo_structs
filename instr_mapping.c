@@ -19,25 +19,30 @@
 __attribute__ ((section(".extram")))
 #endif
 SECTION_EXTRAM
-s_instr keyboardL_instr_map[NUM_BUTTON_KEYBOARD];
+//info_instr keyboardL_instr_map[NUM_BUTTON_KEYBOARD];
+info_instr *keyboardL_instr_map;
 
 #ifdef __LPC177X_8X__
 __attribute__ ((section(".extram")))
 #endif
 SECTION_EXTRAM
-s_instr keyboardR_instr_map[NUM_BUTTON_KEYBOARD];
+//info_instr keyboardR_instr_map[NUM_BUTTON_KEYBOARD];
+info_instr *keyboardR_instr_map;
 
-
+/*
 #ifdef __LPC177X_8X__
-__attribute__ ((section(".intflash")))
+//__attribute__ ((section(".intflash")))
+__attribute__ ((section(".extram")))
 #else
 SECTION_INTFLASH
 #endif
-const s_note keyboard_note_map[NUM_NOTE_MAP][2][NUM_BUTTON_KEYBOARD] =
-{
+const s_note keyboard_note_map[NUM_NOTE_MAP][2][NUM_BUTTON_KEYBOARD];
+
+const s_note keyboard_note_mapdefault[2][NUM_BUTTON_KEYBOARD]=
+//{
 	{ // Map 1: jazz
 		{ // Left
-			//PC,	C0,	channel, 	key
+			//gmref, excl,	 note off, 	key
             {35, 	0xFF,		0,		35, "Soul Kick   ", "PT"},// 0
             {35, 	0xFF,		0,		36, "Trip Kick   ", "PT"},// 1
             {36, 	0xFF,		0,		37, "Hood Kick   ", "PT"},// 2
@@ -158,7 +163,7 @@ const s_note keyboard_note_map[NUM_NOTE_MAP][2][NUM_BUTTON_KEYBOARD] =
             {0xFF, 	0xFF,		0,		91, "Storm       ", "FX"},// 56
             {0xFF, 	0xFF,		0,		92, "White Wobble", "FX"} // 57
 		}
-	},
+	};
 	{ // Map 2: rock
 		{ // Left
 			//PC,	C0,	channel, 	key
@@ -532,7 +537,7 @@ const s_note keyboard_note_map[NUM_NOTE_MAP][2][NUM_BUTTON_KEYBOARD] =
 		}
 	}
 };
-
+*/
 
 #if ADD_SONICCELL_INTERFACE == 1
 #ifdef __LPC177X_8X__

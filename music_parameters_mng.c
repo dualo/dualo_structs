@@ -8,6 +8,7 @@
 // includes
 #include "music_parameters_mng.h"
 #include "sound_parameters_mng.h"
+#include "old_sound_parameters_mng.h"
 #include "controler_parameters_mng.h"
 #include "arrangement_parameters_mng.h"
 #include "g_parameters_mng.h"
@@ -35,8 +36,10 @@
 
 volatile s_total_buffer *exchange_buffer;
 
-extern s_instr keyboardL_instr_map[];
-extern s_instr keyboardR_instr_map[];
+extern info_instr *keyboardL_instr_map;
+extern info_instr *keyboardR_instr_map;
+
+extern uint8_t fx_mix_preset[FX_MIX_NUM_PARAMETERS+FX_MIX_NOP_PARAMETERS];
 
 // external parameters
 
@@ -44,7 +47,7 @@ extern s_instr keyboardR_instr_map[];
 //music_song *record_buffers[dt_config.nb_key];
 
 extern struct_controler controler_tab;
-extern struct_instr instr_tab[];
+extern sound_instr instr_tab[];
 extern music_song music_tab[];
 
 extern s_arrangement arrangement_buffer;
@@ -61,13 +64,20 @@ extern uint32_t record_compt_tracker[MUSIC_MAXTRACK][MUSIC_MAXLAYER];
 extern uint8_t record_forcelecture[MUSIC_MAXTRACK][MUSIC_MAXLAYER];
 extern uint32_t compt_mult;
 
+uint32_t beatrepeat_rate[MUSIC_MAXTRACK][MUSIC_MAXLAYER];
+
 uint32_t last_ledstate;
 
 uint8_t *metadata_buf = NULL;
 uint32_t metadata_size = 0;
 
+uint8_t flag_learn = 0;
+#ifdef __LPC18XX__
 SECTION_INTFLASH
-const uint8_t ref_led[NUM_LED_VALUE] = {
+#else
+__attribute__ ((section(".intflash")))
+#endif
+uint8_t ref_led[NUM_LED_VALUE] = {
 	0xE0,
 	0x00,
 	0x82,
@@ -177,6 +187,7 @@ extern inline uint32_t music_cloop(void)
 }
 
 /******* fx struct parameters initialisation ************/
+#if 0
 void migrate_music(music_song *song_struct)
 {
 	uint32_t version = 0xFFFFFFFF;
@@ -185,23 +196,128 @@ void migrate_music(music_song *song_struct)
 	EEPROM_Read8(eeprom_map[EE_INFO_LASTFIRMWARE].addr,(void *)&version, eeprom_map[EE_INFO_LASTFIRMWARE].size);
 #endif
 
-	if(version<0x00020015) // V2.22
+	if(version<0x00020018) // V2.0.24
 	{
-		song_struct->s_swing = 0; // add swing
-	}
-
-	if(version<0x00020017) // V2.0.23
-	{ // invert filter freq
-		for(i = 0; i<MUSIC_MAXTRACK; i++)
+		if(version<0x00020015) // V2.22
 		{
-			for(j = 0; j<MUSIC_MAXLAYER; j++)
+			song_struct->s_swing = 0; // add swing
+		}
+
+		if(version<0x00020017) // V2.0.23
+		{ // invert filter freq
+			for(i = 0; i<MUSIC_MAXTRACK; i++)
 			{
-				song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_wah_freq = 127 - song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_wah_freq;
+				for(j = 0; j<MUSIC_MAXLAYER; j++)
+				{
+					music_instr_old* song_instr_old = (music_instr_old*)&song_struct->s_track[i].t_loop[j].l_instr;
+					song_instr_old->i_preset.s_wah_freq = 127 - song_instr_old->i_preset.s_wah_freq;
+				}
 			}
+		}
+
+		if(version<0x00020018) // V2.0.24
+		{
+			// migration here
+			music_instr_old* song_instr_old = (music_instr_old*)lpc_new(MUSIC_INSTRU_SIZE);
+
+			for(i = 0; i<MUSIC_MAXTRACK; i++)
+			{
+				for(j = 0; j<MUSIC_MAXLAYER; j++)
+				{
+					memcpy(song_instr_old, &song_struct->s_track[i].t_loop[j].l_instr, MUSIC_INSTRU_SIZE);
+					memset(&song_struct->s_track[i].t_loop[j].l_instr, 0, MUSIC_INSTRU_SIZE);
+
+					memcpy(&song_struct->s_track[i].t_loop[j].l_instr.i_instrument, &song_instr_old->i_instrument, INSTR_INFO_SIZE);
+
+					init_preset( &(song_struct->s_track[i].t_loop[j].l_instr.i_preset), song_instr_old->i_instrument.instr_octave, 0);
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_volume = song_instr_old->i_preset.s_volume;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_panning = song_instr_old->i_preset.s_panning;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_sendtorev = song_instr_old->i_preset.s_sendtorev;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_instr_octave = song_instr_old->i_preset.s_instr_octave;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_key_curve = song_instr_old->i_preset.s_key_curve;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_expression = song_instr_old->i_preset.s_expression;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_activ_aftertouch = song_instr_old->i_preset.s_activ_aftertouch;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_activ_slider_L = song_instr_old->i_preset.s_activ_slider_L;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_activ_slider_R = song_instr_old->i_preset.s_activ_slider_R;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_activ_gyro_P = song_instr_old->i_preset.s_activ_gyro_P;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_activ_gyro_R = song_instr_old->i_preset.s_activ_gyro_R;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_activ_gyro_Y = song_instr_old->i_preset.s_activ_gyro_Y;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_direction_gyro_P = song_instr_old->i_preset.s_direction_gyro_P;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_direction_gyro_R = song_instr_old->i_preset.s_activ_gyro_R;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_direction_gyro_Y = song_instr_old->i_preset.s_direction_gyro_Y;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_portamento_on_off = song_instr_old->i_preset.s_portamento_on_off;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_portamento_ctrl = song_instr_old->i_preset.s_portamento_ctrl;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_portamento_time = song_instr_old->i_preset.s_portamento_time;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_pitch = 64;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_pitch_bend_sensitivity = song_instr_old->i_preset.s_pitch_bend_sensitivity;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_adsr_attack = song_instr_old->i_preset.s_adsr_attack;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_adsr_release = song_instr_old->i_preset.s_adsr_release;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_wah_type = song_instr_old->i_preset.s_wah_type;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_wah_freq = song_instr_old->i_preset.s_wah_freq;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_wah_res = song_instr_old->i_preset.s_wah_res;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_multinote_act = song_instr_old->i_preset.s_multinote_act;
+					memcpy(&song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_multinote, &song_instr_old->i_preset.s_multinote, 4);
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_arpegiator_type = song_instr_old->i_preset.s_arpegiator_type;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_arpegiator_beat = song_instr_old->i_preset.s_arpegiator_beat;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_autopitch_rate = song_instr_old->i_preset.s_autopitch_rate;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_autopitch_range = song_instr_old->i_preset.s_autopitch_range;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_tremolo_rate = song_instr_old->i_preset.s_tremolo_rate;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_tremolo_range = song_instr_old->i_preset.s_tremolo_range;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_autopan_rate = song_instr_old->i_preset.s_autopan_rate;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_autopan_range = song_instr_old->i_preset.s_autopan_range;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_autowah_rate = song_instr_old->i_preset.s_autowah_rate;
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_autowah_range = song_instr_old->i_preset.s_autowah_range;
+
+					song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_reverb_onoff = song_instr_old->i_preset.s_reverb_onoff;
+
+					if(song_instr_old->i_preset.s_compressor_preset != 0)
+					{
+						song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_compressor_onoff = 1;
+						memcpy(&song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_compressor, &(song_instr_old->i_compressor), FX_COMP_SIZE);
+					}
+					if(song_instr_old->i_preset.s_delay_preset != 0)
+					{
+						song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_delay_onoff = 1;
+						memcpy(&song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_delay, &(song_instr_old->i_delay), FX_DELAY_SIZE);
+					}
+					if(song_instr_old->i_preset.s_distortion_preset != 0)
+					{
+						song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_distortion_onoff = 1;
+						memcpy(&song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_distortion, &(song_instr_old->i_distortion), FX_DIST_SIZE);
+					}
+					if(song_instr_old->i_preset.s_eq_preset != 0)
+					{
+						song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_eq_onoff = 1;
+						memcpy(&song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_equalizer, &(song_instr_old->i_equalizer), FX_EQ_SIZE);
+					}
+
+					if(song_instr_old->i_preset.s_chorus_preset != 0)
+					{
+						song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_chorus_preset = 1;
+						song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_chorus_onoff = 1;
+						memcpy(&song_struct->s_track[i].t_loop[j].l_instr.i_preset.s_chorus[0], &(song_instr_old->i_chorus), FX_CHORUS_SIZE);
+					}
+				}
+			}
+
+			lpc_free(song_instr_old);
 		}
 	}
 }
-
+#endif
 void init_music_struct(music_song *song_struct, uint32_t song)
 {
 	int32_t i, j;
@@ -247,6 +363,7 @@ void init_music_struct(music_song *song_struct, uint32_t song)
 				song_struct->s_track[i].t_loop[j].l_loopmod = MUSIC_LOOPMOD_DEFAULTVALUE;
 				song_struct->s_track[i].t_loop[j].l_learn = 0;
 				song_struct->s_track[i].t_loop[j].l_midioutchannel = 0;
+				song_struct->s_track[i].t_loop[j].l_savelooptimer = 0;
 				init_music_instr(&(song_struct->s_track[i].t_loop[j].l_instr), 0);
 			}
 
@@ -256,6 +373,7 @@ void init_music_struct(music_song *song_struct, uint32_t song)
 	}
 	else
 	{
+		memset(song_struct, 0, MUSIC_SONG_SIZE);
 		// name
 		for(i=0; i<MUSIC_SONG_NAME_SIZE; i++)
 			song_struct->s_name[i] = 0;
@@ -307,8 +425,9 @@ void init_music_struct(music_song *song_struct, uint32_t song)
 		EEPROM_Read8(eeprom_map[EE_INFO_SN].addr,(void *)song_struct->s_modif_sn, eeprom_map[EE_INFO_SN].size);
 #endif
 
-		set_mixpreset(&(song_struct->s_mix), 0);
-		set_reverbpreset(&(song_struct->s_reverb), 0);
+		//set_mixpreset(&(song_struct->s_mix), 0);
+		memcpy(&(song_struct->s_mix), &fx_mix_preset, FX_MIX_SIZE);
+		set_reverbpreset(&(song_struct->s_reverb), MUSIC_DEFAULTREVERB);
 
 		for(i = 0; i<MUSIC_MAXTRACK; i++)
 		{
@@ -320,6 +439,7 @@ void init_music_struct(music_song *song_struct, uint32_t song)
 				song_struct->s_track[i].t_loop[j].l_loopmod = MUSIC_LOOPMOD_DEFAULTVALUE;
 				song_struct->s_track[i].t_loop[j].l_learn = 0;
 				song_struct->s_track[i].t_loop[j].l_midioutchannel = 0;
+				song_struct->s_track[i].t_loop[j].l_savelooptimer = 0;
 				init_music_instr(&(song_struct->s_track[i].t_loop[j].l_instr), 0);
 			}
 
@@ -462,17 +582,6 @@ void init_music(music_song *song_struct, uint32_t song)
 		yaffs_close(music_file);
 #endif
 		
-		if(song_struct->s_version_music == 1)
-		{ // old file that cannot be read
-			// do nothing here because we need to convert after the corruption detection
-			//convertmusic_V1toV2( song_struct, song);
-		}
-		else if(song_struct->s_version_music != VERSION_MUSIC)
-		{ // old file that cannot be read
-			erase_music(song);
-			init_music_struct( song_struct, song);
-		}
-		
 		tmp = 0;
 		for(i = 0; i<MUSIC_MAXTRACK; i++)
 		{
@@ -501,12 +610,19 @@ void init_music(music_song *song_struct, uint32_t song)
 			}
 		}
 
-		if(song_struct->s_version_music == 1)
+		if(song_struct->s_version_music < VERSION_MUSIC)
 		{ // old file that cannot be read
-			convertmusic_V1toV2( song_struct, song);
+			//convertmusic_V1toV2( song_struct, song);
+			get_musicsamples( (s_total_buffer *)exchange_buffer, song);
+			migrate_music(exchange_buffer);
+			memcpy((uint8_t *)song_struct, (uint8_t *)&(exchange_buffer->local_song), MUSIC_SONG_SIZE);
+			save_musicsamples( (s_total_buffer *)exchange_buffer, song, song_struct->s_totalsample * MUSIC_SAMPLE_SIZE);
 		}
-
-		migrate_music(song_struct);
+		else if(song_struct->s_version_music > VERSION_MUSIC)
+		{ // old file that cannot be read
+			erase_music(song);
+			init_music_struct( song_struct, song);
+		}
 
 		for(i = 0; i<MUSIC_MAXTRACK; i++)
 		{
@@ -517,6 +633,8 @@ void init_music(music_song *song_struct, uint32_t song)
 
 				if(song_struct->s_track[i].t_loop[j].l_instr.i_instrument.instr_relvolume<40)
 					song_struct->s_track[i].t_loop[j].l_instr.i_instrument.instr_relvolume = 0x7F;
+
+				song_struct->s_track[i].t_loop[j].l_savelooptimer = 0;
 			}
 		}
 
@@ -777,26 +895,58 @@ void init_music_instr(music_instr *instr_struct, uint32_t instr)
 {
 	memcpy(&(instr_struct->i_instrument), &(instr_tab[controler_tab.c_param.c_instr].s_instrument), INSTR_INFO_SIZE);
 	memcpy(&(instr_struct->i_preset), &(instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum]), PRESET_STRUCT_SIZE);
-
-	memcpy(&(instr_struct->i_mix), &(instr_tab[controler_tab.c_param.c_instr].s_mix), FX_MIX_SIZE);
-	memcpy(&(instr_struct->i_distortion), &(instr_tab[controler_tab.c_param.c_instr].s_distortion[instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_distortion_preset]), FX_DIST_SIZE);
-	memcpy(&(instr_struct->i_compressor), &(instr_tab[controler_tab.c_param.c_instr].s_compressor[instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_compressor_preset]), FX_COMP_SIZE);
-	memcpy(&(instr_struct->i_equalizer), &(instr_tab[controler_tab.c_param.c_instr].s_equalizer[instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_eq_preset]), FX_EQ_SIZE);
-	memcpy(&(instr_struct->i_chorus), &(instr_tab[controler_tab.c_param.c_instr].s_chorus[instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_chorus_preset]), FX_CHORUS_SIZE);
-	memcpy(&(instr_struct->i_delay), &(instr_tab[controler_tab.c_param.c_instr].s_delay[instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_delay_preset]), FX_DELAY_SIZE);
 }
 
-void cp_music_instr(music_instr *music_instr_struct, struct_instr* instr_struct, uint32_t preset)
+void cp_music_instr(music_instr *music_instr_struct, sound_instr* instr_struct, uint32_t preset)
 {
 	memcpy(&(music_instr_struct->i_instrument), &(instr_struct->s_instrument), INSTR_INFO_SIZE);
 	memcpy(&(music_instr_struct->i_preset), &(instr_struct->s_preset[preset]), PRESET_STRUCT_SIZE);
+}
 
-	memcpy(&(music_instr_struct->i_mix), &(instr_struct->s_mix), FX_MIX_SIZE);
-	memcpy(&(music_instr_struct->i_distortion), &(instr_struct->s_distortion[instr_struct->s_preset[preset].s_distortion_preset]), FX_DIST_SIZE);
-	memcpy(&(music_instr_struct->i_compressor), &(instr_struct->s_compressor[instr_struct->s_preset[preset].s_compressor_preset]), FX_COMP_SIZE);
-	memcpy(&(music_instr_struct->i_equalizer), &(instr_struct->s_equalizer[instr_struct->s_preset[preset].s_eq_preset]), FX_EQ_SIZE);
-	memcpy(&(music_instr_struct->i_chorus), &(instr_struct->s_chorus[instr_struct->s_preset[preset].s_chorus_preset]), FX_CHORUS_SIZE);
-	memcpy(&(music_instr_struct->i_delay), &(instr_struct->s_delay[instr_struct->s_preset[preset].s_delay_preset]), FX_DELAY_SIZE);
+void check_music_instr(music_instr *instr_struct)
+{
+	uint32_t i;
+	uint32_t match = 0;
+	uint32_t same_category = 0xFF;
+	uint32_t same_du_sound = 0xFF;
+	uint32_t same_version = 0xFF;
+
+	for(i=0; i<(2*dt_config.nb_key); i++)
+	{
+		// do we find an instrument in the same category (PC)
+		if(instr_tab[i].s_instrument.instr_midi_pc == instr_struct->i_instrument.instr_midi_pc)
+		{
+			same_category = i;
+		}
+
+		//do we find the same du-sound
+		if((instr_tab[i].s_instrument.instr_id == instr_struct->i_instrument.instr_id)&&(instr_tab[i].s_instrument.instr_user_id == instr_struct->i_instrument.instr_user_id))
+		{
+			same_du_sound = i;
+			// do we find exactly the same version
+			if(instr_tab[i].s_instrument.instr_version == instr_struct->i_instrument.instr_version)
+			{
+				same_version = i;
+			}
+		}
+	}
+
+	if(same_version!= 0xFF)
+	{// we find the same instrument (we still copy because of the CC0 value and keymap)
+		memcpy(&(instr_struct->i_instrument), &(instr_tab[same_version].s_instrument), INSTR_INFO_SIZE);
+	}
+	else if(same_du_sound!= 0xFF)
+	{// we find the same instrument but with a different version
+		memcpy(&(instr_struct->i_instrument), &(instr_tab[same_du_sound].s_instrument), INSTR_INFO_SIZE);
+	}
+	else if(same_version!= 0xFF)
+	{// we find an instrument in the same category
+		memcpy(&(instr_struct->i_instrument), &(instr_tab[same_category].s_instrument), INSTR_INFO_SIZE);
+	}
+	else
+	{ // no instrument
+		instr_struct->i_instrument.instr_midi_pc = 0xFF;
+	}
 }
 
 /******* fx struct parameters saving ************/
@@ -874,6 +1024,10 @@ void setmusiclearn(param_struct *param, int32_t value, uint32_t rec)
 			}
 			music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_learn = value;
 
+			//TODO : manage instrument preset change for learn mode
+			//controler_tab.c_param.c_instr = music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_instrument.instr_id;
+			//instr_tab[controler_tab.c_param.c_instr].s_preset[] = music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_instrument;
+
 //			if((music_tab[controler_tab.c_param.c_song].s_track[music_tab[controler_tab.c_param.c_song].s_currenttrack].t_instr.i_instrument.instr_key_map))//&&(controler_tab.c_param.c_midiout_mode < MIDI_8TRACKS)) // is a drum
 //			{
 //				Set_LedPlaySong( music_tab[controler_tab.c_param.c_song].s_leds, 0, 0);
@@ -898,13 +1052,17 @@ void setmusiclearn(param_struct *param, int32_t value, uint32_t rec)
 				set_panic(0);
 			}
 
-			if(controler_tab.c_param.c_led_display)
-				controler_tab.c_param.c_led_display = 0;
+//			if(controler_tab.c_param.c_led_display)
+//				controler_tab.c_param.c_led_display = 0;
+
+			//flag to manage led_display in layer_play
+			flag_learn = 1;
 
 			//music_instr_fx_send( 0, &(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr));
 		}
 		else
 		{
+			flag_learn = 0;
 			music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_learn = 0;
 		}
 
@@ -992,6 +1150,10 @@ void setmusictempovolume(param_struct *param, int32_t value, uint32_t rec)
 #endif
 	if(value)
 	{ // active metronome if not activated
+		//init channel to not keep last param for metronome
+		uint32_t channel = recordTask_getfreechannel();
+		if (channel)
+			init_metronome(channel);
 		if(!v_metronome)
 		{
 			//recordTask_synchtempo();
@@ -1013,12 +1175,11 @@ void setmusicplayhead(param_struct *param, int32_t value, uint32_t rec)
 		for(j=0; j<MUSIC_MAXLAYER; j++)
 		{
 			record_forcelecture[i][j] = 1;
-#if CONFIG_COM_TASK_ENABLED == 1
 			add_cmd_usbmidi( MIDI_CONTROL_CHANGE, music_tab[record_currentnumsong].s_track[i].t_loop[j].l_midioutchannel, 0x78, 0); // panic mode en midi out
-#endif
-			record_compt_loop[i][j] = record_compt;
-			record_compt_tracker[i][j] = record_compt;
-
+			//record_compt_loop[i][j] = record_compt;
+			//record_compt_tracker[i][j] = record_compt;
+			record_compt_loop[i][j] = record_compt % (music_tab[record_currentnumsong].s_looptimer*music_tab[record_currentnumsong].s_track[i].t_loop[j].l_loopmod);
+			record_compt_tracker[i][j] = record_compt % (music_tab[record_currentnumsong].s_looptimer*music_tab[record_currentnumsong].s_track[i].t_loop[j].l_loopmod);
 		}
 		midiTask_add_cmd( MIDI_CONTROL_CHANGE, music_tab[record_currentnumsong].s_track[i].t_midichannel, 0x78, 0); // panic mode sur le canal
 		midiTask_add_cmd( MIDI_CONTROL_CHANGE, music_tab[record_currentnumsong].s_track[i].t_midichannel + 8, 0x78, 0); // panic mode sur le canal
@@ -1046,14 +1207,14 @@ void switchledmode(param_struct *param, int32_t value, uint32_t rec)
 {
 	if(value == STATIC_LED_MODE)
 	{
-		Set_LedPlaySong( music_tab[controler_tab.c_param.c_song].s_leds, 0, 1, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_displayled, music_tab[controler_tab.c_param.c_song].s_scaletonality);
+		Set_LedPlaySong( music_tab[controler_tab.c_param.c_song].s_leds, 0, 1, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_displayled, music_tab[controler_tab.c_param.c_song].s_scaletonality);
 	}
 	else
 	{
 		if(last_ledstate == STATIC_LED_MODE)
 		{
 			music_tab[controler_tab.c_param.c_song].s_displaynote = STATIC_LED_MODE;
-			Set_LedPlaySong( music_tab[controler_tab.c_param.c_song].s_leds, 0, 2, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_displayled, record_currentnumsong);
+			Set_LedPlaySong( music_tab[controler_tab.c_param.c_song].s_leds, 0, 2, music_tab[controler_tab.c_param.c_song].s_displaynote, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_displayled, record_currentnumsong);
 			music_tab[controler_tab.c_param.c_song].s_displaynote = value;
 		}
 		if(value == NONE_LED_MODE)
@@ -1087,11 +1248,11 @@ void switchledmode_ps(param_struct *param, int32_t value, uint32_t rec)
 {
 	if(value)
 	{
-		Set_LedPlaySong( instr_tab[controler_tab.c_param.c_instr].s_leds, instr_tab[controler_tab.c_param.c_instr].s_instrument.instr_key_map, 1, STATIC_LED_MODE, instr_tab[controler_tab.c_param.c_instr].s_displayled, 0);
+		Set_LedPlaySong( instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_leds, instr_tab[controler_tab.c_param.c_instr].s_instrument.instr_key_map, 1, STATIC_LED_MODE, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_displayled, 0);
 	}
 	else
 	{
-		Set_LedPlaySong( instr_tab[controler_tab.c_param.c_instr].s_leds, 0, 2, STATIC_LED_MODE, instr_tab[controler_tab.c_param.c_instr].s_displayled, 0);
+		Set_LedPlaySong( instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_leds, 0, 2, STATIC_LED_MODE, instr_tab[controler_tab.c_param.c_instr].s_preset[instr_tab[controler_tab.c_param.c_instr].s_presetnum].s_displayled, 0);
 
 		Clear_LedPlay();
 	}
@@ -1132,7 +1293,8 @@ void setmusicbeatrepeat(param_struct *param, int32_t value, uint32_t rec)
 			for(j=0; j<MUSIC_MAXLAYER; j++)
 			{
 				record_beatrepeat[i][j][0] = temp;// length
-				record_beatrepeat[i][j][1] = record_tmp; // start time
+				//record_beatrepeat[i][j][1] = record_tmp; // start time
+				record_beatrepeat[i][j][1] = record_tmp % (music_tab[record_currentnumsong].s_looptimer*music_tab[record_currentnumsong].s_track[i].t_loop[j].l_loopmod);
 			}
 		}
 	}
@@ -1172,7 +1334,9 @@ void setloopbeatrepeat(param_struct *param, int32_t value, uint32_t rec)
 	{
 		temp = (1<<(METRONOME_MOD_TIMER_P2 + 2 -value));
 		record_beatrepeat[i][j][0] = temp;// length
-		record_beatrepeat[i][j][1] = record_compt; // start time
+		//record_beatrepeat[i][j][1] = record_compt; // start time
+		record_beatrepeat[i][j][1] = record_compt % (music_tab[record_currentnumsong].s_looptimer*music_tab[record_currentnumsong].s_track[i].t_loop[j].l_loopmod);
+		beatrepeat_rate[i][j] = temp;
 	}
 	else
 	{
@@ -1371,6 +1535,46 @@ int32_t music_getinfosong_param(uint32_t num_song, uint32_t num_track, uint32_t 
 					buffer[1] = ((music_tab[num_song].s_voltempo>>16) & 0xFF);
 					buffer[2] = ((music_tab[num_song].s_voltempo>>8) & 0xFF);
 					buffer[3] = ((music_tab[num_song].s_voltempo>>0) & 0xFF);
+					ret = 4;
+				break;
+
+			case SONG_QUANTIZE:
+					buffer[0] = ((music_tab[num_song].s_quantification >>24) & 0xFF);
+					buffer[1] = ((music_tab[num_song].s_quantification>>16) & 0xFF);
+					buffer[2] = ((music_tab[num_song].s_quantification>>8) & 0xFF);
+					buffer[3] = ((music_tab[num_song].s_quantification>>0) & 0xFF);
+					ret = 4;
+				break;
+
+			case SONG_DISPLAYNOTE://SONG_DISPLAYNOTE  s_displaynote
+					buffer[0] = ((music_tab[num_song].s_displaynote>>24) & 0xFF);
+					buffer[1] = ((music_tab[num_song].s_displaynote>>16) & 0xFF);
+					buffer[2] = ((music_tab[num_song].s_displaynote>>8) & 0xFF);
+					buffer[3] = ((music_tab[num_song].s_displaynote>>0) & 0xFF);
+					ret = 4;
+				break;
+
+			case SONG_TIMESIGNATURE:
+					buffer[0] = ((music_tab[num_song].s_timesignature>>24) & 0xFF);
+					buffer[1] = ((music_tab[num_song].s_timesignature>>16) & 0xFF);
+					buffer[2] = ((music_tab[num_song].s_timesignature>>8) & 0xFF);
+					buffer[3] = ((music_tab[num_song].s_timesignature>>0) & 0xFF);
+					ret = 4;
+				break;
+
+			case SONG_TRANSPOSE://SONG_DISPLAYNOTE
+					buffer[0] = ((music_tab[num_song].s_transpose>>24) & 0xFF);
+					buffer[1] = ((music_tab[num_song].s_transpose>>16) & 0xFF);
+					buffer[2] = ((music_tab[num_song].s_transpose>>8) & 0xFF);
+					buffer[3] = ((music_tab[num_song].s_transpose>>0) & 0xFF);
+					ret = 4;
+				break;
+
+			case SONG_REVERBPRESET:
+					buffer[0] = ((music_tab[num_song].s_reverb_preset>>24) & 0xFF);
+					buffer[1] = ((music_tab[num_song].s_reverb_preset>>16) & 0xFF);
+					buffer[2] = ((music_tab[num_song].s_reverb_preset>>8) & 0xFF);
+					buffer[3] = ((music_tab[num_song].s_reverb_preset>>0) & 0xFF);
 					ret = 4;
 				break;
 
@@ -1717,12 +1921,12 @@ void cp_linkedloop_parameters(music_instr *to_music_instr, music_instr *from_mus
 	to_music_instr->i_preset.s_wah_freq = from_music_instr->i_preset.s_wah_freq;
 	to_music_instr->i_preset.s_wah_res = from_music_instr->i_preset.s_wah_res;
 
-	memcpy(&(to_music_instr->i_mix), &(from_music_instr->i_mix), FX_MIX_SIZE);
-	memcpy(&(to_music_instr->i_distortion), &(from_music_instr->i_distortion), FX_DIST_SIZE);
-	memcpy(&(to_music_instr->i_compressor), &(from_music_instr->i_compressor), FX_COMP_SIZE);
-	memcpy(&(to_music_instr->i_equalizer), &(from_music_instr->i_equalizer), FX_EQ_SIZE);
-	memcpy(&(to_music_instr->i_chorus), &(from_music_instr->i_chorus), FX_CHORUS_SIZE);
-	memcpy(&(to_music_instr->i_delay), &(from_music_instr->i_delay), FX_DELAY_SIZE);
+	memcpy(&(to_music_instr->i_preset.s_mix), &(from_music_instr->i_preset.s_mix), FX_MIX_SIZE);
+	memcpy(&(to_music_instr->i_preset.s_distortion), &(from_music_instr->i_preset.s_distortion), FX_DIST_SIZE);
+	memcpy(&(to_music_instr->i_preset.s_compressor), &(from_music_instr->i_preset.s_compressor), FX_COMP_SIZE);
+	memcpy(&(to_music_instr->i_preset.s_equalizer), &(from_music_instr->i_preset.s_equalizer), FX_EQ_SIZE);
+	memcpy(&(to_music_instr->i_preset.s_chorus[to_music_instr->i_preset.s_chorus_preset-1]), &(from_music_instr->i_preset.s_chorus[from_music_instr->i_preset.s_chorus_preset-1]), FX_CHORUS_SIZE);
+	memcpy(&(to_music_instr->i_preset.s_delay), &(from_music_instr->i_preset.s_delay), FX_DELAY_SIZE);
 }
 
 void process_cpparam_iflinkedloop(uint32_t track, uint32_t loop)

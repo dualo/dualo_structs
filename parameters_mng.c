@@ -32,7 +32,9 @@
 SECTION_EXTRAM
 struct_controler controler_tab;
 SECTION_EXTRAM
-struct_instr instr_tab[2*NUM_BUTTON_KEYBOARD];
+sound_instr instr_tab[2*NUM_BUTTON_KEYBOARD];
+SECTION_EXTRAM
+sound_instr instr_sys;
 SECTION_EXTRAM
 music_song music_tab[NUM_BUTTON_KEYBOARD];
 SECTION_EXTRAM
@@ -44,7 +46,9 @@ struct_miditable midi_tab[MIDITABLE_MAX];
 __attribute__ ((section(".extram")))
 struct_controler controler_tab;
 __attribute__ ((section(".extram")))
-struct_instr instr_tab[2*NUM_BUTTON_KEYBOARD];
+sound_instr instr_tab[2*NUM_BUTTON_KEYBOARD];
+__attribute__ ((section(".extram")))
+sound_instr instr_sys;
 __attribute__ ((section(".extram")))
 music_song music_tab[NUM_BUTTON_KEYBOARD];
 __attribute__ ((section(".extram")))
@@ -283,7 +287,7 @@ const param_struct	sound_chorus_param[FX_CHORUS_USER_SIZE] = {
 		{	INSTR_CHORUS,	FX_CHORUS_MODRATE,		"rate",			FX_CHORUS_MODRATE_MINVALUE,    		FX_CHORUS_MODRATE_MAXVALUE, 	FX_CHORUS_MODRATE_DEFAULTVALUE,		FX_CHORUS_MODRATE_DEFAULTVALUE,		SCREEN_DISPLAY_MILI_HZ,			0,						CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaychorusrate,NULL,		0,			0,				NULL,			NULL,			0x00,	0x0096},
 		{	INSTR_CHORUS,	FX_CHORUS_MODDEPTH,		"depth",		FX_CHORUS_MODDEPTH_MINVALUE,    	FX_CHORUS_MODDEPTH_MAXVALUE,	FX_CHORUS_MODDEPTH_DEFAULTVALUE,	FX_CHORUS_MODDEPTH_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,		0,						CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0097},
 		//{	INSTR_CHORUS,	FX_CHORUS_TREMOLO,		"trem. shape",	FX_CHORUS_TREMOLO_MINVALUE,     	FX_CHORUS_TREMOLO_MAXVALUE, 	FX_CHORUS_TREMOLO_DEFAULTVALUE,		FX_CHORUS_TREMOLO_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,		0,						CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0098},
-		{	INSTR_CHORUS,	FX_CHORUS_ROTARYSPEED,	"rotary speed",	FX_CHORUS_ROTARY_MINVALUE,   		FX_CHORUS_ROTARY_MAXVALUE,  	FX_CHORUS_ROTARY_DEFAULTVALUE,		FX_CHORUS_ROTARY_DEFAULTVALUE,	SCREEN_DISPLAY_ROTARYSPEED,			0,						CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0099},
+		//{	INSTR_CHORUS,	FX_CHORUS_ROTARYSPEED,	"rotary speed",	FX_CHORUS_ROTARY_MINVALUE,   		FX_CHORUS_ROTARY_MAXVALUE,  	FX_CHORUS_ROTARY_DEFAULTVALUE,		FX_CHORUS_ROTARY_DEFAULTVALUE,	SCREEN_DISPLAY_ROTARYSPEED,			0,						CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0099},
 };
 
 SECTION_INTFLASH
@@ -294,7 +298,7 @@ const param_struct	sound_delay_sensor[FX_DELAY_USER_SIZE] = {
 		//{	INSTR_DELAY,	FX_DELAY_PRELP,			"lowpass freq",	FX_DELAY_PRELP_MINVALUE,			FX_DELAY_PRELP_MAXVALUE,    	FX_DELAY_PRELP_DEFAULTVALUE,		FX_DELAY_PRELP_DEFAULTVALUE,		SCREEN_DISPLAY_FREQUENCY,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A2},
 		//{	INSTR_DELAY,	FX_DELAY_LEVEL,			"level",		FX_DELAY_LEVEL_MINVALUE,    		FX_DELAY_LEVEL_MAXVALUE,    	FX_DELAY_LEVEL_DEFAULTVALUE,		FX_DELAY_LEVEL_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A3},
 		{	INSTR_DELAY,	FX_DELAY_TIME,			"time",			FX_DELAY_BPM_MINVALUE,    			FX_DELAY_BPM_MAXVALUE,     		FX_DELAY_BPM_DEFAULTVALUE,			FX_DELAY_BPM_DEFAULTVALUE,			SCREEN_DISPLAY_BPM_TIME,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A4},
-		{	INSTR_DELAY,	FX_DELAY_FEEDBACK,		"feedback",		FX_DELAY_FEEDBACK_MINVALUE, 		FX_DELAY_FEEDBACK_MAXVALUE, 	FX_DELAY_FEEDBACK_DEFAULTVALUE,		FX_DELAY_FEEDBACK_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,	0,			(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A5},
+		{	INSTR_DELAY,	FX_DELAY_FEEDBACK,		"feedback",		FX_DELAY_FEEDBACK_MINVALUE, 		FX_DELAY_FEEDBACK_MAXVALUE, 	FX_DELAY_FEEDBACK_DEFAULTVALUE,		FX_DELAY_FEEDBACK_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,	0,			(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A5},
 		//{	INSTR_DELAY,	FX_DELAY_HDAMP,			"h-damp",		FX_DELAY_HDAMP_MINVALUE,   			FX_DELAY_HDAMP_MAXVALUE,    	FX_DELAY_HDAMP_DEFAULTVALUE,		FX_DELAY_HDAMP_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A6},
 };
 
@@ -327,7 +331,7 @@ const param_struct	sound_adsr_param[FX_ADSR_USER_SIZE] = {
 		//{	INSTR_ADSR,		FX_ADSR_ENV_DECAY,			"decay time",	FX_ADSR_DECAY_MINVALUE,				FX_ADSR_DECAY_MAXVALUE,			FX_ADSR_DECAY_DEFAULTVALUE,			FX_ADSR_DECAY_DEFAULTVALUE,			SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr,			(uint32_t)displayADSRdecay,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x00C1},
 		//{	INSTR_ADSR,		FX_ADSR_CUTOFF_RES,			"filter res.",	FX_ADSR_RES_MINVALUE,				FX_ADSR_RES_MAXVALUE,			FX_ADSR_RES_DEFAULTVALUE,			FX_ADSR_RES_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr,			(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x00C2},
 		//{	INSTR_ADSR,		FX_ADSR_CUTOFF_FREQ,		"filter freq.",	FX_ADSR_FREQ_MINVALUE, 				FX_ADSR_FREQ_MAXVALUE,   		FX_ADSR_FREQ_DEFAULTVALUE,			FX_ADSR_FREQ_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr,			(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x00C3},
-		{	INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,	(uint32_t *)&sound_adsr_sensor[1],			(uint32_t *)&sound_adsr_param[0],			0x00,	0x05C4},
+		{	INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,	            NULL,			(uint32_t *)&sound_adsr_param[0],			0x00,	0x05C4},
 };
 
 SECTION_INTFLASH
@@ -476,7 +480,7 @@ const param_struct	music_adsr_param[FX_ADSR_USER_SIZE] = {
 		//{	MUSIC_INSTR_ADSR,		FX_ADSR_ENV_DECAY,			"decay time",	FX_ADSR_DECAY_MINVALUE,				FX_ADSR_DECAY_MAXVALUE,			FX_ADSR_DECAY_DEFAULTVALUE,			FX_ADSR_DECAY_DEFAULTVALUE,			SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr,			(uint32_t)displayADSRdecay,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0141},
 		//{	MUSIC_INSTR_ADSR,		FX_ADSR_CUTOFF_RES,			"filter res.",	FX_ADSR_RES_MINVALUE,				FX_ADSR_RES_MAXVALUE,			FX_ADSR_RES_DEFAULTVALUE,			FX_ADSR_RES_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr,			(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0142},
 		//{	MUSIC_INSTR_ADSR,		FX_ADSR_CUTOFF_FREQ,		"filter freq.",	FX_ADSR_FREQ_MINVALUE, 				FX_ADSR_FREQ_MAXVALUE,   		FX_ADSR_FREQ_DEFAULTVALUE,			FX_ADSR_FREQ_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr,			(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0143},
-		{	MUSIC_INSTR_PRESET,		SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,	(uint32_t *)&music_adsr_sensor[1],	(uint32_t *)&music_adsr_param[0],			0x00,	0x0144},
+		{	MUSIC_INSTR_PRESET,		SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,	            NULL,	(uint32_t *)&music_adsr_param[0],			0x00,	0x0144},
 };
 
 SECTION_INTFLASH
@@ -543,100 +547,141 @@ const param_struct	imu_param[2] = {
 		{	CONTROLER,		CONTROLER_IMU_ANGLE,	"motion angle",		GYRO_SEND_ANGLE_MIN,	GYRO_SEND_ANGLE_MAX,	GYRO_SEND_ANGLE_DEFAULT,	GYRO_SEND_ANGLE_DEFAULT,	SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x026B},
 		{	CONTROLER,		CONTROLER_IMU_DEAD_ZONE,"motion deadzone",	GYRO_FULL_AXIS_MIN,		GYRO_FULL_AXIS_MAX,		GYRO_FULL_AXIS_DEFAULT,		GYRO_FULL_AXIS_DEFAULT,		SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x026C},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	fx_onoff_ctrl =
 		{	CONTROLER,		CONTROLER_EQ, 			"equalizer",		0,						FX_NUM_FX_INTR-1,		FX_PEQ_PRESET_DEFAULTVALUE,	FX_PEQ_PRESET_DEFAULTVALUE,	FX_PEQ_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setgeneraleq,	(uint32_t)displaypreset_onoff,	(uint32_t *)controler_eq_param,	FX_PEQ_USER_SIZE,		0,NULL,	NULL,			0x00,	0x0271};
 
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	controler_param[NUM_PARAM_CONTROLER_MAX] = {
 // 			p_struct,		p_param,				p_name,				p_min,					p_max,					p_default,					p_sticky,					p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
-		{	CONTROLER,		CONTROLER_LEDDISPLAY,	"lighted keys",		LED_DISPLAY_MINVALUE,	LED_DISPLAY_MAXVALUE,	LED_DISPLAY_DEFAULTVALUE,	LED_DISPLAY_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0161},
 		{	CONTROLER,		CONTROLER_SCREENMODE,	"display note",		SCREEN_MODE_MINVALUE,	SCREEN_MODE_MAXVALUE,	SCREEN_MODE_DEFAULTVALUE,	SCREEN_MODE_DEFAULTVALUE,	SCREEN_DISPLAY_SCREEN_MODE,	0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0160},
-		{	CONTROLER,		CONTROLER_LUMINOSITY,	"keys brightness",	LUMINOSITY_MINVALUE,	LUMINOSITY_MAXVALUE,	LUMINOSITY_DEFAULTVALUE,	LUMINOSITY_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)NULL,				(uint32_t)displayluminositypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0169},
+		{	CONTROLER,		CONTROLER_LEDDISPLAY,	"lighted keys",		LED_DISPLAY_MINVALUE,	LED_DISPLAY_MAXVALUE,	LED_DISPLAY_DEFAULTVALUE,	LED_DISPLAY_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0161},
+		{	CONTROLER,		CONTROLER_CIRCLETIME,	"time circle",		0,						1,						0,							1,							SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0162},
 
 		{	OTHERS,			PARAM_METRO,			"clic mode",		0,        				(METRONOME_MODE_NUM-1),	0,							0,							SCREEN_DISPLAY_METRO_MODE,	0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)setmusictempomode,(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0163},
-		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
-
-		{	CONTROLER,		CONTROLER_CIRCLETIME,	"time circle",		0,						1,						0,							1,							SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0162},
-		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		{	CONTROLER,		CONTROLER_ACCESSIBILITY,"accessibility",	0,       				1,						0,							0,							SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)setaccesibility,	(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0164},
+		{	CONTROLER,		CONTROLER_MIDIMODE,		"midi preset",		0,       				(MIDIOUTMODE_NUM-1),	0,							0,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setmidioutmode,	(uint32_t)displaymiditable,			NULL,		0,			0,				NULL,			NULL,			0x00,	0x0165},
+		{	CONTROLER,		CONTROLER_MIDIDIN,		"midi din",			0,       				1,						0,							0,							SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0166},
 
 		{	CONTROLER,		CONTROLER_DIATONIC,		"key layout",		0,       				(NUM_KEY_LAYOUT-1),		0,							0,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MID,		0,				0x83,				(uint32_t)setdiatonic,		(uint32_t)displaychromadiato,		NULL,		0,			0,				NULL,			NULL,			0x00,	0x0167},
-		{	CONTROLER,		CONTROLER_FINETUNING,	"fine tuning",		FINE_TUNING_MINVALUE,	FINE_TUNING_MAXVALUE,	FINE_TUNING_DEFAULTVALUE,	FINE_TUNING_DEFAULTVALUE,	SCREEN_DISPLAY_FINETUNNING,	0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setfinetuning,	(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0168},
-		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		{	CONTROLER,		CONTROLER_FINETUNING,	"fine tuning",		FINE_TUNING_MINVALUE,	FINE_TUNING_MAXVALUE,	FINE_TUNING_MINVALUE,	    FINE_TUNING_DEFAULTVALUE,	SCREEN_DISPLAY_FINETUNNING,	0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setfinetuning,	(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0168},
+		{	CONTROLER,		CONTROLER_LUMINOSITY,	"keys brightness",	LUMINOSITY_MINVALUE,	LUMINOSITY_MAXVALUE,	LUMINOSITY_DEFAULTVALUE,	LUMINOSITY_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)NULL,				(uint32_t)displayluminositypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0169},
 
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		//{	CONTROLER,		CONTROLER_KEYCURVE,		"keys sensibility",	KEYS_CURVES_MINVALUE,	KEYS_CURVES_MAXVALUE,	KEYS_CURVES_DEFAULTVALUE,	KEYS_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_KEYCURVES,	0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
 		{	CONTROLER,		CONTROLER_GYROCURVE,	"motion",			GYRO_CURVES_MINVALUE,	GYRO_CURVES_MAXVALUE,	GYRO_CURVES_DEFAULTVALUE,	GYRO_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,				(uint32_t)setgyro,				(uint32_t)NULL,				(uint32_t *)imu_param,2,		0,				NULL,			NULL,			0x00,	0x016B},
 		{	CONTROLER,		CONTROLER_SLIDERCURVE,	"sliders",			GYRO_CURVES_MINVALUE,   GYRO_CURVES_MAXVALUE,	GYRO_CURVES_DEFAULTVALUE,	GYRO_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,				(uint32_t)setsliders,			(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016C},
 		{	CONTROLER,		CONTROLER_PRESSURECURVE,"aftertouch",		GYRO_CURVES_MINVALUE,   GYRO_CURVES_MAXVALUE,	GYRO_CURVES_DEFAULTVALUE,	GYRO_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016D},
 
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016E},
+		{	OTHERS,			PARAM_INFODUTOUCH,		"du-touch",			0,						(NUM_DUTOUCHINFO-1),	0,							0,							SCREEN_CLEAR,				0,							CTRL_EVENT_REL_MID,		0,				1,					(uint32_t)NULL,		 		(uint32_t)display_info,				(uint32_t *)NULL,0,		0,				NULL,			NULL,			0x00,	0x016F},
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0170},
+
+		{	CONTROLER,		CONTROLER_EQ, 			"equalizer",		0,						FX_NUM_FX_INTR-1,		FX_PEQ_PRESET_DEFAULTVALUE, FX_PEQ_PRESET_DEFAULTVALUE, FX_PEQ_NAME,				0,							CTRL_EVENT_REL_MID,		0,				1,					(uint32_t)setgeneraleq,		(uint32_t)displaypreset,(uint32_t *)controler_eq_param,	FX_PEQ_USER_SIZE,		0,	NULL,			NULL,			0x00,	0x0171},
+		{	OTHERS,			PARAM_NONE,				"un-set ctrl",		0,       				0,						0,							0,							0,							0,							0,						0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0172},
+};
+#ifdef BRUNO_MIDIOUT
+#ifdef __LPC18XX__
+SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
+const param_struct	controler_param_bruno[NUM_PARAM_CONTROLER_MAX] = {
+// 			p_struct,		p_param,				p_name,				p_min,					p_max,					p_default,					p_sticky,					p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
+		{	CONTROLER,		CONTROLER_LEDDISPLAY,	"lighted keys",		LED_DISPLAY_MINVALUE,	LED_DISPLAY_MAXVALUE,	LED_DISPLAY_DEFAULTVALUE,	LED_DISPLAY_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0161},
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
 		{	CONTROLER,		CONTROLER_MIDIMODE,		"midi preset",		0,       				(MIDIOUTMODE_NUM-1),	0,							0,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setmidioutmode,	(uint32_t)displaymiditable,			NULL,		0,			0,				NULL,			NULL,			0x00,	0x0165},
 		{	CONTROLER,		CONTROLER_MIDIDIN,		"midi din",			0,       				1,						0,							0,							SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0166},
 
-		{	CONTROLER,		CONTROLER_ACCESSIBILITY,"accessibility",	0,       				1,						0,							0,							SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0164},
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		{	CONTROLER,		CONTROLER_LUMINOSITY,	"keys brightness",	LUMINOSITY_MINVALUE,	LUMINOSITY_MAXVALUE,	LUMINOSITY_DEFAULTVALUE,	LUMINOSITY_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)NULL,				(uint32_t)displayluminositypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0169},
+
+		{	CONTROLER,CONTROLER_MIDIOUTKEYSENSIBILITY,"keys sensibility",KEYS_CURVES_MINVALUE,	KEYS_CURVES_MAXVALUE,	KEYS_CURVES_DEFAULTVALUE,	KEYS_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_KEYCURVES,	0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
+		{	CONTROLER,		CONTROLER_GYROCURVE,	"motion",			GYRO_CURVES_MINVALUE,	GYRO_CURVES_MAXVALUE,	GYRO_CURVES_DEFAULTVALUE,	GYRO_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,				(uint32_t)setgyro,				(uint32_t)NULL,				(uint32_t *)imu_param,2,		0,				NULL,			NULL,			0x00,	0x016B},
+		{	CONTROLER,		CONTROLER_SLIDERCURVE,	"sliders",			GYRO_CURVES_MINVALUE,   GYRO_CURVES_MAXVALUE,	GYRO_CURVES_DEFAULTVALUE,	GYRO_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,				(uint32_t)setsliders,			(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016C},
+		{	CONTROLER,		CONTROLER_PRESSURECURVE,"aftertouch",		GYRO_CURVES_MINVALUE,   GYRO_CURVES_MAXVALUE,	GYRO_CURVES_DEFAULTVALUE,	GYRO_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016D},
+
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016E},
 		{	OTHERS,			PARAM_INFODUTOUCH,		"du-touch",			0,						(NUM_DUTOUCHINFO-1),	0,							0,							SCREEN_CLEAR,				0,							CTRL_EVENT_REL_MID,		0,				1,					(uint32_t)NULL,		 		(uint32_t)display_info,				(uint32_t *)NULL,0,		0,				NULL,			NULL,			0x00,	0x016F},
-		{	CONTROLER,		CONTROLER_EQ, 			"equalizer",		0,						FX_NUM_FX_INTR-1,		FX_PEQ_PRESET_DEFAULTVALUE,	FX_PEQ_PRESET_DEFAULTVALUE,	FX_PEQ_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setgeneraleq,		(uint32_t)displaypreset,	(uint32_t *)controler_eq_param,	FX_PEQ_USER_SIZE,		0,NULL,	(uint32_t *)&fx_onoff_ctrl,	0x00,	0x0171},
-		{	OTHERS,			PARAM_NONE,				"un-set ctrl",		0,       				0,						0,							0,							0,							0,							0,						0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0172},
+		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0170},
 
 		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
 		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
-		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
-		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
-		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
-
-		{	OTHERS,			PARAM_BLE_CANAL,		"ble_canal",		0,       				39,						0,							0,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MID,		0,				1,					(uint32_t)setnrfchan,		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0172},
-		{	OTHERS,			PARAM_BLE_POWER,		"ble-power",		0,       				8,						0,							0,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MID,		0,				1,					(uint32_t)setnrfpower,		(uint32_t)displayblepower,			NULL,		0,			0,				NULL,			NULL,			0x00,	0x0172},
-
-		//{	CONTROLER,		CONTROLER_KEYCURVE,		"keys sensibility",	KEYS_CURVES_MINVALUE,	KEYS_CURVES_MAXVALUE,	KEYS_CURVES_DEFAULTVALUE,	KEYS_CURVES_DEFAULTVALUE,	SCREEN_DISPLAY_KEYCURVES,	0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x016A},
-
 };
-
+#endif
 
 extern const param_struct	sound_param[];
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	sound_sensor[7] = {
 		{	INSTR_PRESET,	SOUND_PRESET_PITCHVALUE,	"pitch",			MAIN_PB_SENS_MIN,   	MAIN_PB_SENS_MAX,   	0x40,							0x40,							SCREEN_DISPLAY_VALUE,		CTRL_EVENT_LINEAR_UP,		CTRL_EVENT_REL_MIN,	CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setinstrpitchbend,(uint32_t)NULL, 					NULL,							0,					0,				NULL,			NULL,			0x00,	0x0681},
 		{	INSTR_PRESET,	SOUND_PRESET_EXPRESSION,	"expression",		MAIN_EXPRESSION_MIN,	MAIN_EXPRESSION_MAX,	MAIN_EXPRESSION_DEFAULT,		MAIN_EXPRESSION_DEFAULT,		SCREEN_DISPLAY_PERCENTAGE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_REL_MIN,	CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setinstrexpression,(uint32_t)displaypercent, 			NULL,							0,					0,				NULL,			NULL,			0x00,	0x068A},
 		{	INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_MIN,				MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,			CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_REL_MIN,	CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,				NULL,			NULL,			0x00,	0x068B},
-		{	INSTR_PRESET,	SOUND_PRESET_OCTAVE,		"octave",			MAIN_OCTAVE_MIN,		MAIN_OCTAVE_MAX,		MAIN_OCTAVE_DEFAULT,			MAIN_OCTAVE_DEFAULT,			SCREEN_DISPLAY_SIGNEDVALUE,	0,							CTRL_EVENT_LINEAR,	0,						0,					(uint32_t)setinstroctave,	(uint32_t)displayoctave,			NULL,							0,					0,				NULL,			NULL,			CC_OCTAVE,	0x0683},
+		{	INSTR_PRESET,	SOUND_PRESET_OCTAVE,		"octave",			MAIN_OCTAVE_MIN,		MAIN_OCTAVE_MAX,		MAIN_OCTAVE_DEFAULT,			MAIN_OCTAVE_DEFAULT,			SCREEN_DISPLAY_SIGNEDVALUE,	0,							CTRL_EVENT_REL_MAX,	0,						0,					(uint32_t)setinstroctave,	(uint32_t)displayoctave,			NULL,							0,					0,				NULL,			NULL,			CC_OCTAVE,	0x0683},
 		{	INSTR_PRESET,SOUND_PRESET_ARPEGGIATO_BEAT,	"arpeggiator",		0,       				RECORD_BEATLEVELMAX,	0,								0,								SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0686},
 		{	INSTR_PRESET,SOUND_PRESET_ARPEGGIATO_BEAT,	"beat repeat",		0,       				RECORD_BEATLEVELMAX,	0,								0,								SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0A86},
 		{	INSTR_PRESET,	SOUND_PRESET_VOLUME,		"volume",			MAIN_VOLUME_MIN,		MAIN_VOLUME_MAX,		MAIN_VOLUME_MIN,				MAIN_VOLUME_MIN,				SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,0,					(uint32_t)setinstrvolume,	(uint32_t)displaypercent,			0,								0,					0,				NULL,			NULL,			0x00,	0x0A80}
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	onoff_param =
-		{	NONE,			SOUND_PRESET_COMPRESSOR,	"fx rack",			0,       				0,						0,								0,								0,							0,							CTRL_EVENT_DUMMY,		0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,								0,					0,				NULL,			NULL,			0x00,	0x0180}
+		{	NONE,			SOUND_PRESET_CHORUS,		"fx rack",			0,       				0,						0,								0,								0,							0,							CTRL_EVENT_DUMMY,		0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,								0,					0,				NULL,			NULL,			0x00,	0x0180}
 ;
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
-const param_struct	fx_onoff_param[6] = {
-		{	INSTR_PRESET,	SOUND_PRESET_COMPRESSOR,	"compressor",		0,                  	FX_NUM_FX_INTR-1,   	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrcompressor,(uint32_t)displaypreset_onoff,		(uint32_t *)sound_compressor_param,	FX_COMP_USER_SIZE,	0,(uint32_t *)&onoff_param,			NULL,			0x00,	0x028E},
-		{	INSTR_PRESET,	SOUND_PRESET_DELAY,			"delay",			0,                  	FX_NUM_FX_INTR-1,   	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypreset_onoff,		(uint32_t *)sound_delay_param,		FX_DELAY_USER_SIZE,	0,(uint32_t *)&onoff_param,			NULL,			0x00,	0x0288},
-		{	INSTR_PRESET,	SOUND_PRESET_DISTORTION,	"distortion",		0,                  	FX_NUM_FX_INTR-1,   	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrdistortion,(uint32_t)displaypreset_onoff,		(uint32_t *)sound_distortion_param,	FX_DISTO_USER_SIZE,	0,(uint32_t *)&onoff_param,			NULL,			0x00,	0x028F},
-		{	INSTR_PRESET,	SOUND_PRESET_EQ,			"equalizer",		0,                  	FX_NUM_FX_INTR-1,   	FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstreq,		(uint32_t)displaypreset_onoff,		(uint32_t *)sound_eq_param,			FX_PEQ_USER_SIZE,	0,(uint32_t *)&onoff_param,			NULL,			0x00,	0x0291},
-		{	INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	FX_NUM_FX_INTR-1,   	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset_onoff,		(uint32_t *)sound_chorus_param,		FX_CHORUS_USER_SIZE,0,(uint32_t *)&onoff_param,			NULL,			0x00,	0x0287},
+#else
+__attribute__ ((section(".intflash")))
+#endif
+const param_struct	fx_onoff_param[2] = {
+		{	INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	3,   					0,								0,								SCREEN_DISPLAY_CHORUS,		0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset_onoff,		(uint32_t *)sound_chorus_param,		FX_CHORUS_USER_SIZE,0,(uint32_t *)&onoff_param,			NULL,			0x00,	0x0287},
 		{	INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,  0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypreset_onoff,		NULL,								0,					0,					NULL,			NULL,			0x00,	0x0289},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	auto_range_param[4] = {
 		{	INSTR_PRESET,SOUND_PRESET_AUTOPITCH_RANGE,	"vibrato range",	0,       				127,					127,							127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x0384},
 		{	INSTR_PRESET,SOUND_PRESET_TREMOLO_RANGE,	"tremolo range",	0,       				127,					127,							127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x038A},
 		{	INSTR_PRESET,SOUND_PRESET_AUTOPAN_RANGE,	"auto-pan range",	0,       				127,					127,							127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x038B},
 		{	INSTR_PRESET,SOUND_PRESET_AUTOWAH_RANGE,	"auto-fltr range",	0,       				127,					127,							127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x038D},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	ctrl_rate_param[4] = {
 		{	INSTR_PRESET,SOUND_PRESET_AUTOPITCH_RATE,	"vibrato",			0,       				RECORD_BEATLEVELMAX,	0,							0,								SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&auto_range_param[0],			1,					0,				NULL,	NULL,	CC_VIBRATO_RATE,	0x0484},
 		{	INSTR_PRESET,SOUND_PRESET_TREMOLO_RATE,		"tremolo",			0,       				RECORD_BEATLEVELMAX,	0,							0,								SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&auto_range_param[1],			1,					0,				NULL,	NULL,	CC_TREMOLO_RATE,	0x048A},
 		{	INSTR_PRESET,SOUND_PRESET_AUTOPAN_RATE,		"auto-pan",			0,       				RECORD_BEATLEVELMAX,	0,							0,								SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&auto_range_param[2],			1,					0,				NULL,	NULL,	CC_AUTOPAN_RATE,	0x048B},
 		{	INSTR_PRESET,SOUND_PRESET_AUTOWAH_RATE,		"auto-filter",		0,       				RECORD_BEATLEVELMAX,	0,							0,								SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&auto_range_param[3],			1,					0,				NULL,	NULL,	CC_AUTOFILTER_RATE,	0x048D},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	auto_rate_param[4] = {
 		{	INSTR_PRESET,SOUND_PRESET_AUTOPITCH_RATE,	"vibrato",			0,       				RECORD_BEATLEVELMAX,	0,							0,								SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				8,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&auto_range_param[0],			(1|0x80),					0,	(uint32_t *)&ctrl_rate_param[0],	(uint32_t *)&sound_param[12],	0x00,	0x0284},
 		{	INSTR_PRESET,SOUND_PRESET_TREMOLO_RATE,		"tremolo",			0,       				RECORD_BEATLEVELMAX,	0,							0,								SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				8,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&auto_range_param[1],			(1|0x80),					0,	(uint32_t *)&ctrl_rate_param[1],	(uint32_t *)&sound_param[10],	0x00,	0x028A},
@@ -644,75 +689,90 @@ const param_struct	auto_rate_param[4] = {
 		{	INSTR_PRESET,SOUND_PRESET_AUTOWAH_RATE,		"auto-filter",		0,       				RECORD_BEATLEVELMAX,	0,							0,								SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				8,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&auto_range_param[3],			(1|0x80),					0,	(uint32_t *)&ctrl_rate_param[3],	(uint32_t *)&sound_param[13],	0x00,	0x028D},
 };
 
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	sound_param[NUM_PARAM_SOUND_MAX] = {
 // 			p_struct,		p_param,					p_name,				p_min,					p_max,					p_default,						p_sticky,						p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	INSTR_PRESET,	SOUND_PRESET_VOLUME,		"volume",			MAIN_VOLUME_MIN,		MAIN_VOLUME_MAX,		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstrvolume,	(uint32_t)displaypercent,			0,								0,					0,(uint32_t *)&sound_sensor[6],			NULL,			0x00,	0x0180},
 		{	INSTR_PRESET,	SOUND_PRESET_KEY_CURVE,		"keys sensitivity",	KEYS_CURVES_MINVALUE,	KEYS_CURVES_MAXVALUE,	KEYS_CURVES_DEFAULTVALUE,		KEYS_CURVES_DEFAULTVALUE,		SCREEN_DISPLAY_KEYCURVES,	0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0181},
 		{	COPYANDPAST,	COPY_SOUNDPRESET,			"copy & past",		0,        				1,						0,								0,								SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MAX,		0,				9,				(uint32_t)checkcopyandpastparam,(uint32_t)displaycopyandpast,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x0182},
 
-		{	INSTR_PRESET,	SOUND_PRESET_PORTTIME,		"portamento",		MAIN_PORT_TIME_MIN, 	MAIN_PORT_TIME_MAX, 	MAIN_PORT_TIME_DEFAULT,			MAIN_PORT_TIME_DEFAULT,			SCREEN_DISPLAY_TIME_OCT,	0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrporttime,	(uint32_t)displayportamento,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x0185},
 		{	INSTR_PRESET,	SOUND_PRESET_OCTAVE,		"octave",			MAIN_OCTAVE_MIN,		MAIN_OCTAVE_MAX,		MAIN_OCTAVE_DEFAULT,			MAIN_OCTAVE_DEFAULT,			SCREEN_DISPLAY_SIGNEDVALUE,	0,							CTRL_EVENT_REL_MAX,		0,				2,					(uint32_t)setinstroctave,	(uint32_t)displayoctave,			NULL,							0,					0,(uint32_t *)&sound_sensor[3],	NULL,			0x00,	0x0183},
-
 		{	INSTR_PRESET,	SOUND_PRESET_CHORDS,		"chords",			0,       				1,						0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				1,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0184},
+		{	INSTR_PRESET,	SOUND_PRESET_PORTTIME,		"portamento",		MAIN_PORT_TIME_MIN, 	MAIN_PORT_TIME_MAX, 	MAIN_PORT_TIME_DEFAULT,			MAIN_PORT_TIME_DEFAULT,			SCREEN_DISPLAY_TIME_OCT,	0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrporttime,	(uint32_t)displayportamento,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x0185},
 		{	INSTR_PRESET,SOUND_PRESET_ARPEGGIATO_BEAT,	"arpeggiator",		0,       				RECORD_BEATLEVELMAX,	0,								0,								SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,(uint32_t *)&sound_sensor[4],			NULL,			0x00,	0x0186},
-		{	INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	FX_NUM_FX_INTR-1,   	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset,			(uint32_t *)sound_chorus_param,	FX_CHORUS_USER_SIZE,0,	(uint32_t *)&onoff_param,(uint32_t *)&fx_onoff_param[4],0x00,	0x0187},
 
-		{	INSTR_PRESET,	SOUND_PRESET_DELAY,			"delay",			0,                  	FX_NUM_FX_INTR-1,   	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrdelay,	(uint32_t)displaypreset,			(uint32_t *)sound_delay_param,	FX_DELAY_USER_SIZE,	0,	(uint32_t *)&onoff_param,(uint32_t *)&fx_onoff_param[1],			0x00,	0x0188},
-		{	INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,  0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			(uint32_t *)&fx_onoff_param[5],			0x00,	0x0189},
+		{	INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	3,   					0,								0,								SCREEN_DISPLAY_CHORUS,		0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrchorus,	(uint32_t)NULL,						(uint32_t *)sound_chorus_param,	FX_CHORUS_USER_SIZE,0,	(uint32_t *)&onoff_param,(uint32_t *)&fx_onoff_param[0],0x00,	0x0187},
+		{	INSTR_PRESET,	SOUND_PRESET_DELAY_ONOFF,	"delay",			0,                  	1,   					0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)setinstrdelay,	(uint32_t)NULL,						(uint32_t *)sound_delay_param,	FX_DELAY_USER_SIZE,	0,	(uint32_t *)&onoff_param,	NULL,			0x00,	0x0188},
+		{	INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,  0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			(uint32_t *)&fx_onoff_param[1],			0x00,	0x0189},
 
 		{	INSTR_PRESET,	SOUND_PRESET_EXPRESSION,	"expression",		MAIN_EXPRESSION_MIN,	MAIN_EXPRESSION_MAX,	MAIN_EXPRESSION_DEFAULT,		MAIN_EXPRESSION_DEFAULT,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrexpression,(uint32_t)displaypercent, 			NULL,							0,					0,(uint32_t *)&sound_sensor[1],(uint32_t *)&auto_rate_param[1],			0x00,	0x018A},
-		{	INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_MIN,				MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,			0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,(uint32_t *)&sound_sensor[2],(uint32_t *)&auto_rate_param[2],			0x00,	0x018B},
+		{	INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_DEFAULT,			MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,			0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,(uint32_t *)&sound_sensor[2],(uint32_t *)&auto_rate_param[2],			0x00,	0x018B},
 		{	INSTR_PRESET,	SOUND_PRESET_PITCHSEND,		"pitch",			MAIN_PB_SENS_MIN,   	MAIN_PB_SENS_MAX,   	MAIN_PB_SENS_DEFAULT,			MAIN_PB_SENS_DEFAULT,			SCREEN_DISPLAY_PITCH,		0,							CTRL_EVENT_REL_MID,		0,				0xA,			(uint32_t)setinstrpitchbendsens,(uint32_t)NULL, 					NULL,							0,					0,(uint32_t *)&sound_sensor[0],(uint32_t *)&auto_rate_param[0],0x00,	0x018C},
-
+		//{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x018C},
+		//{	INSTR_PRESET,	SOUND_PRESET_VIBRATO,		"vibrato",			0,                  	FX_NUM_FX_INTR-1,   	FX_VIB_PRESET_DEFAULTVALUE,		FX_VIB_PRESET_DEFAULTVALUE,		FX_VIBRATO_NAME,			0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrvibrato,	(uint32_t)displaypreset,			(uint32_t *)sound_vibrato_param,FX_VIBRATO_USER_SIZE,0,	(uint32_t *)&onoff_param[1],(uint32_t *)&fx_onoff_param[6],			0x00,	0x018C},
+		//{	INSTR_PRESET,	SOUND_PRESET_WAH,			"wah-wah",			0,                  	FX_NUM_FX_INTR-1,   	FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrwah,		(uint32_t)displaypreset,			(uint32_t *)sound_wah_param,	FX_WAH_USER_SIZE,	0,	(uint32_t *)&onoff_param[1],(uint32_t *)&auto_rate_param[3],			0x00,	0x018D},
 		{	INSTR_PRESET,	SOUND_PRESET_WAH_FREQ,		"filter",		FX_WAH_FILTERFREQ_MINVALUE,	FX_WAH_FILTERFREQ_MAXVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,SCREEN_DISPLAY_FREQUENCY,	0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrwah_freq,	(uint32_t)display8khzfreqwah,		(uint32_t *)sound_wah_param,	(FX_WAH_USER_SIZE|0x80),0,(uint32_t *)&sound_wah_sensor[0],(uint32_t *)&auto_rate_param[3],			0x00,	0x018D},
+
 		{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x018E},
 		//{	INSTR_PRESET,	SOUND_PRESET_COMPRESSOR,	"compressor",		0,                  	FX_NUM_FX_INTR-1,   	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrcompressor,(uint32_t)displaypreset,			(uint32_t *)sound_compressor_param,	FX_COMP_USER_SIZE,0,(uint32_t *)&onoff_param[0],(uint32_t *)&fx_onoff_param[1],			0x00,	0x018E},
+		{	INSTR_PRESET,	SOUND_PRESET_DISTORTION_ONOFF,"distortion",		0,		            	1,						0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)setinstrdistortion,(uint32_t)NULL,					(uint32_t *)sound_distortion_param,FX_DISTO_USER_SIZE,0,(uint32_t *)&onoff_param,	NULL,			0x00,	0x018F},
+		//{	INSTR_PRESET,	SOUND_PRESET_ADSR,			"adsr",				0,                  	FX_NUM_FX_INTR-1,   	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstradsr,	 	(uint32_t)displaypreset,			(uint32_t *)sound_adsr_param,	FX_ADSR_USER_SIZE,	0,	(uint32_t *)&onoff_param[0],(uint32_t *)&fx_onoff_param[0],			0x00,	0x0190},
+		{	INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",		FX_ADSR_RELEAS_MINVALUE,FX_ADSR_RELEAS_MAXVALUE,FX_ADSR_RELEAS_DEFAULTVALUE,	FX_ADSR_RELEAS_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,	NULL,							0,					0,				NULL,			(uint32_t *)&sound_adsr_param[0],		0x00,	0x05C4},
 
-		{	INSTR_PRESET,	SOUND_PRESET_DISTORTION,	"distortion",		0,		            	FX_NUM_FX_INTR-1,		FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrdistortion,(uint32_t)displaypreset,			(uint32_t *)sound_distortion_param,FX_DISTO_USER_SIZE,0,(uint32_t *)&onoff_param,(uint32_t *)&fx_onoff_param[2],			0x00,	0x018F},
-		{	INSTR_PRESET,	SOUND_PRESET_EQ,			"equalizer",		0,                  	FX_NUM_FX_INTR-1,   	FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstreq,		(uint32_t)displaypreset,			(uint32_t *)sound_eq_param,		FX_PEQ_USER_SIZE,	0,	(uint32_t *)&onoff_param,(uint32_t *)&fx_onoff_param[3],			0x00,	0x0191},
-		{	INSTR_PRESET,	SOUND_PRESET_ADSR_ATTACK,	"attack time",		FX_ADSR_ATTACK_MINVALUE,FX_ADSR_ATTACK_MAXVALUE,FX_ADSR_ATTACK_DEFAULTVALUE,	FX_ADSR_ATTACK_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,	NULL,							0,					0,				NULL,			(uint32_t *)&sound_adsr_param[1],		0x00,	0x0190},
+		{	INSTR_PRESET,	SOUND_PRESET_EQ_ONOFF,		"equalizer",		0,                  	1,   					0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				0xB,				(uint32_t)setinstreq,		(uint32_t)NULL,						(uint32_t *)sound_eq_param,		FX_PEQ_USER_SIZE,	0,	(uint32_t *)&onoff_param,	NULL,			0x00,	0x0191},
 		{	OTHERS,			PARAM_NONE,					"un-set ctrl",		0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0192},
 
 
 			//
 		//{	OTHERS,			PARAM_INSTRUVOL,			"relativ vol",		MAIN_EXPRESSION_MIN,	MAIN_EXPRESSION_MAX,	MAIN_EXPRESSION_DEFAULT,		MAIN_EXPRESSION_DEFAULT,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrrelvolume,(uint32_t)displaypercent, 			NULL,							0,					0,				NULL,			NULL,			0x00,	0x018C},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	sound_param_ps[NUM_PARAM_SOUND_MAX] = {
 // 			p_struct,		p_param,					p_name,				p_min,					p_max,					p_default,						p_sticky,						p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	INSTR_PRESET,	SOUND_PRESET_VOLUME,		"volume",			MAIN_VOLUME_MIN,		MAIN_VOLUME_MAX,		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstrvolume,	(uint32_t)displaypercent,			0,								0,					0,(uint32_t *)&sound_sensor[6],			NULL,			0x00,	0x0180},
 		{	INSTR_PRESET,	SOUND_PRESET_KEY_CURVE,		"keys sensibility",	KEYS_CURVES_MINVALUE,	KEYS_CURVES_MAXVALUE,	KEYS_CURVES_DEFAULTVALUE,		KEYS_CURVES_DEFAULTVALUE,		SCREEN_DISPLAY_KEYCURVES,	0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0181},
 		{	COPYANDPAST,	COPY_SOUNDPRESET,			"copy & past",		0,        				1,						0,								0,								SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MAX,		0,				9,				(uint32_t)checkcopyandpastparam,(uint32_t)displaycopyandpast,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x0182},
 
-		{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0184},
-		{	OTHERS,			PARAM_INSTRLED,				"marks",			0,        				1,						0,								0,								SCREEN_DISPLAY_LED_MODE,	0,							CTRL_EVENT_REL_MAX,		0,				0,					(uint32_t)switchledmode_ps,	(uint32_t)displaymarks,				NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A1},
-
+		//{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0183},
+		{	OTHERS,			PARAM_INSTRLED,				"marks",			0,        				1,						0,								0,								SCREEN_DISPLAY_LED_MODE,	0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)switchledmode_ps,	(uint32_t)displaymarks,				NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A1},
 		//{	INSTR_PRESET,	SOUND_PRESET_CHORDS,		"chords",			0,       				1,						0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0184},
+		{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0184},
 		{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0185},
 		{	INSTR_PRESET,SOUND_PRESET_ARPEGGIATO_BEAT,	"beat repeat",		0,       				RECORD_BEATLEVELMAX,	0,								0,								SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,(uint32_t *)&sound_sensor[5],	NULL,			0x00,	0x0186},
-		{	INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	FX_NUM_FX_INTR-1,   	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset,			(uint32_t *)sound_chorus_param,	FX_CHORUS_USER_SIZE,0,				NULL,(uint32_t *)&fx_onoff_param[4],0x00,	0x0187},
 
-		{	INSTR_PRESET,	SOUND_PRESET_DELAY,			"delay",			0,                  	FX_NUM_FX_INTR-1,   	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrdelay,	(uint32_t)displaypreset,			(uint32_t *)sound_delay_param,	FX_DELAY_USER_SIZE,	0,				NULL,(uint32_t *)&fx_onoff_param[1],			0x00,	0x0188},
-		{	INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,  0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			(uint32_t *)&fx_onoff_param[5],			0x00,	0x0189},
+		{	INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	3,   					0,								0,								SCREEN_DISPLAY_CHORUS,		0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrchorus,	(uint32_t)NULL,						(uint32_t *)sound_chorus_param,	FX_CHORUS_USER_SIZE,0,				NULL,(uint32_t *)&fx_onoff_param[0],0x00,	0x0187},
+		{	INSTR_PRESET,	SOUND_PRESET_DELAY_ONOFF,	"delay",			0,                  	1,   					0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				2,					(uint32_t)setinstrdelay,	(uint32_t)NULL,						(uint32_t *)sound_delay_param,	FX_DELAY_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x0188},
+		{	INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,  0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			(uint32_t *)&fx_onoff_param[1],			0x00,	0x0189},
 
 		{	INSTR_PRESET,	SOUND_PRESET_EXPRESSION,	"expression",		MAIN_EXPRESSION_MIN,	MAIN_EXPRESSION_MAX,	MAIN_EXPRESSION_DEFAULT,		MAIN_EXPRESSION_DEFAULT,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrexpression,(uint32_t)displaypercent, 			NULL,							0,					0,(uint32_t *)&sound_sensor[1],(uint32_t *)&auto_rate_param[1],			0x00,	0x018A},
-		{	INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_MIN,				MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,			0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,(uint32_t *)&sound_sensor[2],(uint32_t *)&auto_rate_param[2],			0x00,	0x018B},
+		{	INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_DEFAULT,			MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,			0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,(uint32_t *)&sound_sensor[2],(uint32_t *)&auto_rate_param[2],			0x00,	0x018B},
 		{	INSTR_PRESET,	SOUND_PRESET_PITCHSEND,		"pitch",			MAIN_PB_SENS_MIN,   	MAIN_PB_SENS_MAX,   	MAIN_PB_SENS_DEFAULT,			MAIN_PB_SENS_DEFAULT,			SCREEN_DISPLAY_PITCH,		0,							CTRL_EVENT_REL_MID,		0,				0xA,			(uint32_t)setinstrpitchbendsens,(uint32_t)NULL, 					NULL,							0,					0,(uint32_t *)&sound_sensor[0],(uint32_t *)&auto_rate_param[0],0x00,	0x018C},
-
+		//{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x018C},
+		//{	INSTR_PRESET,	SOUND_PRESET_VIBRATO,		"vibrato",			0,                  	FX_NUM_FX_INTR-1,   	FX_VIB_PRESET_DEFAULTVALUE,		FX_VIB_PRESET_DEFAULTVALUE,		FX_VIBRATO_NAME,			0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrvibrato,	(uint32_t)displaypreset,			(uint32_t *)sound_vibrato_param,FX_VIBRATO_USER_SIZE,0,				NULL,(uint32_t *)&fx_onoff_param[6],			0x00,	0x018C},
+		//{	INSTR_PRESET,	SOUND_PRESET_WAH,			"wah-wah",			0,                  	FX_NUM_FX_INTR-1,   	FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrwah,		(uint32_t)displaypreset,			(uint32_t *)sound_wah_param,	FX_WAH_USER_SIZE,	0,				NULL,(uint32_t *)&auto_rate_param[3],			0x00,	0x018D},
 		{	INSTR_PRESET,	SOUND_PRESET_WAH_FREQ,		"filter",		FX_WAH_FILTERFREQ_MINVALUE,	FX_WAH_FILTERFREQ_MAXVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,SCREEN_DISPLAY_FREQUENCY,	0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrwah_freq,	(uint32_t)display8khzfreqwah,		(uint32_t *)sound_wah_param,	(FX_WAH_USER_SIZE|0x80),0,(uint32_t *)&sound_wah_sensor[0],(uint32_t *)&auto_rate_param[3],			0x00,	0x018D},
+
 		{	NONE,			0,							"",					0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x018E},
 		//{	INSTR_PRESET,	SOUND_PRESET_COMPRESSOR,	"compressor",		0,                  	FX_NUM_FX_INTR-1,   	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstrcompressor,(uint32_t)displaypreset,			(uint32_t *)sound_compressor_param,	FX_COMP_USER_SIZE,0,			NULL,(uint32_t *)&fx_onoff_param[1],			0x00,	0x018E},
-
-		{	INSTR_PRESET,	SOUND_PRESET_DISTORTION,	"distortion",		0,		            	FX_NUM_FX_INTR-1,		FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstrdistortion,(uint32_t)displaypreset,			(uint32_t *)sound_distortion_param,FX_DISTO_USER_SIZE,0,			NULL,(uint32_t *)&fx_onoff_param[2],			0x00,	0x018F},
-		{	INSTR_PRESET,	SOUND_PRESET_EQ,			"equalizer",		0,                  	FX_NUM_FX_INTR-1,   	FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_NAME,				0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setinstreq,		(uint32_t)displaypreset,			(uint32_t *)sound_eq_param,		FX_PEQ_USER_SIZE,	0,				NULL,(uint32_t *)&fx_onoff_param[3],			0x00,	0x0191},
-		{	INSTR_PRESET,	SOUND_PRESET_ADSR_ATTACK,	"attack time",		FX_ADSR_ATTACK_MINVALUE,FX_ADSR_ATTACK_MAXVALUE,FX_ADSR_ATTACK_DEFAULTVALUE,	FX_ADSR_ATTACK_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,	NULL,							0,					0,				NULL,			(uint32_t *)&sound_adsr_param[1],		0x00,	0x0190},
+		{	INSTR_PRESET,	SOUND_PRESET_DISTORTION_ONOFF,"distortion",		0,		            	1,						0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				2,					(uint32_t)setinstrdistortion,(uint32_t)NULL,					(uint32_t *)sound_distortion_param,FX_DISTO_USER_SIZE,0,			NULL,			NULL,			0x00,	0x018F},
+		//{	INSTR_PRESET,	SOUND_PRESET_ADSR,			"adsr",				0,                  	FX_NUM_FX_INTR-1,   	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_NAME,				0,							CTRL_EVENT_REL_MID,		0,				0,					(uint32_t)setinstradsr,	 	(uint32_t)displaypreset,			(uint32_t *)sound_adsr_param,	FX_ADSR_USER_SIZE,	0,				NULL,(uint32_t *)&fx_onoff_param[0],			0x00,	0x0190},
+		{	INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",		FX_ADSR_RELEAS_MINVALUE,FX_ADSR_RELEAS_MAXVALUE,FX_ADSR_RELEAS_DEFAULTVALUE,	FX_ADSR_RELEAS_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,	NULL,							0,					0,				NULL,(uint32_t *)&sound_adsr_param[0],		0x00,	0x05C4},
+		{	INSTR_PRESET,	SOUND_PRESET_EQ_ONOFF,		"equalizer",		0,                  	1,   					0,								0,								SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)setinstreq,		(uint32_t)NULL,						(uint32_t *)sound_eq_param,		FX_PEQ_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x0191},
 		{	OTHERS,			PARAM_NONE,					"un-set ctrl",		0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0192},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	music_sensor[6] = {
 // 			p_struct,		p_param,				p_name,			p_min,						p_max,					p_default,						p_sticky,						p_screen,						p_linktoaftertouch,			p_linktoslider,			p_linktogyro,		p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_SONG,		SONG_VOLUME,			"volume",			MAIN_VOLUME_MIN,   		MAIN_VOLUME_MAX,		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,		0,						CTRL_EVENT_LINEAR,		CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setmusicvolume, 	(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			NULL,			0x00,	0x06A0},
@@ -722,13 +782,19 @@ const param_struct	music_sensor[6] = {
 		{	MUSIC_SONG,		SONG_TRANSPOSE,			"transpose",		0,        				((2*RECORD_TRANSPOSEDEFAULT)-1),RECORD_TRANSPOSEDEFAULT,RECORD_TRANSPOSEDEFAULT,		SCREEN_DISPLAY_SIGNEDVALUE,		0,						CTRL_EVENT_LINEAR,		0,						0,					(uint32_t)transpose,		(uint32_t)displaytranspose,			NULL,							0,					0,				NULL,			NULL,			0x00,	0x06A7},
 		{	MUSIC_MIX,		FX_MIX_HCFILTER,		"lowpass",			FX_MIX_HCFREQ_MINVALUE,	FX_MIX_HCFREQ_MAXVALUE,	FX_MIX_HCFREQ_MINVALUE,			FX_MIX_HCFREQ_MINVALUE,			SCREEN_DISPLAY_FREQUENCY,		CTRL_EVENT_LINEAR_REF,	CTRL_EVENT_LINEAR,		CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setmusicmix,		(uint32_t)displaymixlp,				NULL,							0,					0,				NULL,			NULL,			0x00,	0x06AA},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	music_swing_param =
 // 			p_struct,		p_param,					p_name,				p_min,					p_max,					p_default,			p_sticky,						p_screen,						p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_SONG,		SONG_SWING,					"swing",			0,        				127,					0,					0,								SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,	0,				6,					(uint32_t)NULL,	 			(uint32_t)displaypercent,			NULL,							0,					0,				NULL,		(uint32_t *)NULL,	0x00,	0x01A6};
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	music_param[NUM_PARAM_MUSIC_MAX] = {
 // 			p_struct,		p_param,					p_name,				p_min,					p_max,					p_default,						p_sticky,						p_screen,						p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_SONG,		SONG_VOLUME,				"volume",			MAIN_VOLUME_MIN,   		MAIN_VOLUME_MAX,		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setmusicvolume, 	(uint32_t)displaypercent,			NULL,							0,					0,(uint32_t *)&music_sensor[0],	NULL,			0x00,	0x01A0},
@@ -736,38 +802,33 @@ const param_struct	music_param[NUM_PARAM_MUSIC_MAX] = {
 		{	COPYANDPAST,	COPY_MUSIC,					"copy & past",		0,        				2,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MAX,		0,				9,				(uint32_t)checkcopyandpastparam,(uint32_t)displaycopyandpast,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A2},
 
 		{	MUSIC_SONG,		SONG_TIMESIGNATURE,			"signature",		0,        				(NUM_TIMESIGNATURE - 1),0,								0,								SCREEN_DISPLAY_TIME_SIGNATURE,	0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A3},
-		{	MUSIC_SONG,		SONG_TEMPO,					"tempo",			MUSIC_TEMPO_MINVALUE,	MUSIC_TEMPO_MAXVALUE,   MUSIC_TEMPO_DEFAULTVALUE,		MUSIC_TEMPO_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setmusictempo,	(uint32_t)NULL,						NULL,							0,					0,(uint32_t *)&music_sensor[1],	NULL,			0x00,	0x01A4},
-
+		{	MUSIC_SONG,		SONG_TEMPO,					"tempo",			MUSIC_TEMPO_MINVALUE,	MUSIC_TEMPO_MAXVALUE,   MUSIC_TEMPO_MINVALUE,			MUSIC_TEMPO_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setmusictempo,	(uint32_t)NULL,						NULL,							0,					0,(uint32_t *)&music_sensor[1],	NULL,			0x00,	0x01A4},
 		{	MUSIC_SONG,		SONG_VOLTEMPO,				"clic level",		MUSIC_TEMPOVOL_MINVALUE,MUSIC_TEMPOVOL_MAXVALUE,MUSIC_TEMPOVOL_DEFAULTVALUE,	MUSIC_TEMPOVOL_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,		0,				6,					(uint32_t)setmusictempovolume,(uint32_t)displaypercent,			NULL,							0,					0,(uint32_t *)&music_sensor[2],	NULL,			0x00,	0x01A5},
 		{	MUSIC_SONG,		SONG_QUANTIZE,				"quantizer",		0,        				RECORD_QUANTLEVELMAX,	RECORD_QUANTLEVELDEFAULT,		RECORD_QUANTLEVELDEFAULT,		SCREEN_DISPLAY_REC_QUANT_STATE,	0,							CTRL_EVENT_REL_MAX,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,			(uint32_t *)&music_swing_param,				1,					0,(uint32_t *)&music_sensor[3],	NULL,			0x00,	0x01A6},
+
 		{	MUSIC_SONG,		SONG_TRANSPOSE,				"transpose",			0,        	((2*RECORD_TRANSPOSEDEFAULT)-1),RECORD_TRANSPOSEDEFAULT,		RECORD_TRANSPOSEDEFAULT,		SCREEN_DISPLAY_SIGNEDVALUE,		0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)transpose,		(uint32_t)displaytranspose,			NULL,							0,					0,(uint32_t *)&music_sensor[4],	NULL,			0x00,	0x01A7},
-
 		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A8},
+		//{	OTHERS,			PARAM_NONE,					"default du-music",	0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)displaydefaultsong,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A8},
 		{	MUSIC_SONG,		SONG_REVERBPRESET,			"reverb",			0,						FX_NUM_FX_INTR-1,		FX_REVERB_PRESET_DEFAULTVALUE, 	FX_REVERB_PRESET_DEFAULTVALUE, 	FX_REVERB_NAME,					0,							CTRL_EVENT_REL_MAX,		0,				2,					(uint32_t)setgeneralreverb,	(uint32_t)displaypreset,		(uint32_t *)music_reverb_param,		FX_REVERB_USER_SIZE,0,				NULL,			NULL,			0x00,	0x01A9},
-
 		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
-//		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
-//		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
-//		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
-//		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
-//		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
-//		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
-//		{	NONE,			PARAM_NONE,					"",					0,        				0,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_NONE,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01AA},
+		//{	MUSIC_MIX,		FX_MIX_HCFILTER,			"lowpass",			FX_MIX_HCFREQ_MINVALUE,	FX_MIX_HCFREQ_MAXVALUE,	FX_MIX_HCFREQ_MAXVALUE,			FX_MIX_HCFREQ_MAXVALUE,			SCREEN_DISPLAY_FREQUENCY,		0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)setmusicmix,		(uint32_t)displaymixlp,				NULL,							0,					0,(uint32_t *)&music_sensor[5],	NULL,			0x00,	0x01AA},
 
 		{	OTHERS,			PARAM_NONE,					"un-set ctrl",		0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0192},
 
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	music_param_ps[NUM_PARAM_MUSIC_MAX] = {
 // 			p_struct,		p_param,					p_name,				p_min,					p_max,					p_default,						p_sticky,						p_screen,						p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_SONG,		SONG_VOLUME,				"volume",			MAIN_VOLUME_MIN,   		MAIN_VOLUME_MAX,		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setmusicvolume, 	(uint32_t)displaypercent,			NULL,							0,					0,(uint32_t *)&music_sensor[0],	NULL,			0x00,	0x01A0},
-		{	OTHERS,			PARAM_INSTRLED,				"marks",			0,        				1,						0,								0,								SCREEN_DISPLAY_LED_MODE,		0,							CTRL_EVENT_REL_MAX,		0,				0,					(uint32_t)switchledmode_ps,	(uint32_t)displaymarks,				NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A1},
+		{	OTHERS,			PARAM_INSTRLED,				"marks",			0,        				1,						0,								0,								SCREEN_DISPLAY_LED_MODE,		0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)switchledmode_ps,	(uint32_t)displaymarks,				NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A1},
 		{	COPYANDPAST,	COPY_MUSIC,					"copy & past",		0,        				2,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MAX,		0,				9,				(uint32_t)checkcopyandpastparam,(uint32_t)displaycopyandpast,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A2},
 
 		{	MUSIC_SONG,		SONG_TIMESIGNATURE,			"signature",		0,        				(NUM_TIMESIGNATURE - 1),0,								0,								SCREEN_DISPLAY_TIME_SIGNATURE,	0,							CTRL_EVENT_REL_MAX,		0,				3,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01A3},
-		{	MUSIC_SONG,		SONG_TEMPO,					"tempo",			MUSIC_TEMPO_MINVALUE,	MUSIC_TEMPO_MAXVALUE,   MUSIC_TEMPO_DEFAULTVALUE,		MUSIC_TEMPO_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)setmusictempo,	(uint32_t)NULL,						NULL,							0,					0,(uint32_t *)&music_sensor[1],	NULL,			0x00,	0x01A4},
-
+		{	MUSIC_SONG,		SONG_TEMPO,					"tempo",			MUSIC_TEMPO_MINVALUE,	MUSIC_TEMPO_MAXVALUE,   MUSIC_TEMPO_MINVALUE,			MUSIC_TEMPO_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)setmusictempo,	(uint32_t)NULL,						NULL,							0,					0,(uint32_t *)&music_sensor[1],	NULL,			0x00,	0x01A4},
 		{	MUSIC_SONG,		SONG_VOLTEMPO,				"clic level",		MUSIC_TEMPOVOL_MINVALUE,MUSIC_TEMPOVOL_MAXVALUE,MUSIC_TEMPOVOL_DEFAULTVALUE,	MUSIC_TEMPOVOL_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,		0,				6,					(uint32_t)setmusictempovolume,(uint32_t)displaypercent,			NULL,							0,					0,(uint32_t *)&music_sensor[2],	NULL,			0x00,	0x01A5},
 		{	MUSIC_SONG,		SONG_QUANTIZE,				"quantizer",		0,        				RECORD_QUANTLEVELMAX,	RECORD_QUANTLEVELDEFAULT,		RECORD_QUANTLEVELDEFAULT,		SCREEN_DISPLAY_REC_QUANT_STATE,	0,							CTRL_EVENT_REL_MAX,		0,				0,					(uint32_t)NULL,				(uint32_t)NULL,			(uint32_t *)&music_swing_param,				1,					0,(uint32_t *)&music_sensor[3],	NULL,			0x00,	0x01A6},
 		{	MUSIC_SONG,		SONG_TRANSPOSE,				"transpose",			0,        	((2*RECORD_TRANSPOSEDEFAULT)-1),RECORD_TRANSPOSEDEFAULT,		RECORD_TRANSPOSEDEFAULT,		SCREEN_DISPLAY_SIGNEDVALUE,		0,							CTRL_EVENT_REL_MID,		0,				2,					(uint32_t)transpose,		(uint32_t)displaytranspose,			NULL,							0,					0,(uint32_t *)&music_sensor[4],	NULL,			0x00,	0x01A7},
@@ -789,14 +850,20 @@ const param_struct	music_param_ps[NUM_PARAM_MUSIC_MAX] = {
 };
 
 extern const param_struct	music_track_param[];
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	loop_changesound_param =
 // 			p_struct,			p_param,					p_name,				p_min,					p_max,					p_default,			p_sticky,						p_screen,						p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	OTHERS,				PARAM_LOOPSOUND,			"change sound",		0,        				0,						0,					0,								SCREEN_CLEAR,			0,							CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)NULL,	 			(uint32_t)NULL,						NULL,							0,					0,				NULL,(uint32_t *)&music_track_param[0],0x00,	0x02C0};
 
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	loop_sensor[6] = {
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_VOLUME,		"volume",			MAIN_VOLUME_MIN,   		MAIN_VOLUME_MAX,   		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,							0,		CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)setinstrvolume,	(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			NULL,			0x00,	0x06C0},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_OCTAVE,		"octave",			MAIN_OCTAVE_MIN,		MAIN_OCTAVE_MAX,		MAIN_OCTAVE_DEFAULT,			MAIN_OCTAVE_DEFAULT,			SCREEN_DISPLAY_SIGNEDVALUE, 						0,		CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)setinstroctave,	(uint32_t)displayoctave,			NULL,							0,					0,				NULL,			NULL,			0x00,	0x06C3},
@@ -805,34 +872,42 @@ const param_struct	loop_sensor[6] = {
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_MIN,				MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,				CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_REL_MIN,	CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,				NULL,			NULL,			0x00,	0x06CB},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PITCHVALUE,	"pitch",			MAIN_PB_SENS_MIN,   	MAIN_PB_SENS_MAX,   	0x40,							0x40,							SCREEN_DISPLAY_VALUE,			CTRL_EVENT_LINEAR_UP,		CTRL_EVENT_REL_MIN,	CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)setinstrpitchbend,(uint32_t)NULL, 					NULL,							0,					0,				NULL,			NULL,			0x00,	0x06C1},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
-const param_struct	musicfx_onoff_param[6] = {
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_COMPRESSOR,	"compressor",		0,                  	FX_NUM_FX_INTR-1,   	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrcompressor,(uint32_t)displaypreset_onoff,		(uint32_t *)music_compressor_param,	FX_COMP_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x02CE},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DELAY,			"delay",			0,                  	FX_NUM_FX_INTR-1,   	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypreset_onoff,		(uint32_t *)music_delay_param,		FX_DELAY_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x02C8},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DISTORTION,	"distortion",		0,                  	FX_NUM_FX_INTR-1,   	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrdistortion,(uint32_t)displaypreset_onoff,		(uint32_t *)music_distortion_param,	FX_DISTO_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x02CF},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_EQ,			"equalizer",		0,                  	FX_NUM_FX_INTR-1,   	FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstreq,		(uint32_t)displaypreset_onoff,		(uint32_t *)music_eq_param,			FX_PEQ_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x02D1},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	FX_NUM_FX_INTR-1,   	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset_onoff,		(uint32_t *)music_chorus_param,		FX_CHORUS_USER_SIZE,0,				NULL,			NULL,			0x00,	0x02C7},
+#else
+__attribute__ ((section(".intflash")))
+#endif
+const param_struct	musicfx_onoff_param[2] = {
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	3,   					0,								0,								SCREEN_DISPLAY_CHORUS,			0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset_onoff,		(uint32_t *)music_chorus_param,		FX_CHORUS_USER_SIZE,0,				NULL,			NULL,			0x00,	0x02C7},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,   	0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypreset_onoff,		NULL,								0,					0,				NULL,			NULL,			0x00,	0x02C9},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	musicauto_range_param[4] = {
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOPITCH_RANGE,	"vibrato range",	0,       				127,					127,					127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x03C4},
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_TREMOLO_RANGE,		"tremolo range",	0,       				127,					127,					127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x03CA},
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOPAN_RANGE,		"auto-pan range",	0,       				127,					127,					127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x03CB},
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOWAH_RANGE,		"auto-fltr range",	0,       				127,					127,					127,							SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,	0x00,	0x03CD},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	musicctrl_rate_param[4] = {
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOPITCH_RATE,		"vibrato",			0,       				RECORD_BEATLEVELMAX,	0,							0,							SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&musicauto_range_param[0],			1,					0,				NULL,	NULL,	0x00,	0x04C4},
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_TREMOLO_RATE,		"tremolo",			0,       				RECORD_BEATLEVELMAX,	0,							0,							SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&musicauto_range_param[1],			1,					0,				NULL,	NULL,	0x00,	0x04CA},
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOPAN_RATE,		"auto-pan",			0,       				RECORD_BEATLEVELMAX,	0,							0,							SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&musicauto_range_param[2],			1,					0,				NULL,	NULL,	0x00,	0x04CB},
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOWAH_RATE,		"auto-filter",		0,       				RECORD_BEATLEVELMAX,	0,							0,							SCREEN_DISPLAY_BEAT_STATE,	CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR_RET,CTRL_EVENT_LINEAR_GYRO,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&musicauto_range_param[3],			1,					0,				NULL,	NULL,	0x00,	0x04CD},
 };
-
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	musicauto_rate_param[4] = {
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOPITCH_RATE,		"vibrato",			0,       				RECORD_BEATLEVELMAX,	0,							0,							SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				8,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&musicauto_range_param[0],			(1|0x80),					0,				(uint32_t *)&musicctrl_rate_param[0],	(uint32_t *)&music_track_param[12],	0x00,	0x02C4},
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_TREMOLO_RATE,		"tremolo",			0,       				RECORD_BEATLEVELMAX,	0,							0,							SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				8,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&musicauto_range_param[1],			(1|0x80),					0,				(uint32_t *)&musicctrl_rate_param[1],	(uint32_t *)&music_track_param[10],	0x00,	0x02CA},
@@ -840,72 +915,83 @@ const param_struct	musicauto_rate_param[4] = {
 		{	MUSIC_INSTR_PRESET,SOUND_PRESET_AUTOWAH_RATE,		"auto-filter",		0,       				RECORD_BEATLEVELMAX,	0,							0,							SCREEN_DISPLAY_BEAT_STATE,	0,							CTRL_EVENT_REL_MID,		0,				8,					(uint32_t)NULL,		 		(uint32_t)NULL,			(uint32_t *)&musicauto_range_param[3],			(1|0x80),					0,				(uint32_t *)&musicctrl_rate_param[3],	(uint32_t *)&music_track_param[13],	0x00,	0x02CD},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	music_track_param[NUM_PARAM_MUSIC_TRACK_MAX] = {
 // 			p_struct,			p_param,					p_name,				p_min,					p_max,					p_default,						p_sticky,						p_screen,						p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_VOLUME,		"volume",			MAIN_VOLUME_MIN,   		MAIN_VOLUME_MAX,   		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstrvolume,	(uint32_t)displaypercent,			NULL,							0,					0,	(uint32_t *)&loop_sensor[0],(uint32_t *)&loop_changesound_param,	0x00,	0x01C0},
-		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C4},
+		{	MUSIC_LOOP,			LOOP_LEARN,					"score",			0,        				(NUM_LEARNMODE - 2),	0,								0,								SCREEN_DISPLAY_LEARN,			0,							CTRL_EVENT_REL_MAX,	0,				1,					(uint32_t)setmusiclearn,	(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C1},
 		{	COPYANDPAST,		COPY_LOOP,					"copy & past",		0,        				1,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MAX,	0,				9,				(uint32_t)checkcopyandpastparam,(uint32_t)displaycopyandpast,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C2},
 
-		{	MUSIC_LOOP,			LOOP_LEARN,					"score",			0,        				1/*(NUM_LEARNMODE - 2)*/,	0,								0,								SCREEN_DISPLAY_LEARN,			0,							CTRL_EVENT_REL_MAX,	0,				1,					(uint32_t)setmusiclearn,	(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C1},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_OCTAVE,		"octave",			MAIN_OCTAVE_MIN,		MAIN_OCTAVE_MAX,		MAIN_OCTAVE_DEFAULT,			MAIN_OCTAVE_DEFAULT,			SCREEN_DISPLAY_SIGNEDVALUE, 	0,							CTRL_EVENT_REL_MAX,	0,				2,					(uint32_t)setinstroctave,	(uint32_t)displayoctave,			NULL,							0,					0,	(uint32_t *)&loop_sensor[1],			NULL,			0x00,	0x01C3},
-
+		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C4},
 		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C5},
 		{	OTHERS,				PARAM_LOOPBEATREPEAT,		"beat repeat",		0,						RECORD_BEATLEVELMAX,	RECORD_BEATLEVELDEFAULT,		RECORD_BEATLEVELDEFAULT,		SCREEN_DISPLAY_BEAT_STATE,		0,							CTRL_EVENT_REL_MAX,	0,				1,					(uint32_t)setloopbeatrepeat,(uint32_t)NULL,						0,								0,					0,	(uint32_t *)&loop_sensor[2],			NULL,0x00,	0x01C6},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	FX_NUM_FX_INTR-1,  		FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_NAME,					0,							CTRL_EVENT_REL_MID,	0,				2,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset,			(uint32_t *)music_chorus_param,	FX_CHORUS_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[4],			0x00,	0x01C7},
 
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DELAY,			"delay",			0,                  	FX_NUM_FX_INTR-1,  		FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_NAME,					0,							CTRL_EVENT_REL_MID,	0,				2,					(uint32_t)setinstrdelay,	(uint32_t)displaypreset,			(uint32_t *)music_delay_param,	FX_DELAY_USER_SIZE,	0,				NULL,(uint32_t *)&musicfx_onoff_param[1],			0x00,	0x01C8},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,   	0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			(uint32_t *)&musicfx_onoff_param[5],			0x00,	0x01C9},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	3,  					0,								0,								SCREEN_DISPLAY_CHORUS,			0,							CTRL_EVENT_REL_MID,	0,				2,					(uint32_t)setinstrchorus,	(uint32_t)NULL,						(uint32_t *)music_chorus_param,	FX_CHORUS_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[0],			0x00,	0x01C7},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DELAY_ONOFF,	"delay",			0,                  	1,  					0,								0,								SCREEN_DISPLAY_BOOL,			0,							CTRL_EVENT_REL_MAX,	0,				3,					(uint32_t)setinstrdelay,	(uint32_t)NULL,						(uint32_t *)music_delay_param,	FX_DELAY_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x01C8},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,   	0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,						NULL,							0,					0,				NULL,			(uint32_t *)&musicfx_onoff_param[1],			0x00,	0x01C9},
 
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_EXPRESSION,	"expression",		MAIN_EXPRESSION_MIN,	MAIN_EXPRESSION_MAX,	MAIN_EXPRESSION_DEFAULT,		MAIN_EXPRESSION_DEFAULT,		SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,	0,				0xA,				(uint32_t)setinstrexpression,(uint32_t)displaypercent, 			NULL,							0,					0,	(uint32_t *)&loop_sensor[3],(uint32_t *)&musicauto_rate_param[1],			0x00,	0x01CA},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_MIN,				MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,				0,							CTRL_EVENT_REL_MIN,	0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,	(uint32_t *)&loop_sensor[4],(uint32_t *)&musicauto_rate_param[2],			0x00,	0x01CB},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_DEFAULT,			MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,				0,							CTRL_EVENT_REL_MIN,	0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,	(uint32_t *)&loop_sensor[4],(uint32_t *)&musicauto_rate_param[2],			0x00,	0x01CB},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PITCHSEND,		"pitch",			MAIN_PB_SENS_MIN,   	MAIN_PB_SENS_MAX,   	MAIN_PB_SENS_DEFAULT,			MAIN_PB_SENS_DEFAULT,			SCREEN_DISPLAY_PITCH,			0,							CTRL_EVENT_REL_MID,	0,				0xA,			(uint32_t)setinstrpitchbendsens,(uint32_t)NULL, 					NULL,							0,					0,	(uint32_t *)&loop_sensor[5],(uint32_t *)&musicauto_rate_param[0],0x00,	0x01CC},
-
+		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_VIBRATO,		"vibrato",			0,                  	FX_NUM_FX_INTR-1,   	FX_VIB_PRESET_DEFAULTVALUE,		FX_VIB_PRESET_DEFAULTVALUE,		FX_VIBRATO_NAME,				0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrvibrato,	(uint32_t)displaypreset,			(uint32_t *)music_vibrato_param,FX_VIBRATO_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[6],			0x00,	0x01CC},
+		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_WAH,			"wah-wah",			0,                  	FX_NUM_FX_INTR-1,   	FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_NAME,				   	0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrwah,		(uint32_t)displaypreset,			(uint32_t *)music_wah_param,	FX_WAH_USER_SIZE,	0,				NULL,(uint32_t *)&musicauto_rate_param[3],			0x00,	0x01CD},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_WAH_FREQ,		"filter",			FX_WAH_FILTERFREQ_MINVALUE,	FX_WAH_FILTERFREQ_MAXVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,SCREEN_DISPLAY_FREQUENCY,	0,							CTRL_EVENT_REL_MIN,	0,				0xA,				(uint32_t)setinstrwah_freq,	(uint32_t)display8khzfreqwah,		(uint32_t *)sound_wah_param,	(FX_WAH_USER_SIZE|0x80),0,(uint32_t *)&music_wah_sensor[0],	(uint32_t *)&musicauto_rate_param[3],			0x00,	0x01CD},
+
 		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01CE},
 		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_COMPRESSOR,	"compressor",		0,                  	FX_NUM_FX_INTR-1,   	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_PRESET_DEFAULTVALUE,	SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrcompressor,(uint32_t)NULL,					(uint32_t *)music_compressor_param,FX_COMP_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[1],			0x00,	0x01CE},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DISTORTION_ONOFF,"distortion",		0,		            	1,						0,								0,								SCREEN_DISPLAY_BOOL,			0,							CTRL_EVENT_REL_MAX,	0,				3,					(uint32_t)setinstrdistortion,(uint32_t)NULL,					(uint32_t *)music_distortion_param,FX_DISTO_USER_SIZE,0,			NULL,			NULL,			0x00,	0x01CF},
+		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_ADSR,			"adsr",				0,                  	FX_NUM_FX_INTR-1,   	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstradsr,	 	(uint32_t)displaypreset,			(uint32_t *)music_adsr_param,	FX_ADSR_USER_SIZE,	0,				NULL,(uint32_t *)&musicfx_onoff_param[0],			0x00,	0x01D0},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",		FX_ADSR_RELEAS_MINVALUE,FX_ADSR_RELEAS_MAXVALUE,FX_ADSR_RELEAS_DEFAULTVALUE,	FX_ADSR_RELEAS_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,			0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,	NULL,							0,					0,				NULL,(uint32_t *)&music_adsr_param[0],				0x00,	0x0144},
 
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DISTORTION,	"distortion",		0,		            	FX_NUM_FX_INTR-1,		FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_NAME,					0,							CTRL_EVENT_REL_MID,	0,				2,					(uint32_t)setinstrdistortion,(uint32_t)displaypreset,			(uint32_t *)music_distortion_param,FX_DISTO_USER_SIZE,0,			NULL,(uint32_t *)&musicfx_onoff_param[2],			0x00,	0x01CF},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_EQ,			"equalizer",		0,                  	FX_NUM_FX_INTR-1,  		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_NAME, 					0,							CTRL_EVENT_REL_MID,	0,				2,					(uint32_t)setinstreq,		(uint32_t)displaypreset,			(uint32_t *)music_eq_param,		FX_PEQ_USER_SIZE,	0,				NULL,(uint32_t *)&musicfx_onoff_param[3],			0x00,	0x01D1},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_ADSR_ATTACK,	"attack time",		FX_ADSR_ATTACK_MINVALUE,FX_ADSR_ATTACK_MAXVALUE,FX_ADSR_ATTACK_DEFAULTVALUE,	FX_ADSR_ATTACK_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,			0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,	NULL,							0,					0,				NULL,(uint32_t *)&music_adsr_param[1],				0x00,	0x01D0},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_EQ_ONOFF,		"equalizer",		0,                  	1,  					0,								0,								SCREEN_DISPLAY_BOOL, 			0,							CTRL_EVENT_REL_MAX,	0,				2,					(uint32_t)setinstreq,		(uint32_t)NULL,						(uint32_t *)music_eq_param,		FX_PEQ_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x01D1},
 		{	OTHERS,				PARAM_NONE,					"un-set ctrl",		0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0192},
 
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#else
+__attribute__ ((section(".intflash")))
+#endif
 const param_struct	music_track_param_ps[NUM_PARAM_MUSIC_TRACK_MAX] = {
 // 			p_struct,			p_param,					p_name,				p_min,					p_max,					p_default,						p_sticky,						p_screen,						p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,							extra_size,			p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_VOLUME,		"volume",			MAIN_VOLUME_MIN,   		MAIN_VOLUME_MAX,   		MAIN_VOLUME_MIN,				MAIN_VOLUME_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstrvolume,	(uint32_t)displaypercent,			NULL,							0,					0,		(uint32_t *)&loop_sensor[0],(uint32_t *)&loop_changesound_param,	0x00,	0x01C0},
-		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C3},
+		{	MUSIC_LOOP,			LOOP_LEARN,					"score",			0,        				(NUM_LEARNMODE - 2),	0,								0,								SCREEN_DISPLAY_LEARN,			0,							CTRL_EVENT_REL_MAX,	0,				1,					(uint32_t)setmusiclearn,	(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C1},
 		{	COPYANDPAST,		COPY_LOOP,					"copy & past",		0,        				1,						0,								0,								SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MAX,	0,				9,				(uint32_t)checkcopyandpastparam,(uint32_t)displaycopyandpast,		NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C2},
 
-		{	MUSIC_LOOP,			LOOP_LEARN,					"score",			0,        				1/*(NUM_LEARNMODE - 2)*/,	0,								0,								SCREEN_DISPLAY_LEARN,			0,							CTRL_EVENT_REL_MAX,	0,				1,					(uint32_t)setmusiclearn,	(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C1},
+		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C3},
 		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C4},
-
 		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01C5},
 		{	OTHERS,				PARAM_LOOPBEATREPEAT,		"beat repeat",		0,						RECORD_BEATLEVELMAX,	RECORD_BEATLEVELDEFAULT,		RECORD_BEATLEVELDEFAULT,		SCREEN_DISPLAY_BEAT_STATE,		0,							CTRL_EVENT_REL_MAX,	0,				1,					(uint32_t)setloopbeatrepeat,(uint32_t)NULL,						0,								0,					0,		(uint32_t *)&loop_sensor[2],			NULL,0x00,	0x01C6},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	FX_NUM_FX_INTR-1,  		FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_PRESET_DEFAULTVALUE,	FX_CHORUS_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)displaypreset,			(uint32_t *)music_chorus_param,	FX_CHORUS_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[4],			0x00,	0x01C7},
 
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DELAY,			"delay",			0,                  	FX_NUM_FX_INTR-1,  		FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_PRESET_DEFAULTVALUE,	FX_DELAY_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypreset,			(uint32_t *)music_delay_param,	FX_DELAY_USER_SIZE,	0,				NULL,(uint32_t *)&musicfx_onoff_param[1],			0x00,	0x01C8},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,   	0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			(uint32_t *)&musicfx_onoff_param[5],			0x00,	0x01C9},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_CHORUS,		"chorus",			0,                  	3,  					0,								0,								SCREEN_DISPLAY_CHORUS,			0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)NULL,						(uint32_t *)music_chorus_param,	FX_CHORUS_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[0],			0x00,	0x01C7},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DELAY_ONOFF,	"delay",			0,                  	1,  					0,								0,								SCREEN_DISPLAY_BOOL,			0,							CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)NULL,						(uint32_t *)music_delay_param,	FX_DELAY_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x01C8},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_SENDTOREVERB,	"reverb level",		MAIN_SENDTOREV_MIN, 	MAIN_SENDTOREV_MAX, 	MAIN_SENDTOREV_DEFAULT,			MAIN_SENDTOREV_DEFAULT,			SCREEN_DISPLAY_PERCENTAGE,   	0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstrsendtorev,(uint32_t)displaypercent,			NULL,							0,					0,				NULL,			(uint32_t *)&musicfx_onoff_param[1],			0x00,	0x01C9},
 
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_EXPRESSION,	"expression",		MAIN_EXPRESSION_MIN,	MAIN_EXPRESSION_MAX,	MAIN_EXPRESSION_DEFAULT,		MAIN_EXPRESSION_DEFAULT,		SCREEN_DISPLAY_PERCENTAGE,		0,							CTRL_EVENT_REL_MIN,	0,				0xA,				(uint32_t)setinstrexpression,(uint32_t)displaypercent, 			NULL,							0,					0,		(uint32_t *)&loop_sensor[3],(uint32_t *)&musicauto_rate_param[1],			0x00,	0x01CA},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_MIN,				MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,				0,							CTRL_EVENT_REL_MIN,	0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,		(uint32_t *)&loop_sensor[4],(uint32_t *)&musicauto_rate_param[2],			0x00,	0x01CB},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PANNING,		"panning",			MAIN_PANNING_MIN,   	MAIN_PANNING_MAX,		MAIN_PANNING_DEFAULT,			MAIN_PANNING_DEFAULT,			SCREEN_DISPLAY_PAN,				0,							CTRL_EVENT_REL_MIN,	0,				0xA,				(uint32_t)setinstrpanning,	(uint32_t)displaypanning,			NULL,							0,					0,		(uint32_t *)&loop_sensor[4],(uint32_t *)&musicauto_rate_param[2],			0x00,	0x01CB},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_PITCHSEND,		"pitch",			MAIN_PB_SENS_MIN,   	MAIN_PB_SENS_MAX,   	MAIN_PB_SENS_DEFAULT,			MAIN_PB_SENS_DEFAULT,			SCREEN_DISPLAY_PITCH,			0,							CTRL_EVENT_REL_MID,	0,				0xA,			(uint32_t)setinstrpitchbendsens,(uint32_t)NULL, 					NULL,							0,					0,	(uint32_t *)&loop_sensor[5],(uint32_t *)&musicauto_rate_param[0],0x00,	0x01CC},
-
+		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_VIBRATO,		"vibrato",			0,                  	FX_NUM_FX_INTR-1,   	FX_VIB_PRESET_DEFAULTVALUE,		FX_VIB_PRESET_DEFAULTVALUE,		FX_VIBRATO_NAME,				0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrvibrato,	(uint32_t)displaypreset,			(uint32_t *)music_vibrato_param,FX_VIBRATO_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[6],			0x00,	0x01CC},
+		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_WAH,			"wah-wah",			0,                  	FX_NUM_FX_INTR-1,   	FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_PRESET_DEFAULTVALUE,		FX_WAH_NAME,				   	0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrwah,		(uint32_t)displaypreset,			(uint32_t *)music_wah_param,	FX_WAH_USER_SIZE,	0,				NULL,(uint32_t *)&musicauto_rate_param[3],			0x00,	0x01CD},
 		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_WAH_FREQ,		"filter",		FX_WAH_FILTERFREQ_MINVALUE,	FX_WAH_FILTERFREQ_MAXVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,FX_WAH_FILTERFREQ_DEFAULTVALUE,SCREEN_DISPLAY_FREQUENCY,	0,							CTRL_EVENT_REL_MIN,		0,				0xA,				(uint32_t)setinstrwah_freq,	(uint32_t)display8khzfreqwah,		(uint32_t *)sound_wah_param,	(FX_WAH_USER_SIZE|0x80),0,(uint32_t *)&music_wah_sensor[0],(uint32_t *)&musicauto_rate_param[3],			0x00,	0x01CD},
+
 		{	NONE,				0,							"",					0,       				0,						0,								0,								0,								0,							0,					0,				0,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x01CE},
 		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_COMPRESSOR,	"compressor",		0,                  	FX_NUM_FX_INTR-1,   	FX_COMP_PRESET_DEFAULTVALUE,	FX_COMP_PRESET_DEFAULTVALUE,	SCREEN_DISPLAY_VALUE,			0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrcompressor,(uint32_t)NULL,					(uint32_t *)music_compressor_param,FX_COMP_USER_SIZE,0,				NULL,(uint32_t *)&musicfx_onoff_param[1],			0x00,	0x01CE},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DISTORTION_ONOFF,"distortion",		0,		           		1,						0,								0,								SCREEN_DISPLAY_BOOL,			0,							CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)setinstrdistortion,(uint32_t)NULL,					(uint32_t *)music_distortion_param,FX_DISTO_USER_SIZE,0,			NULL,			NULL,			0x00,	0x01CF},
+		//{	MUSIC_INSTR_PRESET,	SOUND_PRESET_ADSR,			"adsr",				0,                  	FX_NUM_FX_INTR-1,   	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_PRESET_DEFAULTVALUE,	FX_ADSR_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstradsr,	 	(uint32_t)displaypreset,			(uint32_t *)music_adsr_param,	FX_ADSR_USER_SIZE,	0,				NULL,(uint32_t *)&musicfx_onoff_param[0],			0x00,	0x01D0},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",		FX_ADSR_RELEAS_MINVALUE,FX_ADSR_RELEAS_MAXVALUE,FX_ADSR_RELEAS_DEFAULTVALUE,	FX_ADSR_RELEAS_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,			0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,	NULL,							0,					0,				NULL,(uint32_t *)&music_adsr_param[0],				0x00,	0x0144},
 
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_DISTORTION,	"distortion",			0,		            	FX_NUM_FX_INTR-1,		FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_PRESET_DEFAULTVALUE,	FX_DISTO_NAME,					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstrdistortion,(uint32_t)displaypreset,			(uint32_t *)music_distortion_param,FX_DISTO_USER_SIZE,0,			NULL,(uint32_t *)&musicfx_onoff_param[2],			0x00,	0x01CF},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_EQ,			"equalizer",		0,                  	FX_NUM_FX_INTR-1,  		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_PRESET_DEFAULTVALUE,		FX_PEQ_NAME, 					0,							CTRL_EVENT_REL_MID,	0,				0,					(uint32_t)setinstreq,		(uint32_t)displaypreset,			(uint32_t *)music_eq_param,		FX_PEQ_USER_SIZE,	0,				NULL,(uint32_t *)&musicfx_onoff_param[3],			0x00,	0x01D1},
-		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_ADSR_ATTACK,	"attack time",		FX_ADSR_ATTACK_MINVALUE,FX_ADSR_ATTACK_MAXVALUE,FX_ADSR_ATTACK_DEFAULTVALUE,	FX_ADSR_ATTACK_DEFAULTVALUE,	SCREEN_DISPLAY_TIME,			0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,	NULL,							0,					0,				NULL,(uint32_t *)&music_adsr_param[1],				0x00,	0x01D0},
+		{	MUSIC_INSTR_PRESET,	SOUND_PRESET_EQ_ONOFF,		"equalizer",		0,                  	1,  					0,								0,								SCREEN_DISPLAY_BOOL, 			0,							CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)setinstreq,		(uint32_t)NULL,						(uint32_t *)music_eq_param,		FX_PEQ_USER_SIZE,	0,				NULL,			NULL,			0x00,	0x01D1},
 		{	OTHERS,				PARAM_NONE,					"un-set ctrl",		0,       				0,						0,								0,								0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,							0,					0,				NULL,			NULL,			0x00,	0x0192},
 
 };
 
-SECTION_INTFLASH
-const tab_param tab_struct_param[NUM_PARAM_TAB] =
+tab_param tab_struct_param[NUM_PARAM_TAB] =
 {
 	{&controler_vol_param, 	1}, // 1
 	{&sound_vol_param, 		1}, // 2
@@ -947,7 +1033,7 @@ const tab_param tab_struct_param[NUM_PARAM_TAB] =
 	{controler_param,		NUM_PARAM_CONTROLER_MAX}, // 40
 	{sound_sensor,			7}, // 41
 	{&onoff_param,			1}, // 42
-	{fx_onoff_param,		6}, // 43
+	{fx_onoff_param,		2}, // 43
 	{auto_range_param,		4}, // 44
 	{auto_rate_param,		4}, // 45
 	{sound_param,			NUM_PARAM_SOUND_MAX}, // 46
@@ -957,7 +1043,7 @@ const tab_param tab_struct_param[NUM_PARAM_TAB] =
 	{music_param_ps,		NUM_PARAM_MUSIC_MAX}, // 50
 	{&loop_changesound_param,1}, // 51
 	{loop_sensor,			6}, // 52
-	{musicfx_onoff_param,	6}, // 53
+	{musicfx_onoff_param,	2}, // 53
 	{musicauto_range_param,	4}, // 54
 	{musicauto_rate_param,	4}, // 55
 	{music_track_param,		NUM_PARAM_MUSIC_TRACK_MAX}, // 56
@@ -1013,42 +1099,42 @@ uint8_t *getparamtoset(uint32_t cat, uint32_t param)
         case INSTR_MIX:
         {
         	temp = controler_tab.c_param.c_instr;
-        	tab = (uint8_t *)&(instr_tab[temp].s_mix);
+        	tab = (uint8_t *)&(instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_mix);
 			ret = &(tab[param]);
         }
 		break;
         case INSTR_DISTORTION:
         {
         	temp = controler_tab.c_param.c_instr;
-        	tab = (uint8_t *)&(instr_tab[temp].s_distortion[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_distortion_preset]);
+        	tab = (uint8_t *)&(instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_distortion);
 			ret = &(tab[param]);
         }
 		break;
         case INSTR_COMPRESSOR:
         {
         	temp = controler_tab.c_param.c_instr;
-			tab = (uint8_t *)&(instr_tab[temp].s_compressor[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_compressor_preset]);
+			tab = (uint8_t *)&(instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_compressor);
 			ret = &(tab[param]);
         }
 		break;
         case INSTR_EQUALIZER:
         {
         	temp = controler_tab.c_param.c_instr;
-			tab = (uint8_t *)&(instr_tab[temp].s_equalizer[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_eq_preset]);
+			tab = (uint8_t *)&(instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_equalizer);
 			ret = &(tab[param]);
         }
 		break;
         case INSTR_CHORUS:
         {
         	temp = controler_tab.c_param.c_instr;
-			tab = (uint8_t *)&(instr_tab[temp].s_chorus[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_chorus_preset]);
+			tab = (uint8_t *)&(instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_chorus[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_chorus_preset-1]);
 			ret = &(tab[param]);
         }
 		break;
         case INSTR_DELAY:
         {
         	temp = controler_tab.c_param.c_instr;
-			tab = (uint8_t *)&(instr_tab[temp].s_delay[instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_delay_preset]);
+			tab = (uint8_t *)&(instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_delay);
 			ret = &(tab[param]);
         }
 		break;
@@ -1061,37 +1147,37 @@ uint8_t *getparamtoset(uint32_t cat, uint32_t param)
 		break;
         case MUSIC_INSTR_MIX:
         {
-        	tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_mix);
+        	tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_mix);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_DISTORTION:
         {
-			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_distortion);
+			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_distortion);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_COMPRESSOR:
         {
-			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_compressor);
+			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_compressor);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_EQUALIZER:
         {
-			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_equalizer);
+			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_equalizer);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_CHORUS:
         {
-			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_chorus);
+			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_chorus[music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_chorus_preset-1]);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_DELAY:
         {
-			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_delay);
+			tab = (uint8_t *)&(music_tab[controler_tab.c_param.c_song].s_track[music_strack()].t_loop[music_sloop()].l_instr.i_preset.s_delay);
 			ret = &(tab[param]);
         }
 		break;
@@ -1215,7 +1301,7 @@ uint8_t *getparamtoset(uint32_t cat, uint32_t param)
 				case PARAM_INSTRLED:
 				{
 					temp = controler_tab.c_param.c_instr;
-					ret = (uint8_t *)&(instr_tab[temp].s_displayled);
+					ret = (uint8_t *)&(instr_tab[temp].s_preset[instr_tab[temp].s_presetnum].s_displayled);
 				}
 				break;
 
@@ -1250,37 +1336,37 @@ uint8_t *getparamtoset_internalCC(uint32_t cat, uint32_t param)
     {
         case MUSIC_INSTR_MIX:
         {
-        	tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_mix);
+        	tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_preset.s_mix);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_DISTORTION:
         {
-			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_distortion);
+			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_preset.s_distortion);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_COMPRESSOR:
         {
-			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_compressor);
+			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_preset.s_compressor);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_EQUALIZER:
         {
-			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_equalizer);
+			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_preset.s_equalizer);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_CHORUS:
         {
-			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_chorus);
+			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_preset.s_chorus[tmp_loop_instr[music_strack()][music_sloop()].i_preset.s_chorus_onoff]);
 			ret = &(tab[param]);
         }
 		break;
         case MUSIC_INSTR_DELAY:
         {
-			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_delay);
+			tab = (uint8_t *)&(tmp_loop_instr[music_strack()][music_sloop()].i_preset.s_delay);
 			ret = &(tab[param]);
         }
 		break;

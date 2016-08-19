@@ -20,17 +20,20 @@
 #define MUSIC_MAXLAYER		4
 
 #define MUSIC_SONG_NAME_SIZE			32 //12
+#define MUSIC_SONG_OWNER_STR_SIZE		0x010
 
-#define VERSION_MUSIC	2 //1
+#define MUSIC_DEFAULTREVERB	1
+
+#define VERSION_MUSIC	3 //1
 
 /***** controler parameters structure*****/
 typedef struct
 {
-	uint32_t	time;
-	uint8_t	control;
-	uint8_t	canal;
-	uint8_t	note;
-	uint8_t	value;
+    uint32_t	time;
+    uint8_t	control;
+    uint8_t	canal;
+    uint8_t	note;
+    uint8_t	value;
 }music_sample;
 
 #ifdef __LPC177X_8X__
@@ -43,75 +46,64 @@ typedef uint32_t music_sample_p;
 
 typedef struct
 {
-	s_instr i_instrument;
+	info_instr i_instrument;
 
 	preset_instr	i_preset;
-
-    // FX
-    FX_mix			i_mix;
-	FX_distortion	i_distortion;
-	uint8_t			dummy0[16];
-	FX_compressor	i_compressor;
-	FX_equalizer	i_equalizer;
-	FX_delay		i_delay;
-	FX_chorus		i_chorus;
-	uint8_t			dummy1[16];
-	uint8_t			dummy2[18];
-
 }music_instr;
 
-#define MUSIC_INSTRU_SIZE	(INSTR_INFO_SIZE + PRESET_STRUCT_SIZE + FX_MIX_SIZE + FX_DIST_SIZE + 16 + FX_COMP_SIZE + FX_EQ_SIZE + FX_DELAY_SIZE + FX_CHORUS_SIZE + 16 +18)
+#define MUSIC_INSTRU_SIZE	(INSTR_INFO_SIZE + PRESET_STRUCT_SIZE)
+
 
 typedef struct
 {
-	uint8_t	l_state;
-	uint8_t l_loopmod;
-	uint8_t l_learn;
-	uint8_t l_midioutchannel;
-	uint32_t l_savelooptimer; //uint8_t dummy[4];
-	music_instr l_instr;
+    uint8_t	l_state;
+    uint8_t l_loopmod;
+    uint8_t l_learn;
+    uint8_t l_midioutchannel;
+    uint32_t l_savelooptimer; //uint8_t dummy[4];
+    music_instr l_instr;
     music_sample_p l_adress;
-	uint16_t l_numsample;
-	uint8_t dummy2[2];
+    uint16_t l_numsample;
+    uint8_t dummy2[2];
 }music_loop;
 
 #define MUSIC_LOOP_SIZE	(4 + 4 + MUSIC_INSTRU_SIZE + 4 + 2 + 2)
 
 enum {
-	LOOP_STATE,
-	LOOP_MOD,
-	LOOP_LEARN,
-	LOOP_MIDIOUTCHANNEL,
-	NUM_INFOLOOP
+    LOOP_STATE,
+    LOOP_MOD,
+    LOOP_LEARN,
+    LOOP_MIDIOUTCHANNEL,
+    NUM_INFOLOOP
 };
 
 typedef struct
 {
-	uint8_t	t_midichannel;
-	uint8_t t_currentloop;
-	uint8_t	dummy[2];
-	music_loop t_loop[MUSIC_MAXLAYER];
+    uint8_t	t_midichannel;
+    uint8_t t_currentloop;
+    uint8_t	dummy[2];
+    music_loop t_loop[MUSIC_MAXLAYER];
 }music_track;
 
 #define MUSIC_TRACK_SIZE	(2 + 2 + (MUSIC_LOOP_SIZE * MUSIC_MAXLAYER))
 
 enum TRACK_INFO {
-	TRACK_MIDICHANNEL,
-	TRACK_CURRENTLOOP,
-	NUM_INFOTRACK
+    TRACK_MIDICHANNEL,
+    TRACK_CURRENTLOOP,
+    NUM_INFOTRACK
 };
 
 typedef struct
 {
 	uint32_t s_version_music; // music struct version
-	uint8_t s_original_sn[0x010];
-	uint8_t s_original_name[0x010];
-	uint8_t s_original_user[0x010];
-	uint8_t s_original_userid[0x010];
-	uint8_t s_modif_sn[0x010];
-	uint8_t s_modif_name[0x010];
-	uint8_t s_modif_user[0x010];
-	uint8_t s_modif_userid[0x010];
+    uint8_t s_original_sn[MUSIC_SONG_OWNER_STR_SIZE];
+    uint8_t s_original_name[MUSIC_SONG_OWNER_STR_SIZE];
+    uint8_t s_original_user[MUSIC_SONG_OWNER_STR_SIZE];
+    uint8_t s_original_userid[MUSIC_SONG_OWNER_STR_SIZE];
+    uint8_t s_modif_sn[MUSIC_SONG_OWNER_STR_SIZE];
+    uint8_t s_modif_name[MUSIC_SONG_OWNER_STR_SIZE];
+    uint8_t s_modif_user[MUSIC_SONG_OWNER_STR_SIZE];
+    uint8_t s_modif_userid[MUSIC_SONG_OWNER_STR_SIZE];
 
 	uint32_t s_size;
 	uint32_t s_metadata;
@@ -159,14 +151,14 @@ typedef struct
 
 }music_song;
 
-#define MUSIC_SONG_SIZE    (4 + (2*(0x010 + 0x010 + 0x010 + 0x010)) + 32 + MUSIC_SONG_NAME_SIZE + 4  + 12 + NUM_LED_VALUE + FX_MIX_SIZE + 32 + (MUSIC_TRACK_SIZE * MUSIC_MAXTRACK))
+#define MUSIC_SONG_SIZE    (4 + (8*(MUSIC_SONG_OWNER_STR_SIZE)) + 32 + MUSIC_SONG_NAME_SIZE + 4 + 12 + NUM_LED_VALUE + FX_MIX_SIZE + 8 + FX_REVERB_SIZE + (MUSIC_TRACK_SIZE * MUSIC_MAXTRACK))
 
 #define RECORD_SAMPLEBUFFERSIZE	0x10000
 
 typedef struct
 {
-	music_song local_song;
-	music_sample local_buffer[RECORD_SAMPLEBUFFERSIZE];
+    music_song local_song;
+    music_sample local_buffer[RECORD_SAMPLEBUFFERSIZE];
 } s_total_buffer;
 
 enum SONG_INFO {
@@ -221,33 +213,33 @@ enum SONG_INFO {
 
 
 enum{ // CHANNEL CONTROL
-	REC_EMPTY,
-	REC_RECORD,
-	REC_PLAY,
-	REC_STOP,
-	REC_PAUSE,
-	REC_RECORDWAIT,
-	REC_STATE_NUM
+    REC_EMPTY,
+    REC_RECORD,
+    REC_PLAY,
+    REC_STOP,
+    REC_PAUSE,
+    REC_RECORDWAIT,
+    REC_STATE_NUM
 };
 
 enum{ // LEARN MODE
-	LEARN_OFF,
-	LEARN_ON,
-	LEARN_TWOBEAT,
-	LEARN_ONEBEAT,
-	LEARN_HALFBEAT,
-	LEARN_QUARTERBEAT,
-	LEARN_STEPBYSTEP,
-	NUM_LEARNMODE
+    LEARN_OFF,
+    LEARN_ON,
+    LEARN_TWOBEAT,
+    LEARN_ONEBEAT,
+    LEARN_HALFBEAT,
+    LEARN_QUARTERBEAT,
+    LEARN_STEPBYSTEP,
+    NUM_LEARNMODE
 };
 
 enum{ // TIME SIGNATURE
-	TIME_OFF,
-	TIME_2_4,
-	TIME_3_4,
-	TIME_4_4,
-	TIME_5_4,
-	NUM_TIMESIGNATURE
+    TIME_OFF,
+    TIME_2_4,
+    TIME_3_4,
+    TIME_4_4,
+    TIME_5_4,
+    NUM_TIMESIGNATURE
 };
 
 
@@ -284,7 +276,8 @@ void get_musicdata(uint32_t song, uint8_t *buffer, uint32_t address, uint32_t le
 void save_musicdata(uint32_t song, uint8_t *buffer, uint32_t address, uint32_t length);
 void init_music_instr(music_instr *instr_struct, uint32_t instr);
 void erase_music_instr_name(music_instr *instr_struct);
-void cp_music_instr(music_instr *music_instr_struct, struct_instr* instr_struct, uint32_t preset);
+void cp_music_instr(music_instr *music_instr_struct, sound_instr* instr_struct, uint32_t preset);
+void check_music_instr(music_instr *instr_struct);
 void save_music(music_song *song_struct, uint32_t song);
 void erase_music( uint32_t song);
 int32_t load_defaultmusic(music_song *song_struct);

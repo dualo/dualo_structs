@@ -17,15 +17,17 @@
 
 #ifdef __LPC177X_8X__
 __attribute__ ((section(".extram")))
-#endif
+#else
 SECTION_EXTRAM
+#endif
 //info_instr keyboardL_instr_map[NUM_BUTTON_KEYBOARD];
 info_instr *keyboardL_instr_map;
 
 #ifdef __LPC177X_8X__
 __attribute__ ((section(".extram")))
-#endif
+#else
 SECTION_EXTRAM
+#endif
 //info_instr keyboardR_instr_map[NUM_BUTTON_KEYBOARD];
 info_instr *keyboardR_instr_map;
 

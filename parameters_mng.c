@@ -55,24 +55,41 @@ __attribute__ ((section(".extram")))
 struct_miditable midi_tab[MIDITABLE_MAX];
 
 #endif
-
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_mix			temp_mix;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_distortion	temp_distortion;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_compressor	temp_compressor;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_equalizer	temp_equalizer;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_equalizer	temp_eqmain;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_chorus		temp_chorus;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_delay		temp_delay;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 FX_reverb		temp_reverb;
+#ifdef __LPC18XX__
 SECTION_EXTRAM
+#endif
 preset_instr	temp_preset_instr;
 
 extern music_instr tmp_loop_instr[MUSIC_MAXTRACK][MUSIC_MAXLAYER];
@@ -91,18 +108,24 @@ extern uint32_t layer_play_record;
 
 extern s_arrangement arrangement_buffer;
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	dummy_paramstruct =
 // 			p_struct,		p_param,				p_name,			p_min,				p_max,				p_default,			p_sticky,			p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	NONE,			0,						"",					0,       				0,						0,							0,							0,							0,							0,						0,				0,					(uint32_t)NULL,		 		(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0000};
 
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	controler_vol_param =
 // 			p_struct,		p_param,				p_name,			p_min,				p_max,				p_default,			p_sticky,			p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	CONTROLER,		CONTROLER_MAINVOLUME,	"volume",		MAIN_VOLUME_MIN,	MAIN_VOLUME_MAX,	MAIN_VOLUME_MIN,	MAIN_VOLUME_DEFAULT,SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)setmainvolume, 	(uint32_t)displaypercent,	0,			0,			0,				NULL,			NULL,			0x00,	0x0010};
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_vol_param =
 // 			p_struct,		p_param,				p_name,			p_min,				p_max,				p_default,			p_sticky,			p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	INSTR_PRESET,	SOUND_PRESET_VOLUME,	"sound volume",	MAIN_VOLUME_MIN,	MAIN_VOLUME_MAX,	MAIN_VOLUME_MIN,	MAIN_VOLUME_DEFAULT,SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)setinstrvolume,	(uint32_t)displaypercent,	0,			0,			0,				NULL,			NULL,			0x00,	0x0011};
@@ -112,7 +135,9 @@ const param_struct	sound_vol_param =
 //// 			p_struct,		p_param,				p_name,			p_min,				p_max,				p_default,			p_sticky,			p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 //		{	MUSIC_SONG,		SONG_VOLUME,			"d-m volume",	MAIN_VOLUME_MIN,   MAIN_VOLUME_MAX,		MAIN_VOLUME_MIN,		MAIN_VOLUME_MIN,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)setmusicvolume, 	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0012};
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_head_param =
 // 			p_struct,		p_param,				p_name,			p_min,				p_max,				p_default,			p_sticky,			p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 	{	MUSIC_SONG,		SONG_PLAYHEAD,				"play-head",	0,        			255,				0,					0,					SCREEN_DISPLAY_TIMECIRCLEPOSITION,	0,					CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)NULL,				(uint32_t)displaytimecircle,NULL,							0,					0,				NULL,			NULL,			0x00,	0x0012};
@@ -123,7 +148,9 @@ param_struct	music_dugame_param =
 // 			p_struct,		p_param,				p_name,			p_min,				p_max,				p_default,			p_sticky,			p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	OTHERS,			PARAM_DUGAME,			"du-game step",	0,   		(ARRANGEMENT_MAXEVENT - 1),	0,					0,					SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MAX,		0,				0,					(uint32_t)setarrangementstep,(uint32_t)NULL,			NULL,		0,			0,				NULL,			NULL,			0x00,	0x0013};
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	controler_eq_sensor[FX_PEQ_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,			p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	GENERAL_EQ,		FX_PEQ_LBGAIN,			"low gain",		FX_PEQ_LBGAIN_MINVALUE,     		FX_PEQ_LBGAIN_MAXVALUE,     	FX_PEQ_LBGAIN_DEFAULTVALUE,			FX_PEQ_LBGAIN_DEFAULTVALUE,			SCREEN_DISPLAY_GAIN,		CTRL_EVENT_LINEAR_REF,		CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setgeneraleq,	(uint32_t)displaygain,		NULL,		0,			0,				NULL,			NULL,			0x00,	0x0530},
@@ -138,7 +165,9 @@ const param_struct	controler_eq_sensor[FX_PEQ_USER_SIZE] = {
 		//{	GENERAL_EQ,		FX_PEQ_HMBQ,			"mid-h q.",		FX_PEQ_HMBQ_MINVALUE,       		FX_PEQ_HMBQ_MAXVALUE,       	FX_PEQ_HMBQ_DEFAULTVALUE,			FX_PEQ_HMBQ_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,						0,					(uint32_t)setgeneraleq,	 	(uint32_t)NULL,				NULL,		0,			0}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	controler_eq_param[FX_PEQ_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	GENERAL_EQ,		FX_PEQ_LBGAIN,			"low gain",		FX_PEQ_LBGAIN_MINVALUE,     		FX_PEQ_LBGAIN_MAXVALUE,     	FX_PEQ_LBGAIN_DEFAULTVALUE,			FX_PEQ_LBGAIN_DEFAULTVALUE,			SCREEN_DISPLAY_GAIN,		0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)setgeneraleq,	 	(uint32_t)displaygain,		NULL,		0,			0,(uint32_t *)&controler_eq_sensor[0],			NULL,			0x00,	0x0030},
@@ -153,7 +182,9 @@ const param_struct	controler_eq_param[FX_PEQ_USER_SIZE] = {
 		//{	GENERAL_EQ,		FX_PEQ_HMBQ,			"mid-h q.",		FX_PEQ_HMBQ_MINVALUE,       		FX_PEQ_HMBQ_MAXVALUE,       	FX_PEQ_HMBQ_DEFAULTVALUE,			FX_PEQ_HMBQ_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				0,					(uint32_t)setgeneraleq,	 	(uint32_t)NULL,				NULL,		0,			0}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	controler_reverb_sensor[FX_REVERB_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	GENERAL_REVERB,	FX_REVERB_LEVEL,		"rev level",	FX_REVERB_LEVEL_MINVALUE,			FX_REVERB_LEVEL_MAXVALUE,		FX_REVERB_LEVEL_MAXVALUE,			FX_REVERB_LEVEL_MINVALUE,			SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			0x00,	0x0540},
@@ -170,7 +201,9 @@ const param_struct	controler_reverb_sensor[FX_REVERB_USER_SIZE] = {
 		//{	GENERAL_REVERB,	FX_REVERB_DRY_WET,		"dry / wet",	FX_REVERB_DRYWET_MINVALUE,			FX_REVERB_DRYWET_MAXVALUE,		FX_REVERB_DRYWET_MAXVALUE,    		FX_REVERB_DRYWET_MINVALUE,    		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			00x00,	x054b}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	controler_reverb_param[FX_REVERB_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	GENERAL_REVERB,	FX_REVERB_LEVEL,		"rev level",	FX_REVERB_LEVEL_MINVALUE,			FX_REVERB_LEVEL_MAXVALUE,		FX_REVERB_LEVEL_MAXVALUE,			FX_REVERB_LEVEL_MINVALUE,			SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			0x00,	0x0040},
@@ -187,7 +220,9 @@ const param_struct	controler_reverb_param[FX_REVERB_USER_SIZE] = {
 		//{	GENERAL_REVERB,	FX_REVERB_DRY_WET,		"dry / wet",	FX_REVERB_DRYWET_MINVALUE,			FX_REVERB_DRYWET_MAXVALUE,		FX_REVERB_DRYWET_MAXVALUE,    		FX_REVERB_DRYWET_MINVALUE,    		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			0x00,	0x004b}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_compressor_param[FX_COMP_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,							extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_COMPRESSOR,	FX_COMP_ON_OFF,			"state",		FX_COMP_ONOFF_MINVALUE,				FX_COMP_ONOFF_MAXVALUE,			FX_COMP_ONOFF_DEFAULTVALUE,			FX_COMP_ONOFF_DEFAULTVALUE,			SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrcompressor,	(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0050},
@@ -199,7 +234,9 @@ const param_struct	sound_compressor_param[FX_COMP_USER_SIZE] = {
 		//{	INSTR_COMPRESSOR,	FX_COMP_KNEE,			"knee",			FX_COMP_KNEE_MINVALUE,    			FX_COMP_KNEE_MAXVALUE,    		FX_COMP_KNEE_DEFAULTVALUE,			FX_COMP_KNEE_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrcompressor,	(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x0056},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_wah_sensor[FX_WAH_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_WAH,		FX_WAH_FILTERTYPE,		"filter type",	FX_WAH_FILTERTYPE_MINVALUE,			FX_WAH_FILTERTYPE_MAXVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_FILTERTYPE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrwah_type,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0560},
@@ -208,7 +245,9 @@ const param_struct	sound_wah_sensor[FX_WAH_USER_SIZE] = {
 		//{	INSTR_WAH,		FX_WAH_AUTOSENSITIVITY,	"auto-sens",	FX_WAH_SENSITIVITY_MINVALUE,    	FX_WAH_SENSITIVITY_MAXVALUE,    FX_WAH_SENSITIVITY_DEFAULTVALUE,	FX_WAH_SENSITIVITY_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrwah,		(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0563},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_wah_param[FX_WAH_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	INSTR_PRESET,	SOUND_PRESET_WAH_TYPE,	"filter type",	FX_WAH_FILTERTYPE_MINVALUE,			FX_WAH_FILTERTYPE_MAXVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_FILTERTYPE,	0,							CTRL_EVENT_REL_MIN,	0,				1,					(uint32_t)setinstrwah_type,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0060},
@@ -217,7 +256,9 @@ const param_struct	sound_wah_param[FX_WAH_USER_SIZE] = {
 		//{	INSTR_WAH,		FX_WAH_AUTOSENSITIVITY,	"auto-sens",	FX_WAH_SENSITIVITY_MINVALUE,    	FX_WAH_SENSITIVITY_MAXVALUE,    FX_WAH_SENSITIVITY_DEFAULTVALUE,	FX_WAH_SENSITIVITY_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrwah,		(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0063},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_distortion_sensor[FX_DISTO_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_DISTORTION,	FX_DISTO_ON_OFF,		"state",		FX_DISTO_ONOFF_MINVALUE,			FX_DISTO_ONOFF_MAXVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0570},
@@ -230,7 +271,9 @@ const param_struct	sound_distortion_sensor[FX_DISTO_USER_SIZE] = {
 		///{INSTR_DISTORTION,	FX_DISTO_RCTYPEFREQ,	"rc type freq",	FX_DISTO_RCTYPE_MINVALUE,    		FX_DISTO_RCTYPE_MAXVALUE,    	FX_DISTO_RCTYPE_DEFAULTVALUE,		FX_DISTO_RCTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0577},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_distortion_param[FX_DISTO_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_DISTORTION,	FX_DISTO_ON_OFF,		"state",		FX_DISTO_ONOFF_MINVALUE,			FX_DISTO_ONOFF_MAXVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0070},
@@ -243,7 +286,9 @@ const param_struct	sound_distortion_param[FX_DISTO_USER_SIZE] = {
 		///{INSTR_DISTORTION,	FX_DISTO_RCTYPEFREQ,	"rc type freq",	FX_DISTO_RCTYPE_MINVALUE,    		FX_DISTO_RCTYPE_MAXVALUE,    	FX_DISTO_RCTYPE_DEFAULTVALUE,		FX_DISTO_RCTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0077},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_eq_sensor[FX_PEQ_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_EQUALIZER,	FX_PEQ_ON_OFF,			"state",		FX_PEQ_ONOFF_MINVALUE,				FX_PEQ_ONOFF_MAXVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstreq,	 	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0580},
@@ -259,7 +304,9 @@ const param_struct	sound_eq_sensor[FX_PEQ_USER_SIZE] = {
 		//{	INSTR_EQUALIZER,	FX_PEQ_HMBQ,			"mid-h q.",		FX_PEQ_HMBQ_MINVALUE,       		FX_PEQ_HMBQ_MAXVALUE,       	FX_PEQ_HMBQ_DEFAULTVALUE,			FX_PEQ_HMBQ_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstreq,		 (uint32_t)NULL,			NULL,		0,			0,				NULL,			NULL,			0x00,	0x058A}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_eq_param[FX_PEQ_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_EQUALIZER,	FX_PEQ_ON_OFF,			"state",		FX_PEQ_ONOFF_MINVALUE,				FX_PEQ_ONOFF_MAXVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstreq,	 	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0080},
@@ -275,7 +322,9 @@ const param_struct	sound_eq_param[FX_PEQ_USER_SIZE] = {
 		//{	INSTR_EQUALIZER,	FX_PEQ_HMBQ,			"mid-h q.",		FX_PEQ_HMBQ_MINVALUE,       		FX_PEQ_HMBQ_MAXVALUE,       	FX_PEQ_HMBQ_DEFAULTVALUE,			FX_PEQ_HMBQ_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstreq,		 (uint32_t)NULL,			NULL,		0,			0,				NULL,			NULL,			0x00,	0x008A}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_chorus_param[FX_CHORUS_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_CHORUS,	FX_CHORUS_MODE,			"mode",			FX_CHORUS_MODE_MINVALUE,			FX_CHORUS_MODE_MAXVALUE,		FX_CHORUS_MODE_DEFAULTVALUE,		FX_CHORUS_MODE_DEFAULTVALUE,		SCREEN_DISPLAY_CHORUSMODE,		0,						CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0090},
@@ -290,7 +339,9 @@ const param_struct	sound_chorus_param[FX_CHORUS_USER_SIZE] = {
 		//{	INSTR_CHORUS,	FX_CHORUS_ROTARYSPEED,	"rotary speed",	FX_CHORUS_ROTARY_MINVALUE,   		FX_CHORUS_ROTARY_MAXVALUE,  	FX_CHORUS_ROTARY_DEFAULTVALUE,		FX_CHORUS_ROTARY_DEFAULTVALUE,	SCREEN_DISPLAY_ROTARYSPEED,			0,						CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0099},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_delay_sensor[FX_DELAY_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_DELAY,	FX_DELAY_ON_OFF,		"state",		FX_DELAY_ONOFF_MINVALUE,			FX_DELAY_ONOFF_MAXVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A0},
@@ -302,7 +353,9 @@ const param_struct	sound_delay_sensor[FX_DELAY_USER_SIZE] = {
 		//{	INSTR_DELAY,	FX_DELAY_HDAMP,			"h-damp",		FX_DELAY_HDAMP_MINVALUE,   			FX_DELAY_HDAMP_MAXVALUE,    	FX_DELAY_HDAMP_DEFAULTVALUE,		FX_DELAY_HDAMP_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x05A6},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_delay_param[FX_DELAY_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	INSTR_DELAY,	FX_DELAY_ON_OFF,		"state",		FX_DELAY_ONOFF_MINVALUE,			FX_DELAY_ONOFF_MAXVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x00A0},
@@ -314,7 +367,9 @@ const param_struct	sound_delay_param[FX_DELAY_USER_SIZE] = {
 		//{	INSTR_DELAY,	FX_DELAY_HDAMP,			"h-damp",		FX_DELAY_HDAMP_MINVALUE,   			FX_DELAY_HDAMP_MAXVALUE,    	FX_DELAY_HDAMP_DEFAULTVALUE,		FX_DELAY_HDAMP_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x00A6},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_adsr_sensor[FX_ADSR_USER_SIZE] = {
 // 			p_struct,		p_param,					p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	INSTR_PRESET,	SOUND_PRESET_ADSR_ATTACK,	"attack time",	FX_ADSR_ATTACK_MINVALUE,			FX_ADSR_ATTACK_MAXVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,					CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,NULL,		0,			0,				NULL,			NULL,			0x00,	0x00C0},
@@ -324,7 +379,9 @@ const param_struct	sound_adsr_sensor[FX_ADSR_USER_SIZE] = {
 		{	INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,					CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,	0,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,				NULL,			NULL,			0x00,	0x00C4},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	sound_adsr_param[FX_ADSR_USER_SIZE] = {
 // 			p_struct,		p_param,					p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	INSTR_PRESET,	SOUND_PRESET_ADSR_ATTACK,	"attack time",	FX_ADSR_ATTACK_MINVALUE,			FX_ADSR_ATTACK_MAXVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,NULL,		0,			0,				NULL,			(uint32_t *)&sound_adsr_param[1],			0x00,	0x05C0},
@@ -334,7 +391,9 @@ const param_struct	sound_adsr_param[FX_ADSR_USER_SIZE] = {
 		{	INSTR_PRESET,	SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				2,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,	            NULL,			(uint32_t *)&sound_adsr_param[0],			0x00,	0x05C4},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_compressor_param[FX_COMP_USER_SIZE] = {
 // 			p_struct,				p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,							extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_COMPRESSOR,	FX_COMP_ON_OFF,			"state",		FX_COMP_ONOFF_MINVALUE,				FX_COMP_ONOFF_MAXVALUE,			FX_COMP_ONOFF_DEFAULTVALUE,			FX_COMP_ONOFF_DEFAULTVALUE,			SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrcompressor,	(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x00D0},
@@ -346,7 +405,9 @@ const param_struct	music_compressor_param[FX_COMP_USER_SIZE] = {
 		//{	MUSIC_INSTR_COMPRESSOR,	FX_COMP_KNEE,			"knee",			FX_COMP_KNEE_MINVALUE,    			FX_COMP_KNEE_MAXVALUE,    		FX_COMP_KNEE_DEFAULTVALUE,			FX_COMP_KNEE_DEFAULTVALUE,			SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrcompressor,	(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x00D6},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_wah_sensor[FX_WAH_USER_SIZE] = {
 // 			p_struct,				p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_WAH,		FX_WAH_FILTERTYPE,		"filter type",	FX_WAH_FILTERTYPE_MINVALUE,			FX_WAH_FILTERTYPE_MAXVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_FILTERTYPE,	0,							CTRL_EVENT_REL_MIN,	0,					0,					(uint32_t)setinstrwah,		(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x05E0},
@@ -355,7 +416,9 @@ const param_struct	music_wah_sensor[FX_WAH_USER_SIZE] = {
 		//{	MUSIC_INSTR_WAH,		FX_WAH_AUTOSENSITIVITY,	"auto-sens",	FX_WAH_SENSITIVITY_MINVALUE,    	FX_WAH_SENSITIVITY_MAXVALUE,    FX_WAH_SENSITIVITY_DEFAULTVALUE,	FX_WAH_SENSITIVITY_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,					0,					(uint32_t)setinstrwah,		(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x05E3},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_wah_param[FX_WAH_USER_SIZE] = {
 // 			p_struct,				p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_INSTR_PRESET,		SOUND_PRESET_WAH_TYPE,	"filter type",	FX_WAH_FILTERTYPE_MINVALUE,			FX_WAH_FILTERTYPE_MAXVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		FX_WAH_FILTERTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_FILTERTYPE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrwah_type,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x00E0},
@@ -364,7 +427,9 @@ const param_struct	music_wah_param[FX_WAH_USER_SIZE] = {
 		//{	MUSIC_INSTR_WAH,		FX_WAH_AUTOSENSITIVITY,	"auto-sens",	FX_WAH_SENSITIVITY_MINVALUE,    	FX_WAH_SENSITIVITY_MAXVALUE,    FX_WAH_SENSITIVITY_DEFAULTVALUE,	FX_WAH_SENSITIVITY_DEFAULTVALUE,	SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrwah,		(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x00E3},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_distortion_sensor[FX_DISTO_USER_SIZE] = {
 // 			p_struct,				p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_DISTORTION,	FX_DISTO_ON_OFF,		"state",		FX_DISTO_ONOFF_MINVALUE,			FX_DISTO_ONOFF_MAXVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x05F0},
@@ -377,7 +442,9 @@ const param_struct	music_distortion_sensor[FX_DISTO_USER_SIZE] = {
 		///{MUSIC_INSTR_DISTORTION,	FX_DISTO_RCTYPEFREQ,	"rc type freq",	FX_DISTO_RCTYPE_MINVALUE,    		FX_DISTO_RCTYPE_MAXVALUE,    	FX_DISTO_RCTYPE_DEFAULTVALUE,		FX_DISTO_RCTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x05F7},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_distortion_param[FX_DISTO_USER_SIZE] = {
 // 			p_struct,				p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_DISTORTION,	FX_DISTO_ON_OFF,		"state",		FX_DISTO_ONOFF_MINVALUE,			FX_DISTO_ONOFF_MAXVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		FX_DISTO_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x00F0},
@@ -390,7 +457,9 @@ const param_struct	music_distortion_param[FX_DISTO_USER_SIZE] = {
 		///{MUSIC_INSTR_DISTORTION,	FX_DISTO_RCTYPEFREQ,	"rc type freq",	FX_DISTO_RCTYPE_MINVALUE,    		FX_DISTO_RCTYPE_MAXVALUE,    	FX_DISTO_RCTYPE_DEFAULTVALUE,		FX_DISTO_RCTYPE_DEFAULTVALUE,		SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdistortion,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x00F7},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_eq_sensor[FX_PEQ_USER_SIZE] = {
 // 			p_struct,				p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_EQUALIZER,	FX_PEQ_ON_OFF,			"state",		FX_PEQ_ONOFF_MINVALUE,				FX_PEQ_ONOFF_MAXVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstreq,	 	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0600},
@@ -407,7 +476,9 @@ const param_struct	music_eq_sensor[FX_PEQ_USER_SIZE] = {
 };
 
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_eq_param[FX_PEQ_USER_SIZE] = {
 // 			p_struct,				p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_EQUALIZER,	FX_PEQ_ON_OFF,			"state",		FX_PEQ_ONOFF_MINVALUE,				FX_PEQ_ONOFF_MAXVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			FX_PEQ_ONOFF_DEFAULTVALUE,			SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstreq,	 	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0100},
@@ -424,7 +495,9 @@ const param_struct	music_eq_param[FX_PEQ_USER_SIZE] = {
 };
 
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_chorus_param[FX_CHORUS_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_CHORUS,	FX_CHORUS_MODE,			"mode",			FX_CHORUS_MODE_MINVALUE,			FX_CHORUS_MODE_MAXVALUE,		FX_CHORUS_MODE_DEFAULTVALUE,		FX_CHORUS_MODE_DEFAULTVALUE,		SCREEN_DISPLAY_CHORUSMODE,		0,						CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0110},
@@ -439,7 +512,9 @@ const param_struct	music_chorus_param[FX_CHORUS_USER_SIZE] = {
 		{	MUSIC_INSTR_CHORUS,	FX_CHORUS_ROTARYSPEED,	"rotary speed",	FX_CHORUS_ROTARY_MINVALUE,   		FX_CHORUS_ROTARY_MAXVALUE,  	FX_CHORUS_ROTARY_DEFAULTVALUE,		FX_CHORUS_ROTARY_DEFAULTVALUE,	SCREEN_DISPLAY_ROTARYSPEED,			0,						CTRL_EVENT_REL_MAX,	0,				0,					(uint32_t)setinstrchorus,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0119},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_delay_sensor[FX_DELAY_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_DELAY,	FX_DELAY_ON_OFF,		"state",		FX_DELAY_ONOFF_MINVALUE,			FX_DELAY_ONOFF_MAXVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0620},
@@ -451,7 +526,9 @@ const param_struct	music_delay_sensor[FX_DELAY_USER_SIZE] = {
 		//{	MUSIC_INSTR_DELAY,	FX_DELAY_HDAMP,			"h-damp",		FX_DELAY_HDAMP_MINVALUE,   			FX_DELAY_HDAMP_MAXVALUE,    	FX_DELAY_HDAMP_DEFAULTVALUE,		FX_DELAY_HDAMP_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0626},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_delay_param[FX_DELAY_USER_SIZE] = {
 // 			p_struct,			p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_INSTR_DELAY,	FX_DELAY_ON_OFF,		"state",		FX_DELAY_ONOFF_MINVALUE,			FX_DELAY_ONOFF_MAXVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		FX_DELAY_ONOFF_DEFAULTVALUE,		SCREEN_DISPLAY_BOOL,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)NULL,				NULL,		0,			0,				NULL,			NULL,			0x00,	0x0120},
@@ -463,7 +540,9 @@ const param_struct	music_delay_param[FX_DELAY_USER_SIZE] = {
 		//{	MUSIC_INSTR_DELAY,	FX_DELAY_HDAMP,			"h-damp",		FX_DELAY_HDAMP_MINVALUE,   			FX_DELAY_HDAMP_MAXVALUE,    	FX_DELAY_HDAMP_DEFAULTVALUE,		FX_DELAY_HDAMP_DEFAULTVALUE,		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstrdelay,	(uint32_t)displaypercent,	NULL,		0,			0,				NULL,			NULL,			0x00,	0x0126},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_adsr_sensor[FX_ADSR_USER_SIZE] = {
 // 			p_struct,				p_param,					p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_INSTR_PRESET,		SOUND_PRESET_ADSR_ATTACK,	"attack time",	FX_ADSR_ATTACK_MINVALUE,			FX_ADSR_ATTACK_MAXVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,				CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,		0,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,NULL,		0,			0,				NULL,			NULL,			0x00,	0x0640},
@@ -473,7 +552,9 @@ const param_struct	music_adsr_sensor[FX_ADSR_USER_SIZE] = {
 		{	MUSIC_INSTR_PRESET,		SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,				CTRL_EVENT_LINEAR,	CTRL_EVENT_LINEAR_GYRO,		0,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,				NULL,			NULL,			0x00,	0x0644},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_adsr_param[FX_ADSR_USER_SIZE] = {
 // 			p_struct,				p_param,					p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,						p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	MUSIC_INSTR_PRESET,		SOUND_PRESET_ADSR_ATTACK,	"attack time",	FX_ADSR_ATTACK_MINVALUE,			FX_ADSR_ATTACK_MAXVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		FX_ADSR_ATTACK_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr_attack,	(uint32_t)displayADSRattack,NULL,		0,			0,				NULL,			(uint32_t *)&music_adsr_param[1],			0x00,	0x0140},
@@ -483,7 +564,9 @@ const param_struct	music_adsr_param[FX_ADSR_USER_SIZE] = {
 		{	MUSIC_INSTR_PRESET,		SOUND_PRESET_ADSR_RELEASE,	"release time",	FX_ADSR_RELEAS_MINVALUE,  			FX_ADSR_RELEAS_MAXVALUE,  		FX_ADSR_RELEAS_DEFAULTVALUE,		FX_ADSR_RELEAS_DEFAULTVALUE,		SCREEN_DISPLAY_TIME,		0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setinstradsr_release,	(uint32_t)displayADSRrelease,NULL,		0,			0,	            NULL,	(uint32_t *)&music_adsr_param[0],			0x00,	0x0144},
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_reverb_sensor[FX_REVERB_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_REVERB,	FX_REVERB_LEVEL,		"rev level",	FX_REVERB_LEVEL_MINVALUE,			FX_REVERB_LEVEL_MAXVALUE,		FX_REVERB_LEVEL_MAXVALUE,			FX_REVERB_LEVEL_MAXVALUE,			SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			0x00,	0x0640},
@@ -500,7 +583,9 @@ const param_struct	music_reverb_sensor[FX_REVERB_USER_SIZE] = {
 		//{	MUSIC_REVERB,	FX_REVERB_DRY_WET,		"dry / wet",	FX_REVERB_DRYWET_MINVALUE,			FX_REVERB_DRYWET_MAXVALUE,		FX_REVERB_DRYWET_MAXVALUE,    		FX_REVERB_DRYWET_MAXVALUE,    		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			0x00,	0x064b}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	music_reverb_param[FX_REVERB_USER_SIZE] = {
 // 			p_struct,		p_param,				p_name,			p_min,								p_max,							p_default,							p_sticky,							p_screen,					p_linktoaftertouch,			p_linktoslider,		p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		//{	MUSIC_REVERB,	FX_REVERB_LEVEL,		"rev level",	FX_REVERB_LEVEL_MINVALUE,			FX_REVERB_LEVEL_MAXVALUE,		FX_REVERB_LEVEL_MAXVALUE,			FX_REVERB_LEVEL_MAXVALUE,			SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			0x00,	0x0240},
@@ -517,7 +602,9 @@ const param_struct	music_reverb_param[FX_REVERB_USER_SIZE] = {
 		//{	MUSIC_REVERB,	FX_REVERB_DRY_WET,		"dry / wet",	FX_REVERB_DRYWET_MINVALUE,			FX_REVERB_DRYWET_MAXVALUE,		FX_REVERB_DRYWET_MAXVALUE,    		FX_REVERB_DRYWET_MAXVALUE,    		SCREEN_DISPLAY_PERCENTAGE,	0,							CTRL_EVENT_REL_MIN,	0,				0,					(uint32_t)setgeneralreverb,	(uint32_t)displaypercent_255,NULL,		0,			0,				NULL,			NULL,			0x00,	0x024b}
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	dutouch_info[NUM_DUTOUCHINFO] = {
 // 			p_struct,		p_param,				p_name,			p_min,				p_max,				p_default,			p_sticky,			p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,					extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	DUTOUCHINFO,	DUTOUCH_BATT,			"battery",		0,  				0,					0,					0,					SCREEN_CLEAR,				0,							0,						0,				0,					(uint32_t)NULL,	 	 		(uint32_t)NULL,	(uint32_t *)NULL,		0,			0,				NULL,			NULL,			0x00,	0x0150},
@@ -541,7 +628,9 @@ const param_struct	dutouch_info[NUM_DUTOUCHINFO] = {
 #endif
 };
 
+#ifdef __LPC18XX__
 SECTION_INTFLASH
+#endif
 const param_struct	imu_param[2] = {
 // 			p_struct,		p_param,				p_name,				p_min,					p_max,					p_default,					p_sticky,					p_screen,					p_linktoaftertouch,			p_linktoslider,			p_linktogyro,	p_incrementonclic,	p_callback,					p_display,							extras,		extra_size,	p_screen_extra,	linked_dynamic,	linked_next,	p_CC,	p_id
 		{	CONTROLER,		CONTROLER_IMU_ANGLE,	"motion angle",		GYRO_SEND_ANGLE_MIN,	GYRO_SEND_ANGLE_MAX,	GYRO_SEND_ANGLE_DEFAULT,	GYRO_SEND_ANGLE_DEFAULT,	SCREEN_DISPLAY_VALUE,		0,							CTRL_EVENT_REL_MIN,		0,				2,					(uint32_t)NULL,				(uint32_t)NULL,						NULL,		0,			0,				NULL,			NULL,			0x00,	0x026B},

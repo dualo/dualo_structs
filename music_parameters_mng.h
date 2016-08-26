@@ -309,7 +309,7 @@ void convertmusic_V1toV2(music_song *song_struct, uint32_t song_num);
 
 extern inline uint32_t music_strack(void);
 extern inline uint32_t music_sloop(void);
-extern inline uint32_t music_ctrack(void);
+
 extern inline uint32_t music_cloop(void);
 
 void process_cpparam_iflinkedloop(uint32_t track, uint32_t loop);

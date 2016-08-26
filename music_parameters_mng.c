@@ -25,7 +25,7 @@
 #ifndef __LPC18XX__
 #include "lpc_heap.h"
 #include "lpc177x_8x_eeprom.h"
-#include "leds/ledsmng.h"
+#include "led/ledsmng.h"
 #else
 #include "led/ledsmng.h"
 #include "memory_dispach.h"

@@ -20,14 +20,14 @@
 #include "record_task.h"
 #include "looper_timer/looptimer_interface.h"
 #include "led_interface.h"
+#include "leds/ledsmng.h"
 
 #include "config.h"
 #ifndef __LPC18XX__
 #include "lpc_heap.h"
 #include "lpc177x_8x_eeprom.h"
-#include "led/ledsmng.h"
 #else
-#include "led/ledsmng.h"
+
 #include "memory_dispach.h"
 #endif
 #include "display_convert.h"

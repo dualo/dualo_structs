@@ -29,7 +29,7 @@
 #endif
 
 #include "main_task.h"
-//#include "coprocessor/coprocessor.h"
+#include "coprocessor/coprocessor.h"
 #include "led_interface.h"
 #include "dutouch_config.h"
 //#include "rf/nrf24l01p.h"

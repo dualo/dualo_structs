@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ufwb version="1.14">
+<ufwb version="1.16">
     <grammar name="du-music" start="id:5" author="Kniebihler Nicolas" fileextension="dumusic" uti="du-music">
         <description>Grammar for du-music file format</description>
-        <structure name="DUMUSIC file" id="5" encoding="UTF-8" endian="little" signed="no">
+        <structure name="DUMUSIC file" id="5" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <structure name="s_total_buffer" id="6">
                 <structref name="local_song" id="8" structure="id:7"/>
                 <structref name="local_buffer" id="10" structure="id:9"/>
             </structure>
         </structure>
-        <structure name="music_song" id="7" encoding="UTF-8" endian="little" signed="no">
+        <structure name="music_song" id="7" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="s_version_music" id="13" type="integer" length="4"/>
             <string name="s_original_sn" id="14" type="fixed-length" length="16"/>
             <string name="s_original_name" id="15" type="fixed-length" length="16"/>
@@ -56,14 +56,14 @@
             <structref name="s_reverb" id="59" structure="id:58"/>
             <structref name="s_track" id="61" structure="id:60"/>
         </structure>
-        <structure name="music_sample" id="9" repeatmin="s_totalsample" repeatmax="s_totalsample" encoding="UTF-8" endian="little" signed="no">
+        <structure name="music_sample" id="9" repeatmin="s_totalsample" repeatmax="s_totalsample" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="time" id="63" type="integer" length="4"/>
             <number name="control" id="64" type="integer" length="1"/>
             <number name="canal" id="65" type="integer" length="1"/>
             <number name="note" id="66" type="integer" length="1"/>
             <number name="value" id="67" type="integer" length="1"/>
         </structure>
-        <structure name="FX_mix" id="51" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_mix" id="51" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="m_inputgain" id="69" type="integer" length="1"/>
             <number name="m_locutfilterfrequency" id="70" type="integer" length="1"/>
             <number name="m_hicutfilterfrequency" id="71" type="integer" length="1"/>
@@ -73,7 +73,7 @@
             <number name="m_sendtoreverb" id="75" type="integer" length="1"/>
             <number name="m_sendtochorus" id="76" type="integer" length="1"/>
         </structure>
-        <structure name="FX_reverb" id="58" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_reverb" id="58" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="r_level" id="78" type="integer" length="1"/>
             <number name="r_directlevel" id="79" type="integer" length="1"/>
             <number name="r_revsend" id="80" type="integer" length="1"/>
@@ -88,13 +88,13 @@
             <binary name="r_dummy" id="89" length="1"/>
             <string name="r_name" id="90" type="fixed-length" length="12"/>
         </structure>
-        <structure name="music_track" id="60" repeatmin="7" repeatmax="7" encoding="UTF-8" endian="little" signed="no">
+        <structure name="music_track" id="60" repeatmin="7" repeatmax="7" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="t_midichannel" id="92" type="integer" length="1"/>
             <number name="t_currentloop" id="93" type="integer" length="1"/>
             <binary name="dummy" id="94" repeatmin="2" repeatmax="2" length="1"/>
             <structref name="t_loop" id="96" structure="id:95"/>
         </structure>
-        <structure name="music_loop" id="95" repeatmin="4" repeatmax="4" encoding="UTF-8" endian="little" signed="no">
+        <structure name="music_loop" id="95" repeatmin="4" repeatmax="4" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="l_state" id="98" type="integer" length="1"/>
             <number name="l_loopmod" id="99" type="integer" length="1"/>
             <number name="l_learn" id="100" type="integer" length="1"/>
@@ -106,11 +106,11 @@
             <number name="l_numsample" id="108" type="integer" length="2"/>
             <binary name="dummy2" id="109" repeatmin="2" repeatmax="2" length="1"/>
         </structure>
-        <structure name="music_instr" id="105" length="0" alignment="0" encoding="UTF-8" endian="little" signed="no">
+        <structure name="music_instr" id="105" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <structref name="i_instrument" id="112" structure="id:111"/>
             <structref name="i_preset" id="114" structure="id:113"/>
         </structure>
-        <structure name="info_instr" id="111" length="0" alignment="1" encoding="UTF-8" endian="little" signed="no" fillcolor="FFAEB4">
+        <structure name="info_instr" id="111" length="0" alignment="1" encoding="ISO_8859-1:1987" endian="little" signed="no" fillcolor="FFAEB4">
             <string name="instr_name" id="116" type="fixed-length" length="12"/>
             <number name="instr_midi_pc" id="117" type="integer" length="1"/>
             <number name="instr_midi_C0" id="118" type="integer" length="1"/>
@@ -135,7 +135,7 @@
             <number name="SW_instr_version" id="137" type="integer" length="2"/>
             <number name="instr_version" id="138" type="integer" length="4"/>
         </structure>
-        <structure name="preset_instr" id="113" length="0" alignment="0" encoding="UTF-8" endian="little" signed="no" fillcolor="FF96E1">
+        <structure name="preset_instr" id="113" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no" fillcolor="FF96E1">
             <string name="s_name" id="140" type="fixed-length" length="32"/>
             <structure name="general" id="141">
                 <number name="s_volume" id="142" type="integer" length="1"/>
@@ -225,7 +225,7 @@
             <structref name="s_chorus" id="231" repeatmin="3" repeatmax="3" structure="id:230"/>
             <binary name="s_extra" id="232" length="76"/>
         </structure>
-        <structure name="FX_distortion" id="222" length="0" alignment="0" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_distortion" id="222" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="d_on_off" id="234" type="integer" length="1"/>
             <number name="d_pre_gain" id="235" type="integer" length="1"/>
             <number name="d_type" id="236" type="integer" length="1"/>
@@ -235,7 +235,7 @@
             <number name="d_drive" id="240" type="integer" length="1"/>
             <binary name="d_dummy" id="241" length="1"/>
         </structure>
-        <structure name="FX_compressor" id="224" length="0" alignment="0" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_compressor" id="224" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="c_on_off" id="243" type="integer" length="1"/>
             <number name="c_attacktime" id="244" type="integer" length="1"/>
             <number name="c_releasetime" id="245" type="integer" length="1"/>
@@ -245,7 +245,7 @@
             <number name="c_kneetype" id="249" type="integer" length="1"/>
             <binary name="c_dummy" id="250" length="1"/>
         </structure>
-        <structure name="FX_equalizer" id="226" length="0" alignment="0" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_equalizer" id="226" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="e_on_off" id="252" type="integer" length="1"/>
             <number name="e_lowbandgain" id="253" type="integer" length="1"/>
             <number name="e_lowmidbandgain" id="254" type="integer" length="1"/>
@@ -259,7 +259,7 @@
             <number name="e_highmidbandQ" id="262" type="integer" length="1"/>
             <binary name="e_dummy" id="263" length="1"/>
         </structure>
-        <structure name="FX_delay" id="228" length="0" alignment="0" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_delay" id="228" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="d_on_off" id="265" type="integer" length="1"/>
             <number name="d_mode" id="266" type="integer" length="1"/>
             <number name="d_prelp" id="267" type="integer" length="1"/>
@@ -269,7 +269,7 @@
             <number name="d_hdamp" id="271" type="integer" length="1"/>
             <binary name="d_dummy" id="272" length="1"/>
         </structure>
-        <structure name="FX_chorus" id="230" length="0" alignment="0" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_chorus" id="230" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="c_mode" id="274" type="integer" length="1"/>
             <number name="c_effectlevel" id="275" type="integer" length="1"/>
             <number name="c_delaytime" id="276" type="integer" length="1"/>
@@ -281,7 +281,7 @@
             <number name="c_tremoloshape" id="282" type="integer" length="1"/>
             <number name="c_rotaryspeed" id="283" type="integer" length="1"/>
         </structure>
-        <structure name="music_instr_old" id="103" length="0" encoding="UTF-8" endian="little" signed="no">
+        <structure name="music_instr_old" id="103" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <structref name="i_instrument" id="285" structure="id:111"/>
             <structref name="i_preset" id="287" structure="id:286"/>
             <structref name="i_mix" id="288" structure="id:51"/>
@@ -294,7 +294,7 @@
             <binary name="dummy1" id="300" length="16"/>
             <binary name="dummy2" id="301" length="18"/>
         </structure>
-        <structure name="preset_instr_old" id="286" length="0" encoding="UTF-8" endian="little" signed="no" fillcolor="FF96E1">
+        <structure name="preset_instr_old" id="286" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no" fillcolor="FF96E1">
             <structure name="fx_structs" id="303" length="0">
                 <number name="s_volume" id="304" type="integer" length="1"/>
                 <number name="s_panning" id="305" type="integer" length="1"/>
@@ -364,7 +364,7 @@
             </structure>
             <binary name="align2" id="370" length="54"/>
         </structure>
-        <structure name="FX_distortion_old" id="289" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_distortion_old" id="289" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="d_on_off" id="372" type="integer" length="1"/>
             <number name="d_pre_gain" id="373" type="integer" length="1"/>
             <number name="d_type" id="374" type="integer" length="1"/>
@@ -375,7 +375,7 @@
             <binary name="d_dummy" id="379" length="1"/>
             <string name="d_name" id="380" type="fixed-length" length="12"/>
         </structure>
-        <structure name="FX_compressor_old" id="292" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_compressor_old" id="292" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="c_on_off" id="382" type="integer" length="1"/>
             <number name="c_attacktime" id="383" type="integer" length="1"/>
             <number name="c_releasetime" id="384" type="integer" length="1"/>
@@ -386,7 +386,7 @@
             <binary name="c_dummy" id="389" length="1"/>
             <string name="c_name" id="390" type="fixed-length" length="12"/>
         </structure>
-        <structure name="FX_equalizer_gen" id="294" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_equalizer_gen" id="294" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="e_on_off" id="392" type="integer" length="1"/>
             <number name="e_lowbandgain" id="393" type="integer" length="1"/>
             <number name="e_lowmidbandgain" id="394" type="integer" length="1"/>
@@ -401,7 +401,7 @@
             <binary name="e_dummy" id="403" length="1"/>
             <string name="e_name" id="404" type="fixed-length" length="12"/>
         </structure>
-        <structure name="FX_delay_old" id="296" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_delay_old" id="296" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="d_on_off" id="406" type="integer" length="1"/>
             <number name="d_mode" id="407" type="integer" length="1"/>
             <number name="d_prelp" id="408" type="integer" length="1"/>
@@ -412,7 +412,7 @@
             <binary name="d_dummy" id="413" length="1"/>
             <string name="d_name" id="414" type="fixed-length" length="12"/>
         </structure>
-        <structure name="FX_chorus_old" id="298" encoding="UTF-8" endian="little" signed="no">
+        <structure name="FX_chorus_old" id="298" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="c_mode" id="416" type="integer" length="1"/>
             <number name="c_effectlevel" id="417" type="integer" length="1"/>
             <number name="c_delaytime" id="418" type="integer" length="1"/>

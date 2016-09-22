@@ -119,7 +119,7 @@ void init_controler(struct_controler *control_struct)
 		control_struct->c_param.gyro_angle = GYRO_SEND_ANGLE_DEFAULT;
 		control_struct->c_param.c_pressure_curve = GYRO_CURVES_DEFAULTVALUE;
 
-		control_struct->c_param.c_circle_time = 0; //1;
+		control_struct->c_param.c_circle_time = 1;
 
 		control_struct->c_param.c_midiout_channel = 0;
 		control_struct->c_param.c_midiout_keysens = KEYS_CURVES_DEFAULTVALUE;
@@ -157,6 +157,8 @@ void init_controler(struct_controler *control_struct)
 
 	if(control_struct->c_param.c_song>(dt_config.nb_key))
 		control_struct->c_param.c_song = 0;
+
+	control_struct->c_param.c_equalizer_preset = FX_PEQ_PRESET_DEFAULTVALUE;
 
 	memcpy((uint8_t *)&(temp_eqmain), (uint8_t *)&(control_struct->c_equalizer[control_struct->c_param.c_equalizer_preset]), FX_EQ_SIZE);
 	//mem_cpy((uint8_t *)&(control_struct->c_reverb[control_struct->c_param.c_reverb_preset]), (uint8_t *)&(temp_reverb), FX_REVERB_SIZE);

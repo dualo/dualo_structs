@@ -1992,7 +1992,10 @@ void setinstrvolume(param_struct *param, int32_t value, uint32_t rec)
 /**    set instrument octave **/
 void setinstroctave(param_struct *param, int32_t value, uint32_t rec)
 {
-	set_panic(0);
+	//set_panic(0);
+	//add_cmd_usbmidi( MIDI_CONTROL_CHANGE, music_tab[controler_tab.c_param.c_song].s_track[music_ctrack()].t_midichannel, 0x78, 0);
+	//add_cmd_usbmidi( MIDI_CONTROL_CHANGE, music_tab[controler_tab.c_param.c_song].s_track[music_ctrack()].t_midichannel, 0x7B, 0);
+	midiTask_add_cmd( MIDI_CONTROL_CHANGE, music_tab[controler_tab.c_param.c_song].s_track[music_ctrack()].t_midichannel, 0x78, 0);
 }
 
 /**    set instrument panning **/

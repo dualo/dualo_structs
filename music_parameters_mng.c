@@ -624,6 +624,8 @@ void init_music(music_song *song_struct, uint32_t song)
 			init_music_struct( song_struct, song);
 		}
 
+		set_reverbpreset(&(song_struct->s_reverb), MUSIC_DEFAULTREVERB);
+
 		for(i = 0; i<MUSIC_MAXTRACK; i++)
 		{
 			for(j = 0; j<MUSIC_MAXLAYER; j++)
@@ -1199,7 +1201,7 @@ void setmusictempomode(param_struct *param, int32_t value, uint32_t rec)
 	//recordTask_synchtempo();
 
 		if(!(v_metronome&METRONOME_LIGTH_MASK))
-			LedMng_LogoBrightness(LEDSMNG_LOGOBRIGHTNESS);
+			LedMng_LogoBrightness(LEDSMNG_MAXBRIGHTNESS);
 //	}
 }
 

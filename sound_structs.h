@@ -1,18 +1,12 @@
 /*
- * sound_parameters_mng.h
+ * sound_structs.h
  *
- *  Created on: 07/08/2013
- *      Author: mma
+ *  Created on: 23 sept. 2016
+ *      Author: Maxime
  */
 
-
-#ifndef SOUND_PARAMETERS_MNG_H_
-#define SOUND_PARAMETERS_MNG_H_
-
-#include "parameters_mng.h"
-#include "g_parameters_mng.h"
-
-#include "instr_mapping.h"
+#ifndef PARAMETERS_DUALO_STRUCTS_SOUND_STRUCTS_H_
+#define PARAMETERS_DUALO_STRUCTS_SOUND_STRUCTS_H_
 
 /******** general defines ************/
 #define FX_NUM_PRESET_INTR	4
@@ -982,66 +976,4 @@ enum{ // reverb parameters
 #define FX_VIBRATO_USER_SIZE 2
 
 
-////////////////////////////////////////
-//#ifdef __LPC177X_8X__
-uint32_t checksoundavailable(uint32_t num_sound);
-void init_instrmap(void);
-void load_instrmap(void);
-void init_sound(sound_instr *sound_struct, uint32_t instr);
-void init_soundsystem(sound_instr *sound_struct);
-void erase_sound( uint32_t instr);
-void save_sound(sound_instr *sound_struct, uint32_t instr);
-void init_preset(preset_instr *struct_preset, uint32_t octave, uint32_t preset_num);
-//void init_presetfromdream(preset_instr *struct_preset, uint32_t octave, uint32_t key, uint32_t presetnum);
-
-uint32_t open_soundfile(uint32_t sound_file, sound_instr *sound_struct, info_instr *instr_struct, uint32_t key);
-
-void get_instrbin(uint32_t keyboard, uint32_t instrument, uint8_t *buffer, uint32_t address, uint32_t length);
-void save_instrbin(uint32_t keyboard, uint32_t instrument, uint8_t *buffer, uint32_t address, uint32_t length);
-int32_t exist_instrbin(uint32_t instrument);
-//void rename_instrbin(uint32_t keyboard, uint32_t instrument, uint8_t *name);
-
-void get_instrmap(uint32_t keyboard, uint32_t instrument, uint8_t *buffer, uint32_t address, uint32_t length);
-void save_instrmap(uint32_t keyboard, uint32_t instrument, uint8_t *buffer, uint32_t address, uint32_t length);
-void erase_instrmap( uint32_t keyboard);
-
-void set_equalizerpreset(FX_equalizer *fx_equalizer, uint32_t preset_ID);
-void set_equalizergenpreset(FX_equalizer_gen *fx_eq, uint32_t preset_ID);
-void set_reverbpreset(FX_reverb *fx_reverb, uint32_t preset_ID);
-
-void setinstrdistortion(param_struct *param, int32_t value, uint32_t rec);
-void setinstrcompressor(param_struct *param, int32_t value, uint32_t rec);
-void setgeneraleq(param_struct *param, int32_t value, uint32_t rec);
-void setinstreq(param_struct *param, int32_t value, uint32_t rec);
-void setinstrchorus(param_struct *param, int32_t value, uint32_t rec);
-void setinstrdelay(param_struct *param, int32_t value, uint32_t rec);
-void setgeneralreverb(param_struct *param, int32_t value, uint32_t rec);
-
-void setinstrvolume(param_struct *param, int32_t value, uint32_t rec);
-void setinstroctave(param_struct *param, int32_t value, uint32_t rec);
-void setinstrpanning(param_struct *param, int32_t value, uint32_t rec);
-void setinstrsendtorev(param_struct *param, int32_t value, uint32_t rec);
-void setinstrpitchbendsens(param_struct *param, int32_t value, uint32_t rec);
-void setinstrpitchbend(param_struct *param, int32_t value, uint32_t rec);
-void setinstrporttime(param_struct *param, int32_t value, uint32_t rec);
-void setinstrexpression(param_struct *param, int32_t value, uint32_t rec);
-void setinstrrelvolume(param_struct *param, int32_t value, uint32_t rec);
-
-void setinstrwah_type(param_struct *param, int32_t value, uint32_t rec);
-void setinstrwah_freq(param_struct *param, int32_t value, uint32_t rec);
-void setinstrwah_res(param_struct *param, int32_t value, uint32_t rec);
-
-void setinstradsr_attack(param_struct *param, int32_t value, uint32_t rec);
-void setinstradsr_release(param_struct *param, int32_t value, uint32_t rec);
-
-void setgyro_activ_time(param_struct *param, int32_t value, uint32_t rec);
-void setgyro_desactiv_time(param_struct *param, int32_t value, uint32_t rec);
-void setgyro_dead_zone(param_struct *param, int32_t value, uint32_t rec);
-void setgyro_full_axis_zone(param_struct *param, int32_t value, uint32_t rec);
-void setgyro_angle(param_struct *param, int32_t value, uint32_t rec);
-void setgyro_nb_val_before_send(param_struct *param, int32_t value, uint32_t rec);
-
-void switch_off_ctrl_with_preset_off(preset_instr *preset, uint32_t struct_p);
-//#endif // __LPC177X_8X__
-
-#endif // FX_PARAMETERS_MNG_H_
+#endif /* PARAMETERS_DUALO_STRUCTS_SOUND_STRUCTS_H_ */

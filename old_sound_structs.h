@@ -6,8 +6,8 @@
  */
 
 
-#ifndef OLDSOUND_PARAMETERS_MNG_H_
-#define OLDSOUND_PARAMETERS_MNG_H_
+#ifndef OLDSOUND_STRUCTS_H_
+#define OLDSOUND_STRUCTS_H_
 
 #include "parameters_mng.h"
 #include "g_parameters_mng.h"
@@ -338,4 +338,4 @@ typedef struct
 #define MUSIC_INSTRU_SIZE_OLD	(INSTR_INFO_SIZE + PRESET_STRUCT_SIZE_OLD + FX_MIX_SIZE + FX_DIST_SIZE_OLD + 16 + FX_COMP_SIZE_OLD + FX_EQ_SIZE_GEN + FX_DELAY_SIZE_OLD + FX_CHORUS_SIZE_OLD + 16 +18)
 
 
-#endif // FX_PARAMETERS_MNG_H_
+#endif // OLDSOUND_STRUCTS_H_

@@ -1,16 +1,15 @@
+#include <dualo_structs/old_sound_structs.h>
 #include "music_migration.h"
 
-#include "old_sound_parameters_mng.h"
 
 /*
  * WARNING :
  * This file is used in the firmware and in du-station code.
  * Keep that in mind when you modify it.
  */
-
+#include <string.h>
 #ifndef __LPC177X_8X__
 #include <stdlib.h>
-#include <string.h>
 #define lpc_new malloc
 #define lpc_free free
 #else

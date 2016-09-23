@@ -1,97 +1,14 @@
 /*
- * g_parameters_mng.h
+ * g_parameters_structs.h
  *
- *  Created on: 18/05/2010
- *      Author: mma
+ *  Created on: 23 sept. 2016
+ *      Author: Maxime
  */
 
-
-#ifndef G_PARAMETERS_MNG_H_
-#define G_PARAMETERS_MNG_H_
-
-
-//#include "fx_parameters_mng.h"
+#ifndef PARAMETERS_DUALO_STRUCTS_G_STRUCTS_H_
+#define PARAMETERS_DUALO_STRUCTS_G_STRUCTS_H_
 
 /***** parameters enum *****/
-
-// controls
-/*
-enum{
-	PLAY,
-	EDITION_PLAY_CTRL,
-	AUDIO_CTRL,
-	EDITION_INSTR_CTRL,
-	ARR_CTRL,
-	EDITION_ARR_CTRL,
-	EDITION_ARR_INSTR_CTRL,
-	UPDATE,
-	REFRESH
-};
-*/
-/*
-// Editions Ctrl
-enum{
-	NONE_ED_CTRL,
-
-	ED_DUMMY,
-	ED_SCREEN_MODE,
-	ED_LEDS_LUM,
-	ED_LED_MODE,
-	ED_MIDIOUT_MODE,
-	ED_MIDIOUT_CHANNEL,
-	ED_BATTERYLEVEL,
-	ED_SLEEP_MODE,
-	ED_KEYS_SENSIBILITY,
-	ED_KEYS_SMOOTHING,
-	ED_KEYS_DETECTION,
-	ED_SLIDERGYRO_ACTIVATION,
-
-	ED_KEY_CURVE,
-	ED_GYRO_CURVE,
-	ED_SLIDER_CURVE,
-	ED_INSTR_FINETUNE,
-	ED_INSTR_SEMITONETUNE,
-	ED_INSTR_OCTAVETUNE,
-	ED_INSTR_TEMPEREDTUNE,
-
-
-	ED_INSTR_VOL,
-	ED_INSTR_PANNING,
-	ED_INSTR_SENDTOREV,
-	ED_INSTR_KEYSFX,
-	ED_INSTR_GYROFX,
-	ED_INSTR_SOUND,
-	ED_INSTR_DRUMKEYS,
-	ED_INSTR_MULTINOTES,
-	ED_INSTR_PITCHBEND,
-	ED_INSTR_POLY_MONO,
-	ED_INSTR_PORTAMENTO_TIME,
-	ED_INSTR_PORTAMENTO_ONOFF,
-
-	ED_INSTR_PRESET,
-	ED_GENERAL_REVERB,
-	ED_GENERAL_EQ,
-
-	ED_INSTR_VIBRATO,
-	ED_INSTR_COMPRESSION,
-	ED_INSTR_WAH,
-	ED_INSTR_DISTORTION,
-	ED_INSTR_CHORUS,
-	ED_INSTR_DELAY,
-
-	ED_LOOPER_1STLOOPMODE,
-	ED_LOOPER_QUANTIFICATION,
-	ED_LOOPER_TRANSPOSE,
-	ED_LOOPER_LEARNADVANCE,
-
-	ED_METRO_METER,
-	ED_METRO_TEMPO,
-	ED_METRO_VOL,
-	ED_METRO_MODE,
-
-	NUM_ED_CTRL
-};
-*/
 
 // Audio controls
 enum{
@@ -128,17 +45,6 @@ enum{
 	NUM_SCREEN_MODE,
 };
 
-// Midi Out mode states
-/*enum{
-	NONE_MIDIOUT_MODE,
-	MIDI_DREAM,
-	MIDI_GM,
-	MIDI_GM_LOWPOWER,
-	MIDI_TABLE,
-	MIDI_SONICCELL,
-	NUM_MIDIOUT_MODE,
-};
-*/
 
 // Sliders/Gyro states
 enum{
@@ -158,28 +64,7 @@ enum{
 	NUM_KEY_LAYOUT,
 };
 
-#if 0
-// parameters
-enum{
-	NOTE_OFF,
-	NOTE_ON,
-	NOTE_AFTERTOUCH,
-	NOTE_DETECTED
-};
 
-enum{
-	KEYBOARD_L,
-	KEYBOARD_R
-};
-
-typedef struct
-{
-	uint32_t	keyboard;
-	uint32_t	key;
-	uint32_t	cmd;
-	uint32_t	value;
-}key_control_t;
-#endif
 
 /***** parameters default/bounds *****/
 
@@ -294,23 +179,10 @@ typedef struct
 #define DECAL_MAX	9 //8 // value 0->3
 
 
-#if 0
-// Keyboards
-#define KEY_FIFO_ELEMENT_SIZE	(sizeof(key_control_t)/sizeof(uint32_t))
-#define KEY_FIFO_LENGTH_CTRL (16 * KEY_FIFO_ELEMENT_SIZE)
-#endif
 /***** parameters list *****/
 
 // memory management
 
-/*
-#define EXTFLASH_PART_DATA		0x80000000
-#define EXTFLASH_PART_FXPARAM	0x80200000
-#define EXTFLASH_PART_GPARAM	0x802FE000
-#define EXTFLASH_PART_PRESET	0x802FF000
-#define EXTFLASH_PART_RECORD	0x80300000
-#define EXTFLASH_END			0x80400000
-*/
 #define EXTFLASH_ADDR_CONTROLER		0x90100000
 #define EXTFLASH_ADDR_SOUND			0x90200000
 #define EXTFLASH_ADDR_MUSIC			0x90300000
@@ -321,174 +193,4 @@ typedef struct
 #define EXTFLASH_SIZE_MUSIC			32
 #define EXTFLASH_SIZE_RECORD		2000
 
-
-#ifdef __LPC177X_8X__
-#include "lpc_types.h"
-// general
-//uint32_t current_sleep_time;
-//uint32_t current_midiout_mode;
-
-// fuel gauge
-uint32_t current_fuel_gauge;
-
-// controls
-
-//uint32_t v_transpose;
-//uint32_t v_quantification;
-uint32_t v_metronome;
-
-uint32_t loop_edit_sound;
-uint32_t loop_beat_repeat;
-uint32_t music_beat_repeat;
-
-uint32_t current_rec_track;
-uint32_t current_rec_track_ctrl;
-
-uint32_t current_audio_ctrl;
-uint32_t last_preset_instr;
-uint32_t last_midi_instr;
-//uint32_t current_slidergyro_act;
-
-//uint32_t num_instruments_L;
-//uint32_t num_instruments_R;
-
-
-// general volume
-//uint32_t param_main_vol;
-uint32_t attach_main_vol;
-
-// keyboards
-int8_t *key_map[NUM_KEY_MAP][4];
-uint32_t current_key_map;
-int32_t current_key_offset;
-
-// keyboards led
-//uint32_t current_led_mode;
-
-// midi
-//uint32_t midi_canal;
-
-// screen
-uint32_t current_screen_mode;
-
-// leds
-//uint32_t current_leds_luminosity;
-
-// FX Controls
-//uint32_t FX_Control_State;
-//uint32_t instr_preset;
-
-// record
-uint32_t rec_state;
-
-// metronome
-uint32_t metronome_type;
-uint32_t metronome_mode;
-uint32_t metronome_tempo;
-uint32_t metronome_vol;
-
-#ifdef CONFIG_TEST
-
-enum {
-	RF_NONE,
-	RF_CARRIER,
-	RF_MSG
-};
-
-uint32_t rf_config;
-#endif
-
-//extern uint8_t Edition_Play_table[NUM_ED_PLAY_MAX][2];
-//extern uint8_t Edition_Instr_table[NUM_ED_INSTR_MAX][2];
-//extern uint8_t Edition_Arr_table[NUM_ED_ARR_MAX][2];
-////////////////////////////////////////
-void init_globalparameters(void);
-
-#endif
-
-#ifdef __LPC18XX__
-#include "lpc_types.h"
-// general
-//uint32_t current_sleep_time;
-//uint32_t current_midiout_mode;
-
-// fuel gauge
-uint32_t current_fuel_gauge;
-
-// controls
-
-//uint32_t v_transpose;
-//uint32_t v_quantification;
-uint32_t v_metronome;
-
-uint32_t loop_edit_sound;
-uint32_t loop_beat_repeat;
-uint32_t music_beat_repeat;
-
-uint32_t current_rec_track;
-uint32_t current_rec_track_ctrl;
-
-uint32_t current_audio_ctrl;
-uint32_t last_preset_instr;
-uint32_t last_midi_instr;
-//uint32_t current_slidergyro_act;
-
-//uint32_t num_instruments_L;
-//uint32_t num_instruments_R;
-
-
-// general volume
-//uint32_t param_main_vol;
-uint32_t attach_main_vol;
-
-// keyboards
-int8_t *key_map[NUM_KEY_MAP][4];
-uint32_t current_key_map;
-int32_t current_key_offset;
-
-// keyboards led
-//uint32_t current_led_mode;
-
-// midi
-//uint32_t midi_canal;
-
-// screen
-uint32_t current_screen_mode;
-
-// leds
-//uint32_t current_leds_luminosity;
-
-// FX Controls
-//uint32_t FX_Control_State;
-//uint32_t instr_preset;
-
-// record
-uint32_t rec_state;
-
-// metronome
-uint32_t metronome_type;
-uint32_t metronome_mode;
-uint32_t metronome_tempo;
-uint32_t metronome_vol;
-
-#ifdef CONFIG_TEST
-
-enum {
-	RF_NONE,
-	RF_CARRIER,
-	RF_MSG
-};
-
-uint32_t rf_config;
-#endif
-
-//extern uint8_t Edition_Play_table[NUM_ED_PLAY_MAX][2];
-//extern uint8_t Edition_Instr_table[NUM_ED_INSTR_MAX][2];
-//extern uint8_t Edition_Arr_table[NUM_ED_ARR_MAX][2];
-////////////////////////////////////////
-void init_globalparameters(void);
-
-#endif
-
-
-#endif // G_PARAMETERS_MNG_H_
+#endif /* PARAMETERS_DUALO_STRUCTS_G_STRUCTS_H_ */

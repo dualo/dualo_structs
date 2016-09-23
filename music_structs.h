@@ -1,18 +1,12 @@
 /*
- * music_parameters_mng.h
+ * music_structs.h
  *
- *  Created on: 07/08/2013
- *      Author: mma
+ *  Created on: 23 sept. 2016
+ *      Author: Maxime
  */
 
-
-#ifndef MUSIC_PARAMETERS_MNG_H_
-#define MUSIC_PARAMETERS_MNG_H_
-
-#include "parameters_mng.h"
-#include "sound_parameters_mng.h"
-#include "metadata_parameters_mng.h"
-#include "arrangement_parameters_mng.h"
+#ifndef PARAMETERS_DUALO_STRUCTS_MUSIC_STRUCTS_H_
+#define PARAMETERS_DUALO_STRUCTS_MUSIC_STRUCTS_H_
 
 /******** general defines ************/
 //#define RECORD_MAXSONG		58 //3 //58
@@ -266,60 +260,4 @@ enum{ // TIME SIGNATURE
 #define RECORD_TRANSPOSEMAX		12 //6
 #define RECORD_TRANSPOSEDEFAULT	(RECORD_TRANSPOSEMAX) // 6 - 6 = 0
 
-////////////////////////////////////////
-//#ifdef __LPC177X_8X__
-void init_musicmemory(void);
-void init_music(music_song *song_struct, uint32_t song);
-int32_t get_musicsamples(s_total_buffer *music_struct, uint32_t song);
-int32_t save_musicsamples(s_total_buffer *music_struct, uint32_t song, uint32_t size);
-void get_musicdata(uint32_t song, uint8_t *buffer, uint32_t address, uint32_t length);
-void save_musicdata(uint32_t song, uint8_t *buffer, uint32_t address, uint32_t length);
-void init_music_instr(music_instr *instr_struct, uint32_t instr);
-void erase_music_instr_name(music_instr *instr_struct);
-void cp_music_instr(music_instr *music_instr_struct, sound_instr* instr_struct, uint32_t preset);
-void check_music_instr(music_instr *instr_struct);
-void save_music(music_song *song_struct, uint32_t song);
-void erase_music( uint32_t song);
-int32_t load_defaultmusic(music_song *song_struct);
-int32_t save_defaultmusic(music_song *song_struct);
-
-uint32_t get_musicmetadatasize(void);
-int32_t get_musicarrangement(s_arrangement *arrangement_struct, uint32_t metadataaddress, uint32_t metadatasize, uint32_t song);
-int32_t save_musicarrangement(uint32_t metadataaddress, uint32_t metadatasize, uint32_t song);
-
-void setmusiclearn(param_struct *param, int32_t value, uint32_t rec);
-void setmusicvolume(param_struct *param, int32_t value, uint32_t rec);
-void setmusicmix(param_struct *param, int32_t value, uint32_t rec);
-void setmusictempo(param_struct *param, int32_t value, uint32_t rec);
-void setmusictempovolume(param_struct *param, int32_t value, uint32_t rec);
-void setmusictempomode(param_struct *param, int32_t value, uint32_t rec);
-void setmusicplayhead(param_struct *param, int32_t value, uint32_t rec);
-void switchledmode(param_struct *param, int32_t value, uint32_t rec);
-void switchledmode_ps(param_struct *param, int32_t value, uint32_t rec);
-void transpose(param_struct *param, int32_t value, uint32_t rec);
-void setarrangementstep(param_struct *param, int32_t value, uint32_t rec);
-void setmusicbeatrepeat(param_struct *param, int32_t value, uint32_t rec);
-void setloopbeatrepeat(param_struct *param, int32_t value, uint32_t rec);
-void change_scale(uint32_t key, uint32_t keyboard);
-
-void get_musicname(uint32_t song, char *string);
-
-uint32_t music_recovery(music_song *song_struct);
-void convertmusic_V1toV2(music_song *song_struct, uint32_t song_num);
-
-extern inline uint32_t music_strack(void);
-extern inline uint32_t music_sloop(void);
-
-extern inline uint32_t music_cloop(void);
-
-void process_cpparam_iflinkedloop(uint32_t track, uint32_t loop);
-
-// USB control//////////////////////////////////
-int32_t music_getinfosong_param(uint32_t num_song, uint32_t num_track, uint32_t param, uint8_t *buffer);
-int32_t music_setinfosong_param(uint32_t num_song, uint32_t num_track, uint32_t param, uint8_t *buffer);
-void music_getmemsong(uint32_t num_song, uint32_t address, uint8_t *buf);
-void music_clearmemsong(uint32_t num_song);
-void music_setmemsong(uint32_t num_song, uint32_t address, uint8_t *buf);
-//#endif // __LPC177X_8X__
-
-#endif // MUSIC_PARAMETERS_MNG_H_
+#endif /* PARAMETERS_DUALO_STRUCTS_MUSIC_STRUCTS_H_ */

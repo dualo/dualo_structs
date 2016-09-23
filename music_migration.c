@@ -1,4 +1,4 @@
-#include <dualo_structs/old_sound_structs.h>
+#include "old_sound_structs.h"
 #include "music_migration.h"
 
 

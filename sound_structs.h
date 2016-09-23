@@ -8,6 +8,14 @@
 #ifndef PARAMETERS_DUALO_STRUCTS_SOUND_STRUCTS_H_
 #define PARAMETERS_DUALO_STRUCTS_SOUND_STRUCTS_H_
 
+#ifdef __LPC177X_8X__
+#include "lpc_types.h"
+#else
+#include <stdint.h>
+#endif // __LPC177X_8X__
+
+#include "instr_mapping.h"
+
 /******** general defines ************/
 #define FX_NUM_PRESET_INTR	4
 

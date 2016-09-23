@@ -1,7 +1,7 @@
 #ifndef MUSIC_MIGRATION_H
 #define MUSIC_MIGRATION_H
 
-#include "music_parameters_mng.h"
+#include "music_structs.h"
 
 /*
  * WARNING :

@@ -9,9 +9,8 @@
 #ifndef OLDSOUND_STRUCTS_H_
 #define OLDSOUND_STRUCTS_H_
 
-#include "parameters_mng.h"
-#include "g_parameters_mng.h"
-#include "sound_parameters_mng.h"
+#include "g_structs.h"
+#include "sound_structs.h"
 
 #include "instr_mapping.h"
 

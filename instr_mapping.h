@@ -9,8 +9,7 @@
 #define INSTR_MAPPING_H_
 
 // includes
-#include "parameters_mng.h"
-#include "g_parameters_mng.h"
+#include "g_structs.h"
 
 // define
 

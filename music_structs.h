@@ -8,6 +8,8 @@
 #ifndef PARAMETERS_DUALO_STRUCTS_MUSIC_STRUCTS_H_
 #define PARAMETERS_DUALO_STRUCTS_MUSIC_STRUCTS_H_
 
+#include "sound_structs.h"
+
 /******** general defines ************/
 //#define RECORD_MAXSONG		58 //3 //58
 #define MUSIC_MAXTRACK		7

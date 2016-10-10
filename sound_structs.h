@@ -459,6 +459,10 @@ void init_dream_sp(dream_sp* sp_struct);
 #define MAIN_VOLUME_MAX			127
 #define MAIN_VOLUME_DEFAULT		100
 
+#define SOUND_PRESET_MIN			0
+#define SOUND_PRESET_MAX			3
+#define SOUND_PRESET_DEFAULT		0
+
 #define MAIN_PANNING_MIN		0
 #define MAIN_PANNING_MAX		127
 #define MAIN_PANNING_DEFAULT	64

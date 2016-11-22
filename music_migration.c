@@ -21,89 +21,89 @@ typedef struct
     uint8_t old_PC;
     uint8_t old_CC0;
     uint8_t new_ID;
-    uint8_t align;
+    uint8_t new_PC;
 } migrate_dusound;
 
 migrate_dusound list_dusound[] =
 {
-    {45,	0,	1,   0}, // percu
-    { 9,	0,	2,   0}, // jazz set
-    { 8,	0,	3,   0}, // rock set
-    {114,	0,	7,   0}, // steeldrum
-    {13,	0,	4,   0}, // balafon
-    {12,	0,	5,   0}, // marimba
-    {11,	0,	6,   0}, // vibraphone
-    {14,	0,	8,   0}, // celesta
-    { 1,	0,	9,   0}, // jazz piano
-    { 2,	0,	10,  0}, // classical piano
-    { 3,	0,	11,  0}, // el piano 1
-    { 4,	0,	12,  0}, // el piano 2
-    {46,	0,	13,  0}, // wurlie
-    {98,	0,	14,  0}, // clavi
-    {48,	0,	15,  0}, // fretless bass
-    {49,	0,	16,  0}, // jazz bass
-    {50,	0,	17,  0}, // double bass
-    {15,	0,	18,  0}, // cymbalum
-    {25,	0,	19,  0}, // banjo
-    {100,	0,	20,  0}, // classical guitar
-    {24,	0,	21,  0}, // folk guitar
-    {55,	0,	23,  0}, // jazz guitar
-    {26,	0,	24,  0}, // clean guitar
-    {27,	0,	25,  0}, // blues guitar
-    {30,	0,	27,  0}, // rock guitar
-    {97,	0,	29,  0}, // harp
-    { 6,	0,	30,  0}, // harpsichord
-    {104,	0,	31,  0}, // sitar
-    {22,	0,	36,  0}, // harmonica
-    {21,	0,	37,  0}, // musette
-    {21,	8,	38,  0}, // jazz accordion
-    {20,	0,	39,  0}, // reed organ
-    {19,	8,	40,  0}, // church organ
-    {19,	0,	41,  0}, // cathedral
-    {17,	0,	42,  0}, // perc organ
-    {16,	0,	43,  0}, // drawbar organ
-    {18,	0,	44,  0}, // rock organ
-    {99,	0,	45,  0}, // brige organ
-    {113,	0,	48,  0}, // clarinet
-    {111,	0,	46,  0}, // bassoon oboe
-    {115,	0,	51,  0}, // flute
-    {117,	0,	49,  0}, // pan flute
-    {120,	0,	52,  0}, // ocarina
-    {102,	0,	56,  0}, // tuba
-    {107,	0,	57,  0}, // trombone
-    {106,	0,	58,  0}, // trumpet
+    {45,	0,	1,   1}, // percu
+    { 9,	0,	2,   1}, // jazz set
+    { 8,	0,	3,   1}, // rock set
+    {114,	0,	7,   2}, // steeldrum
+    {13,	0,	4,   2}, // balafon
+    {12,	0,	5,   2}, // marimba
+    {11,	0,	6,   2}, // vibraphone
+    {14,	0,	8,   3}, // celesta
+    { 1,	0,	9,   3}, // jazz piano
+    { 2,	0,	10,  3}, // classical piano
+    { 3,	0,	11,  4}, // el piano 1
+    { 4,	0,	12,  4}, // el piano 2
+    {46,	0,	13,  4}, // wurlie
+    {98,	0,	14,  4}, // clavi
+    {48,	0,	15,  5}, // fretless bass
+    {49,	0,	16,  5}, // jazz bass
+    {50,	0,	17,  5}, // double bass
+    {15,	0,	18,  6}, // cymbalum
+    {25,	0,	19,  6}, // banjo
+    {100,	0,	20,  6}, // classical guitar
+    {24,	0,	21,  6}, // folk guitar
+    {55,	0,	23,  7}, // jazz guitar
+    {26,	0,	24,  7}, // clean guitar
+    {27,	0,	25,  8}, // blues guitar
+    {30,	0,	27,  8}, // rock guitar
+    {97,	0,	29,  9}, // harp
+    { 6,	0,	30,  9}, // harpsichord
+    {104,	0,	31,  9}, // sitar
+    {22,	0,	36, 11}, // harmonica
+    {21,	0,	37, 11}, // musette
+    {21,	8,	38, 11}, // jazz accordion
+    {20,	0,	39, 12}, // reed organ
+    {19,	8,	40, 12}, // church organ
+    {19,	0,	41, 12}, // cathedral
+    {17,	0,	42, 13}, // perc organ
+    {16,	0,	43, 13}, // drawbar organ
+    {18,	0,	44, 13}, // rock organ
+    {99,	0,	45, 13}, // brige organ
+    {113,	0,	48, 14}, // clarinet
+    {111,	0,	46, 14}, // bassoon oboe
+    {115,	0,	51, 15}, // flute
+    {117,	0,	49, 15}, // pan flute
+    {120,	0,	52, 15}, // ocarina
+    {102,	0,	56, 16}, // tuba
+    {107,	0,	57, 16}, // trombone
+    {106,	0,	58, 16}, // trumpet
 
-    { 7,	0,	59,  0}, // electro set
-    {31,	0,	66,  0}, // square bass
-    {32,	0,	67,  0}, // mod square bass
-    {33,	0,	68,  0}, // sub bass
-    {34,	0,	72,  0}, // fuzz bass
-    {37,	0,	69,  0}, // funk bass
-    {39,	0,	70,  0}, // bow wow bass
-    {40,	0,	71,  0}, // saw bass
-    {95,	0,	77,  0}, // sweep pad
-    {89,	0,	78,  0}, // warm pad
-    {56,	0,	80,  0}, // synth string
-    {57,	0,	81,  0}, // smotth string
-    {59,	0,	84,  0}, // sweetness
-    {60,	0,	83,  0}, // travel pad
-    {62,	0,	85,  0}, // crypte pad
-    {63,	0,	86,  0}, // hyper lead
-    {64,	0,	91,  0}, // growlin
-    {66,	0,	89,  0}, // june
-    {68,	0,	91,  0}, // funk lead
-    {69,	0,	92,  0}, // snow lead
-    {127,	0,	106, 0}, // sinus
-    {72,	0,	95,  0}, // kraft
-    {73,	0,	64,  0}, // tech stab
-    {74,	0,	65,  0}, // synth bell
-    {75,	0,	98,  0}, // blumble
-    {76,	0,	99,  0}, // funky lead
-    {77,	0,	100, 0}, // cat lead
-    {79,	0,	102, 0}, // glide
-    {83,	0,	63,  0}, // morodot
-    {91,	0,	112, 0}, // synth brass 1
-    {92,	0,	113, 0}, // synth brass 2
+    { 7,	0,	59, 17}, // electro set
+    {31,	0,	66, 19}, // square bass
+    {32,	0,	67, 19}, // mod square bass
+    {33,	0,	68, 19}, // sub bass
+    {34,	0,	72, 21}, // fuzz bass
+    {37,	0,	69, 20}, // funk bass
+    {39,	0,	70, 20}, // bow wow bass
+    {40,	0,	71, 20}, // saw bass
+    {95,	0,	77, 22}, // sweep pad
+    {89,	0,	78, 22}, // warm pad
+    {56,	0,	80, 22}, // synth string
+    {57,	0,	81, 22}, // smotth string
+    {59,	0,	84, 23}, // sweetness
+    {60,	0,	83, 23}, // travel pad
+    {62,	0,	85, 23}, // crypte pad
+    {63,	0,	86, 23}, // hyper lead
+    {64,	0,	91, 23}, // growlin
+    {66,	0,	89, 23}, // june
+    {68,	0,	91, 24}, // funk lead
+    {69,	0,	92, 24}, // snow lead
+    {127,	0,	106,26}, // sinus
+    {72,	0,	95, 24}, // kraft
+    {73,	0,	64, 18}, // tech stab
+    {74,	0,	65, 18}, // synth bell
+    {75,	0,	98, 25}, // blumble
+    {76,	0,	99, 25}, // funky lead
+    {77,	0,	100,25}, // cat lead
+    {79,	0,	102,25}, // glide
+    {83,	0,	63, 18}, // morodot
+    {91,	0,	112,29}, // synth brass 1
+    {92,	0,	113,29}, // synth brass 2
 };
 
 void find_instrument(info_instr* new_instr, info_instr* old_instr)
@@ -120,6 +120,7 @@ void find_instrument(info_instr* new_instr, info_instr* old_instr)
         if((old_instr->instr_midi_pc == list_dusound[i].old_PC)&&(old_instr->instr_midi_C0 == list_dusound[i].old_CC0))
         {
             new_instr->instr_id = list_dusound[i].new_ID;
+            new_instr->instr_midi_pc = list_dusound[i].new_PC;
             new_instr->instr_user_id = 1; // dualo
             new_instr->instr_version = 0; // in order to migrate on next du-music load
         }

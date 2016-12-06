@@ -256,6 +256,12 @@ int migrate_music(s_total_buffer *du_music)
                 preset->s_wah_freq       = 0;
                 preset->s_wah_res        = FX_WAH_FILTERRES_DEFAULTVALUE;
 
+                if(preset->s_sendtorev)
+                	preset->s_sendtorev = (preset->s_sendtorev*MAIN_SENDTOREV_DEFAULT)/32; //32 is old default value for reverb
+                else
+                	preset->s_sendtorev = MAIN_SENDTOREV_MIN;
+
+
                 // INSTR
                 info_instr* info = &instr->i_instrument;
                 if (info == NULL)

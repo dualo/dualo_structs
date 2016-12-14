@@ -134,7 +134,7 @@ typedef struct
 
 //#define S_NOTE_SIZE (NAME_CARACT*2 + 4*1)
 #define S_NOTE_SIZE (NOTE_NAME_CARACT + NAME_CARACT + 4*1)
-#define MAPPING_SIZE (NUM_BUTTON_KEYBOARD * 2 * S_NOTE_SIZE)
+#define MAPPING_SIZE (NUM_BUTTON_KEYBOARD_L * 2 * S_NOTE_SIZE)
 /*
 typedef struct
 {

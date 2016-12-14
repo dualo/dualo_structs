@@ -103,7 +103,9 @@ enum{
 #else
 #define NUM_INSTRU_KEYBOARD	4
 #endif
-#define NUM_BUTTON_KEYBOARD	58
+#define NUM_BUTTON_KEYBOARD	58 //TODO: remove when replaced everywhere
+#define NUM_BUTTON_KEYBOARD_L 58
+#define NUM_BUTTON_KEYBOARD_S 26
 #define NUM_LED_VALUE	32
 //#define NUM_KEY_LAYOUT		5 //9
 #define NUM_KEY_MAP			12 //9

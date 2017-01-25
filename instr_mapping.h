@@ -24,7 +24,7 @@
 #define NUM_NOTE_MAP		32 //8//4
 
 #define DUSOUND_HW_VERSION	0
-#define DUSOUND_SW_VERSION	2 //0
+#define DUSOUND_SW_VERSION	3 //0
 
 #define INSTRUMENT_MAPPING_MAX  31
 

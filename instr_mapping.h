@@ -13,6 +13,12 @@
 
 // define
 
+#ifdef __LPC177X_8X__
+#include "lpc_types.h"
+#else
+#include <stdint.h>
+#endif // __LPC177X_8X__
+
 #define FX_GUITARE	0 //1
 
 #define INSTR_DRUM_CHANNEL	8 //9

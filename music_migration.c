@@ -8,7 +8,8 @@
  * Keep that in mind when you modify it.
  */
 #include <string.h>
-#ifndef __LPC177X_8X__
+#if !defined(__LPC177X_8X__) && !defined(__LPC18XX__)//TODO : add a du station or C++ flag
+//Only to be use on computer apps
 #include <stdlib.h>
 #define lpc_new malloc
 #define lpc_free free

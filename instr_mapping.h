@@ -139,10 +139,10 @@ typedef struct
 } s_note;
 
 //#define S_NOTE_SIZE (NAME_CARACT*2 + 4*1)
-#define S_NOTE_SIZE (NOTE_NAME_CARACT + NAME_CARACT + 4*1)
+#define S_NOTE_SIZE (NOTE_NAME_CARACT + NAME_CARACT + 4*1)// = 32
 #define MAPPING_SIZE (NUM_BUTTON_KEYBOARD_L * 2 * S_NOTE_SIZE) //TODO: remove when  replaced everywhere
-#define MAPPING_L_SIZE (NUM_BUTTON_KEYBOARD_L * 2 * S_NOTE_SIZE)
-#define MAPPING_S_SIZE (NUM_BUTTON_KEYBOARD_S * 2 * S_NOTE_SIZE)
+#define MAPPING_L_SIZE (NUM_BUTTON_KEYBOARD_L * 2 * S_NOTE_SIZE)// = 3712
+#define MAPPING_S_SIZE (NUM_BUTTON_KEYBOARD_S * 2 * S_NOTE_SIZE)// = 1664
 /*
 typedef struct
 {

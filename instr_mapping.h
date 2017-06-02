@@ -116,7 +116,10 @@ typedef struct
 #define INSTR_ID_OFFSET         INSTR_USER_ID_OFFSET + 4
 #define INSTR_ID_SIZE           4
 
-#define INSTR_TYPE_OFFSET       INSTR_ID_OFFSET + 2*4 + 1 + NAME_CARACT + 3 + 2*2 + 4
+#define INSTR_FORMAT_ID_OFFSET  INSTR_ID_OFFSET + 2*4 + 1 + NAME_CARACT + 1
+#define INSTR_FORMAT_ID_SIZE    1
+
+#define INSTR_TYPE_OFFSET       INSTR_FORMAT_ID_OFFSET + 2 + 2*2 + 4
 #define INSTR_TYPE_SIZE         1
 
 #define INSTR_VERSION_OFFSET    INSTR_TYPE_OFFSET + 4 + 2*2

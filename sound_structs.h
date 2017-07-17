@@ -27,6 +27,12 @@
 #define DIRECTIONCONTROLER_MINVALUE  -1
 #define DIRECTIONCONTROLER_MAXVALUE  1
 
+// Maximum sample length :
+// On du-touch pro (DREAM 3000) : 16 MW / 32 MB
+// On du-touch S-L (DREAM 5000) : 8 MW / 16 MB
+// We use 16 MB so that every sample is compatible with both models.
+#define MAX_SAMPLE_SIZE 16 * 1024 * 1024
+
 /***** fx parameters specific structures*****/
 typedef struct
 {

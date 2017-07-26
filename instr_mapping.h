@@ -13,6 +13,12 @@
 
 // define
 
+#ifdef __LPC177X_8X__
+#include "lpc_types.h"
+#else
+#include <stdint.h>
+#endif // __LPC177X_8X__
+
 #define FX_GUITARE	0 //1
 
 #define INSTR_DRUM_CHANNEL	8 //9
@@ -24,7 +30,8 @@
 #define NUM_NOTE_MAP		32 //8//4
 
 #define DUSOUND_HW_VERSION	0
-#define DUSOUND_SW_VERSION	2 //0
+#define DUSOUND_SW_VERSION	3 //0
+#define MAX_MIGRATABLE_DUSOUND_VERSION_BY_DT	2
 
 #define INSTRUMENT_MAPPING_MAX  31
 
@@ -110,7 +117,10 @@ typedef struct
 #define INSTR_ID_OFFSET         INSTR_USER_ID_OFFSET + 4
 #define INSTR_ID_SIZE           4
 
-#define INSTR_TYPE_OFFSET       INSTR_ID_OFFSET + 2*4 + 1 + NAME_CARACT + 3 + 2*2 + 4
+#define INSTR_FORMAT_ID_OFFSET  INSTR_ID_OFFSET + 2*4 + 1 + NAME_CARACT + 1
+#define INSTR_FORMAT_ID_SIZE    1
+
+#define INSTR_TYPE_OFFSET       INSTR_FORMAT_ID_OFFSET + 2 + 2*2 + 4
 #define INSTR_TYPE_SIZE         1
 
 #define INSTR_VERSION_OFFSET    INSTR_TYPE_OFFSET + 4 + 2*2
@@ -134,7 +144,7 @@ typedef struct
 
 //#define S_NOTE_SIZE (NAME_CARACT*2 + 4*1)
 #define S_NOTE_SIZE (NOTE_NAME_CARACT + NAME_CARACT + 4*1)// = 32
-#define MAPPING_SIZE (NUM_BUTTON_KEYBOARD * 2 * S_NOTE_SIZE)// = 3712
+#define MAPPING_L_SIZE (NUM_BUTTON_KEYBOARD_L * 2 * S_NOTE_SIZE)// = 3712
 #define MAPPING_S_SIZE (NUM_BUTTON_KEYBOARD_S * 2 * S_NOTE_SIZE)// = 1664
 /*
 typedef struct

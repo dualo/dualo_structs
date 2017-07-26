@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="Soundbank" start="id:610" author="Kniebihler Nicolas" email="nicolas.kniebihler@dualo.org" fileextension="bin" uti="com.apple.macbinary-archive">
+        <description>Grammar for DREAM soundbanks.</description>
+        <structure name="Soundbank" id="610" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <structref name="Header" id="612" structure="id:611"/>
+            <structref name="MidiMapTab" id="614" structure="id:613"/>
+            <structure name="IntrumentMappingTable" id="615" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+                <structure name="PC" id="616" length="0" repeatmax="128">
+                    <structure name="var" id="617" length="4" repeatmax="-1">
+                        <number name="variation" id="618" fillcolor="00FCFF" type="integer" length="1"/>
+                        <number name="index" mustmatch="yes" id="619" fillcolor="00FCFF" type="integer" length="1" minval="0" maxval="64">
+                            <fixedvalues>
+                                <fixedvalue name="page" value="0"/>
+                                <fixedvalue name="page" value="1"/>
+                                <fixedvalue name="page" value="2"/>
+                                <fixedvalue name="page" value="3"/>
+                            </fixedvalues>
+                        </number>
+                        <number name="offset" id="620" fillcolor="00FCFF" type="integer" length="2" display="hex"/>
+                    </structure>
+                    <binary name="end" mustmatch="yes" id="622" fillcolor="00FCFF" length="4">
+                        <fixedvalues>
+                            <fixedvalue name="value" value="FFFFFFFF"/>
+                        </fixedvalues>
+                    </binary>
+                </structure>
+            </structure>
+            <scriptelement name="InstrumentParameters" id="625">
+                <script name="unnamed" type="Generic">
+                    <source language="Lua">logSrc = currentMapper:getCurrentLogSrc()
+currentResults = currentMapper:getCurrentResults()
+currentByteView = currentMapper:getCurrentByteView()
+grammar = currentMapper:getCurrentGrammar()
+
+startAddrStartByte = currentResults:getResultByName(&quot;START_ADDR&quot;):getStartBytePos()
+startAddr = (currentByteView:readByte(startAddrStartByte + 3)) * 16777216 + (currentByteView:readByte(startAddrStartByte + 2)) * 65536 + (currentByteView:readByte(startAddrStartByte + 1)) * 256 + (currentByteView:readByte(startAddrStartByte))
+nbPage = currentResults:getResultByName(&quot;page&quot;):getIteration() + 1
+
+formatStartByte = currentResults:getResultByName(&quot;format&quot;):getStartBytePos()
+format = currentByteView:readByte(formatStartByte)
+spSize = 0
+formatName = &quot;&quot;
+if format == 51 then
+	spSize = 84
+	formatName = &quot;3000&quot;
+elseif format == 53 then
+	spSize = 90
+	formatName = &quot;5000&quot;
+end
+ipBlockStructure = grammar:getStructureByName(&quot;InstrumentParametersBlock_&quot; .. formatName)
+ipStructure = grammar:getStructureByName(&quot;dream_ip&quot;)
+spStructure = grammar:getStructureByName(&quot;dream_sp_&quot; .. formatName)
+
+logSrc:logMessage(_VERSION, 111, synalysis.SEVERITY_INFO, string.format(&quot;startAddr: %x, nbPage: %d, format: %s&quot;, startAddr, nbPage, formatName))
+
+pages = {}
+
+currentPage = currentResults:getResultByName(&quot;page&quot;)
+
+for i = nbPage,1,-1 do
+	pageStartByte = currentPage:getStartBytePos()
+
+	pages[i] = currentByteView:readByte(pageStartByte) + (currentByteView:readByte(pageStartByte + 1)) * 256
+
+	if i &gt; 1 then
+		previousResult = currentResults:getPrevResult(currentPage)
+		while previousResult:getName() ~= &quot;page&quot; do
+			previousResult = currentResults:getPrevResult(previousResult)
+		end
+		currentPage = previousResult
+	end
+end
+
+currentVar = currentResults:getResultByName(&quot;var&quot;)
+
+while currentVar ~= NULL do
+	indexStartByte = currentVar:getStartBytePos() + 1
+	index = currentByteView:readByte(indexStartByte)
+
+	offsetStartByte = currentVar:getStartBytePos() + 2
+	offset = currentByteView:readByte(offsetStartByte) + (currentByteView:readByte(offsetStartByte + 1)) * 256
+
+	if offset ~= 0 then
+		ip_addr = (pages[index+1] * 65536 + offset - startAddr) * 2
+		-- ip_addr = offset * 2
+
+		logSrc:logMessage(_VERSION, 111, synalysis.SEVERITY_INFO, string.format(&quot;offset: %x, index: %d, ip_addr: %x&quot;, offset, index, ip_addr))
+
+		nbLayers = currentByteView:readByte(ip_addr + 1)
+		nbSamples = 0
+		if format == 51 then
+			nbSamples = currentByteView:readByte(ip_addr)
+			for i = 1,nbLayers-1 do
+				nbSamples = nbSamples + currentByteView:readByte(ip_addr + i * 2)
+			end
+		elseif format == 53 then
+			for i = 1,nbLayers do
+				nbSamples = nbSamples + currentByteView:readByte(ip_addr + i * 2)
+			end
+		end
+
+		logSrc:logMessage(_VERSION, 111, synalysis.SEVERITY_INFO, string.format(&quot;layers: %d, samples: %d&quot;, nbLayers, nbSamples))
+
+		ipBlockStructureSize = 2 * nbLayers
+		if format == 53 then
+			ipBlockStructureSize = ipBlockStructureSize + 2
+		end
+		currentMapper:mapStructureAtPosition(ipBlockStructure, ip_addr, ipBlockStructureSize)
+		currentMapper:mapStructureAtPosition(ipStructure, ip_addr + ipBlockStructureSize, 6 * nbSamples)
+		currentMapper:mapStructureAtPosition(spStructure, ip_addr + ipBlockStructureSize + 6 * nbSamples, spSize * nbSamples)
+	end
+
+	previousResult = currentResults:getPrevResult(currentVar)
+	while previousResult ~= NULL and previousResult:getName() ~= &quot;var&quot; do
+		previousResult = currentResults:getPrevResult(previousResult)
+	end
+	currentVar = previousResult
+end
+</source>
+                </script>
+            </scriptelement>
+            <scriptelement name="samples" id="626">
+                <script name="unnamed" type="Generic">
+                    <source language="Lua">logSrc = currentMapper:getCurrentLogSrc()
+currentResults = currentMapper:getCurrentResults()
+currentByteView = currentMapper:getCurrentByteView()
+
+startAddrStartByte = currentResults:getResultByName(&quot;START_ADDR&quot;):getStartBytePos()
+startAddr = (currentByteView:readByte(startAddrStartByte + 3)) * 16777216 + (currentByteView:readByte(startAddrStartByte + 2)) * 65536 + (currentByteView:readByte(startAddrStartByte + 1)) * 256 + (currentByteView:readByte(startAddrStartByte))
+
+wavSizes = {}
+wavAddresses = {}
+
+currentDreamSp = currentResults:getResultByName(&quot;size_wav&quot;)
+currentWavAddress = currentResults:getResultByName(&quot;wav_address&quot;)
+i = 0
+while currentDreamSp ~= NULL do
+    i = i + 1
+
+    wavSizes[i] = currentDreamSp
+
+    previousSector = currentResults:getPrevResult(currentWavAddress)
+    while previousSector:getName() ~= &quot;sector&quot; do
+        previousSector = currentResults:getPrevResult(previousSector)
+    end
+    previousSector_bytePos = previousSector:getStartBytePos()
+    previousSectorValue = currentByteView:readByte(previousSector_bytePos + 1) * 256 + currentByteView:readByte(previousSector_bytePos)
+    previousSectorValue = previousSectorValue / 64 -- &gt;&gt; 6
+    previousSectorValue = previousSectorValue * 16777216 -- &lt;&lt; 24
+
+    currentWavAddress_bytePos = currentWavAddress:getStartBytePos()
+    currentWavAddressValue = previousSectorValue + (currentMapper:getCurrentByteView():readByte(currentWavAddress_bytePos+3)) * 65536 + (currentMapper:getCurrentByteView():readByte(currentWavAddress_bytePos+2)) * 256 + (currentMapper:getCurrentByteView():readByte(currentWavAddress_bytePos))
+    wavAddresses[i] = (currentWavAddressValue - startAddr) * 2
+
+    previousWavAddress = currentResults:getPrevResult(currentWavAddress)
+    while previousWavAddress ~= NULL and previousWavAddress:getName() ~= &quot;wav_address&quot; do
+        previousWavAddress = currentResults:getPrevResult(previousWavAddress)
+    end
+    if previousWavAddress ~= NULL then
+        previousWavAddress_bytePos = previousWavAddress:getStartBytePos()
+        previousWavAddressValue = (currentMapper:getCurrentByteView():readByte(previousWavAddress_bytePos+1)) * 16777216 + (currentMapper:getCurrentByteView():readByte(previousWavAddress_bytePos+3)) * 65536 + (currentMapper:getCurrentByteView():readByte(previousWavAddress_bytePos+2)) * 256 + (currentMapper:getCurrentByteView():readByte(previousWavAddress_bytePos))
+        if currentWavAddressValue == previousWavAddressValue then
+            wavSizes[i] = 0
+        end
+    end
+    currentWavAddress = previousWavAddress
+
+    previousResult = currentResults:getPrevResult(currentDreamSp)
+    while previousResult ~= NULL and previousResult:getName() ~= &quot;size_wav&quot; do
+        previousResult = currentResults:getPrevResult(previousResult)
+    end
+    currentDreamSp = previousResult
+end
+
+nbDreamSp = i
+logSrc:logMessage(_VERSION, 111, synalysis.SEVERITY_INFO, string.format(&quot;nb iterations: %d&quot;, nbDreamSp))
+
+grammar = currentMapper:getCurrentGrammar()
+structure = grammar:getStructureByName(&quot;Elements&quot;)
+element = structure:getElementByName(&quot;Sample&quot;)
+
+for i = 1,nbDreamSp do
+    if wavSizes[i] ~= 0 then
+        current_bytePos = wavSizes[i]:getStartBytePos()
+        sample_size = (currentMapper:getCurrentByteView():readByte(current_bytePos+3)) * 16777216 + (currentMapper:getCurrentByteView():readByte(current_bytePos+2)) * 65536 + (currentMapper:getCurrentByteView():readByte(current_bytePos+1)) * 256 + (currentMapper:getCurrentByteView():readByte(current_bytePos))
+        sample_size = sample_size * 2
+        logSrc:logMessage(_VERSION, 111, synalysis.SEVERITY_INFO, string.format(&quot;it %d:, sample size: %d, wav address: %d&quot;, i, sample_size, wavAddresses[i]))
+        currentMapper:mapStructureAtPosition(structure, wavAddresses[i], sample_size)
+    end
+end
+</source>
+                </script>
+            </scriptelement>
+            <scriptelement name="mapping" id="627">
+                <script name="unnamed" type="Generic">
+                    <source language="Lua">grammar = currentMapper:getCurrentGrammar()
+structure = grammar:getStructureByName(&quot;Mapping&quot;)
+
+currentMapper:mapStructureAtPosition(structure, 3840, 117 * 64)</source>
+                </script>
+            </scriptelement>
+        </structure>
+        <structure name="Header" id="611" length="464" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <string name="Bank" mustmatch="yes" id="629" type="fixed-length" length="4">
+                <fixedvalues>
+                    <fixedvalue name="keyword" value="Bank"/>
+                </fixedvalues>
+            </string>
+            <number name="START_ADDR" id="630" type="integer" length="4" display="hex"/>
+            <number name="end_addr" id="631" type="integer" length="4" display="hex"/>
+            <number name="block_size" id="632" type="integer" length="4" display="hex"/>
+            <binary name="unknown" id="633" length="2"/>
+            <string name="name" id="634" fillcolor="FF9200" type="fixed-length" length="128"/>
+            <string name="format" id="635" fillcolor="0432FF" type="fixed-length" length="6"/>
+            <number name="version major" id="636" type="integer" length="1"/>
+            <number name="version minor" id="637" type="integer" length="1"/>
+            <binary name="memory_block_info" id="638" length="2"/>
+            <number name="end_addr2" id="639" type="integer" length="4" display="hex"/>
+            <binary name="unknown2" id="640" length="4"/>
+            <binary name="copyright" id="641" fillcolor="FEFB00" length="300"/>
+        </structure>
+        <structure name="MidiMapTab" id="613" length="size*2" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="size" id="643" type="integer" length="2"/>
+            <structure name="SoundbankPageTable" id="644" endian="little">
+                <number name="page" id="645" fillcolor="00FCFF" repeatmax="64" type="integer" length="2"/>
+            </structure>
+            <structure name="PCMapping" id="647">
+                <number name="pc_addr" id="648" fillcolor="00F900" repeatmax="128" type="integer" length="2" display="hex">
+                    <fixedvalues>
+                        <fixedvalue name="unaffected" value="0x1AA"/>
+                    </fixedvalues>
+                </number>
+            </structure>
+            <binary name="end" mustmatch="yes" id="650" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="FFFF"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unaffected_pc" mustmatch="yes" id="651" length="4">
+                <fixedvalues>
+                    <fixedvalue name="value" value="FFFFFFFF"/>
+                </fixedvalues>
+            </binary>
+        </structure>
+        <structure name="dream_ip" id="653" length="6" repeatmax="-1" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="min_vel" id="654" fillcolor="FEFB00" type="integer" length="1"/>
+            <number name="start_note" id="655" fillcolor="FEFB00" type="integer" length="1"/>
+            <number name="max_vel" id="656" fillcolor="FEFB00" type="integer" length="1"/>
+            <number name="end_note" id="657" fillcolor="FEFB00" type="integer" length="1"/>
+            <number name="dream_sp_addr" id="658" fillcolor="FEFB00" type="integer" length="2" display="hex"/>
+        </structure>
+        <structure name="dream_sp_3000" id="660" length="84" alignment="1" repeatmax="-1" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="align1" id="661" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0000"/>
+                </fixedvalues>
+            </binary>
+            <number name="address1" id="662" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="loopType" id="663" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="address2" id="664" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="address3" id="665" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <binary name="unknown1" mustmatch="yes" id="666" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="F0B5"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown2" mustmatch="yes" id="667" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="1408"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown3" mustmatch="yes" id="668" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="00FF"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown4" mustmatch="yes" id="669" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="3210"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown5" id="670" fillcolor="7980FF" length="1">
+                <fixedvalues>
+                    <fixedvalue name="value" value="04"/>
+                </fixedvalues>
+            </binary>
+            <number name="volume_amplifier" id="671" fillcolor="7980FF" type="integer" length="1"/>
+            <binary name="unknown6" id="672" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="8100"/>
+                </fixedvalues>
+            </binary>
+            <number name="fine_tune" id="673" fillcolor="7980FF" type="integer" length="1"/>
+            <number name="coarse_tune" id="674" fillcolor="7980FF" type="integer" length="1"/>
+            <number name="sector" id="675" type="integer" length="2"/>
+            <number name="loop_start" id="676" fillcolor="7980FF" type="integer" length="4" display="hex"/>
+            <binary name="align3" mustmatch="yes" id="677" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0000"/>
+                </fixedvalues>
+            </binary>
+            <number name="wav_address" id="678" fillcolor="7980FF" type="integer" length="4" endian="little" display="hex"/>
+            <number name="volume_mixer1" id="679" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="loop_end" id="680" fillcolor="7980FF" type="integer" length="4" display="hex"/>
+            <binary name="unknown7" mustmatch="yes" id="681" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0E7F"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown8" mustmatch="yes" id="682" fillcolor="7980FF" length="1">
+                <fixedvalues>
+                    <fixedvalue name="value" value="06"/>
+                </fixedvalues>
+            </binary>
+            <number name="amplitude_osc_amp" id="683" fillcolor="7980FF" type="integer" length="1"/>
+            <number name="volume_mixer2" id="684" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="init" id="685" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="attack" id="686" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="decay" id="687" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="release" id="688" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <binary name="unknown13" mustmatch="yes" id="689" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0104"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown14" mustmatch="yes" id="690" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="000F"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown15" mustmatch="yes" id="691" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="1500"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown16" mustmatch="yes" id="692" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0304"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown17" mustmatch="yes" id="693" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="1000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown18" mustmatch="yes" id="694" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0102"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown19" mustmatch="yes" id="695" fillcolor="7980FF" length="4">
+                <fixedvalues>
+                    <fixedvalue name="value" value="00000000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown20" mustmatch="yes" id="696" fillcolor="7980FF" length="4">
+                <fixedvalues>
+                    <fixedvalue name="value" value="00000000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown21" mustmatch="yes" id="697" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown22" mustmatch="yes" id="698" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0200"/>
+                </fixedvalues>
+            </binary>
+            <number name="size_wav" id="699" fillcolor="7980FF" type="integer" length="4"/>
+        </structure>
+        <structure name="dream_sp_5000" id="701" length="90" alignment="1" repeatmax="-1" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="align1" id="702" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0000"/>
+                </fixedvalues>
+            </binary>
+            <number name="address1" id="703" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="loopType" id="704" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="address2" id="705" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="address3" id="706" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <binary name="unknown0" id="707" length="2"/>
+            <binary name="unknown1" mustmatch="yes" id="708" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="F0B5"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown2" id="709" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="1408"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown3" id="710" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="00FF"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown4" id="711" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="3210"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown5" id="712" fillcolor="7980FF" length="1">
+                <fixedvalues>
+                    <fixedvalue name="value" value="04"/>
+                </fixedvalues>
+            </binary>
+            <number name="volume_amplifier" id="713" fillcolor="7980FF" type="integer" length="1"/>
+            <binary name="unknown6bis" id="714" length="4">
+                <fixedvalues>
+                    <fixedvalue name="value" value="813F01FF"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown6" id="715" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="8100"/>
+                </fixedvalues>
+            </binary>
+            <number name="fine_tune" id="716" fillcolor="7980FF" type="integer" length="1"/>
+            <number name="coarse_tune" id="717" fillcolor="7980FF" type="integer" length="1"/>
+            <number name="sector" id="718" type="integer" length="2"/>
+            <number name="loop_start" id="719" fillcolor="7980FF" type="integer" length="4" display="hex"/>
+            <binary name="align3" id="720" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0000"/>
+                </fixedvalues>
+            </binary>
+            <number name="wav_address" id="721" fillcolor="7980FF" type="integer" length="4" endian="little" display="hex"/>
+            <number name="volume_mixer1" id="722" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="loop_end" id="723" fillcolor="7980FF" type="integer" length="4" display="hex"/>
+            <binary name="unknown7" id="724" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0E7F"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown8" id="725" fillcolor="7980FF" length="1">
+                <fixedvalues>
+                    <fixedvalue name="value" value="06"/>
+                </fixedvalues>
+            </binary>
+            <number name="amplitude_osc_amp" id="726" fillcolor="7980FF" type="integer" length="1"/>
+            <number name="volume_mixer2" id="727" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="init" id="728" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="attack" id="729" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="decay" id="730" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <number name="release" id="731" fillcolor="7980FF" type="integer" length="2" display="hex"/>
+            <binary name="unknown13" id="732" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0104"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown14" id="733" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="000F"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown15" id="734" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="1500"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown16" id="735" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0304"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown17" id="736" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="1000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown18" id="737" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0102"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown19" id="738" fillcolor="7980FF" length="4">
+                <fixedvalues>
+                    <fixedvalue name="value" value="00000000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown20" id="739" fillcolor="7980FF" length="4">
+                <fixedvalues>
+                    <fixedvalue name="value" value="00000000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown21" id="740" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0000"/>
+                </fixedvalues>
+            </binary>
+            <binary name="unknown22" id="741" fillcolor="7980FF" length="2">
+                <fixedvalues>
+                    <fixedvalue name="value" value="0200"/>
+                </fixedvalues>
+            </binary>
+            <number name="size_wav" id="742" fillcolor="7980FF" type="integer" length="4"/>
+        </structure>
+        <structure name="InstrumentParametersBlock_3000" id="744" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="nb_samples" id="745" fillcolor="00F900" type="integer" length="1"/>
+            <number name="nb_layers" id="746" fillcolor="FF9200" type="integer" length="1"/>
+            <structure name="nbSamplesPair" id="747" repeatmin="nb_layers - 1" repeatmax="nb_layers - 1">
+                <number name="nb_samples_in_layer" id="748" fillcolor="00F900" type="integer" length="1"/>
+                <binary name="zero" mustmatch="yes" id="749" fillcolor="FEFFFF" length="1">
+                    <fixedvalues>
+                        <fixedvalue name="value" value="00"/>
+                    </fixedvalues>
+                </binary>
+            </structure>
+        </structure>
+        <structure name="InstrumentParametersBlock_5000" id="752" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="unknown" id="753" length="1">
+                <fixedvalues>
+                    <fixedvalue name="value" value="40"/>
+                </fixedvalues>
+            </binary>
+            <number name="nb_layers" id="754" fillcolor="FF9200" type="integer" length="1"/>
+            <structure name="nbSamplesPair" id="755" length="0" alignment="0" repeatmin="nb_layers" repeatmax="nb_layers">
+                <number name="nb_samples_in_layer" id="756" fillcolor="00F900" type="integer" length="1"/>
+                <binary name="zero" mustmatch="yes" id="757" fillcolor="FEFFFF" length="1">
+                    <fixedvalues>
+                        <fixedvalue name="value" value="00"/>
+                    </fixedvalues>
+                </binary>
+            </structure>
+        </structure>
+        <structure name="Elements" id="760" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="Sample" id="761" length="remaining"/>
+        </structure>
+        <structure name="Mapping" id="763" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <structure name="info_instr" id="764" length="0" alignment="1" repeatmax="117" encoding="ISO_8859-1:1987" endian="little" signed="no">
+                <string name="instr_name" id="765" type="fixed-length" length="12"/>
+                <number name="instr_midi_pc" id="766" type="integer" length="1"/>
+                <number name="instr_midi_C0" id="767" type="integer" length="1"/>
+                <number name="instr_key_map" id="768" type="integer" length="1"/>
+                <number name="instr_octave" id="769" type="integer" length="1"/>
+                <number name="instr_user_id" id="770" type="integer" length="4" display="hex"/>
+                <number name="instr_id" id="771" type="integer" length="4"/>
+                <number name="sample_address" id="772" type="integer" length="4" display="hex"/>
+                <number name="instr_noteoff" id="773" type="integer" length="1"/>
+                <string name="instr_cat" id="774" type="fixed-length" length="12"/>
+                <number name="instr_relvolume" id="775" type="integer" length="1"/>
+                <number name="format_id" id="776" type="integer" length="1"/>
+                <number name="nb_layer" id="777" type="integer" length="1"/>
+                <number name="ip_size" id="778" type="integer" length="2"/>
+                <number name="sp_size" id="779" type="integer" length="2"/>
+                <number name="sample_size" id="780" type="integer" length="4"/>
+                <number name="instr_type" id="781" type="integer" length="1"/>
+                <number name="instr_preset" id="782" type="integer" length="1"/>
+                <number name="instr_mapping" id="783" type="integer" length="1"/>
+                <binary name="align" id="784" length="1"/>
+                <number name="HW_instr_version" id="785" type="integer" length="2"/>
+                <number name="SW_instr_version" id="786" type="integer" length="2"/>
+                <number name="instr_version" id="787" type="integer" length="4"/>
+            </structure>
+        </structure>
+    </grammar>
+</ufwb>

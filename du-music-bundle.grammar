@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="du-music-bundle" start="id:6" author="Kniebihler Nicolas" email="nicolas.kniebihler@dualo.org" fileextension="dumusic" complete="yes">
+        <description>Grammar for du-music bundles</description>
+        <structure name="BUNDLE" id="6" length="0" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <structref name="Header" id="8" structure="id:7"/>
+            <structref name="du-music" id="10" structure="id:9"/>
+            <structref name="du-sound" id="12" repeatmin="0" repeatmax="-1" structure="id:11"/>
+        </structure>
+        <structure name="Header" id="7" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <string name="signature" mustmatch="yes" id="14" type="fixed-length" length="4">
+                <fixedvalues>
+                    <fixedvalue value="DUMB"/>
+                </fixedvalues>
+            </string>
+            <number name="version" id="15" type="integer" length="4"/>
+        </structure>
+        <structure name="Chunk" id="17" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <string name="type" id="18" type="fixed-length" length="4"/>
+            <number name="length" id="19" type="integer" length="4"/>
+            <structure name="data" id="20" length="previous.length"/>
+            <binary name="CRC" id="22" length="2"/>
+        </structure>
+        <structure name="du-music" id="9" extends="id:17">
+            <string name="type" mustmatch="yes" id="24" type="fixed-length">
+                <fixedvalues>
+                    <fixedvalue value="DMSC"/>
+                </fixedvalues>
+            </string>
+            <structure name="data" id="25">
+                <grammarref name="data" id="27" filename="du-music.grammar"/>
+            </structure>
+        </structure>
+        <structure name="du-sound" id="11" extends="id:17">
+            <string name="type" id="31" type="fixed-length">
+                <fixedvalues>
+                    <fixedvalue value="DSND"/>
+                </fixedvalues>
+            </string>
+            <structure name="data" id="32">
+                <grammarref name="data" id="34" filename="du-sound.grammar"/>
+            </structure>
+        </structure>
+    </grammar>
+</ufwb>

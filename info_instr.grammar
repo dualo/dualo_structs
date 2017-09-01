@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="info_instr" start="id:6" author="Kniebihler Nicolas" complete="yes">
+        <description>Grammar for the structur info_instr</description>
+        <structure name="info_instr" id="6" length="0" alignment="1" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <string name="instr_name" id="7" type="fixed-length" length="12"/>
+            <number name="instr_midi_pc" id="8" type="integer" length="1"/>
+            <number name="instr_midi_C0" id="9" type="integer" length="1"/>
+            <number name="instr_key_map" id="10" type="integer" length="1"/>
+            <number name="instr_octave" id="11" type="integer" length="1"/>
+            <number name="instr_user_id" id="12" type="integer" length="4" display="hex"/>
+            <number name="instr_id" id="13" type="integer" length="4"/>
+            <number name="sample_address" id="14" type="integer" length="4" display="hex"/>
+            <number name="instr_noteoff" id="15" type="integer" length="1"/>
+            <string name="instr_cat" id="16" type="fixed-length" length="12"/>
+            <number name="instr_relvolume" id="17" type="integer" length="1"/>
+            <number name="format_id" id="18" type="integer" length="1"/>
+            <number name="nb_layer" id="19" type="integer" length="1"/>
+            <number name="ip_size" id="20" type="integer" length="2"/>
+            <number name="sp_size" id="21" type="integer" length="2"/>
+            <number name="sample_size" id="22" type="integer" length="4"/>
+            <number name="instr_type" id="23" type="integer" length="1"/>
+            <number name="instr_preset" id="24" type="integer" length="1"/>
+            <number name="instr_mapping" id="25" type="integer" length="1"/>
+            <binary name="align" id="26" length="1"/>
+            <number name="HW_instr_version" id="27" type="integer" length="2"/>
+            <number name="SW_instr_version" id="28" type="integer" length="2"/>
+            <number name="instr_version" id="29" type="integer" length="4"/>
+        </structure>
+    </grammar>
+</ufwb>

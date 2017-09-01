@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="preset_instr" start="id:6" author="Kniebihler Nicolas" complete="yes">
+        <description>Grammar for the preset_instr structure</description>
+        <structure name="preset_instr" id="6" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <string name="s_name" id="7" type="fixed-length" length="32"/>
+            <structure name="general" id="8" length="0" alignment="0">
+                <number name="s_volume" id="9" type="integer" length="1"/>
+                <number name="s_panning" id="10" type="integer" length="1"/>
+                <number name="s_sendtorev" id="11" type="integer" length="1"/>
+                <number name="s_instr_octave" id="12" type="integer" length="1"/>
+                <number name="s_key_curve" id="13" type="integer" length="1"/>
+                <number name="s_expression" id="14" type="integer" length="1"/>
+                <binary name="s_dummygeneral" id="15" length="10"/>
+            </structure>
+            <structure name="controllers" id="17" length="0" alignment="0">
+                <number name="s_activ_aftertouch" id="18" type="integer" length="2"/>
+                <number name="s_activ_slider_L" id="19" type="integer" length="2"/>
+                <number name="s_activ_slider_R" id="20" type="integer" length="2"/>
+                <number name="s_activ_gyro_P" id="21" type="integer" length="2"/>
+                <number name="s_activ_gyro_R" id="22" type="integer" length="2"/>
+                <number name="s_activ_gyro_Y" id="23" type="integer" length="2"/>
+                <number name="s_direction_aftertouch" id="24" type="integer" length="1" signed="yes"/>
+                <number name="s_direction_slider_L" id="25" type="integer" length="1" signed="yes"/>
+                <number name="s_direction_slider_R" id="26" type="integer" length="1" signed="yes"/>
+                <number name="s_direction_gyro_P" id="27" type="integer" length="1" signed="yes"/>
+                <number name="s_direction_gyro_R" id="28" type="integer" length="1" signed="yes"/>
+                <number name="s_direction_gyro_Y" id="29" type="integer" length="1" signed="yes"/>
+                <binary name="s_dummycontroler" id="30" length="6"/>
+            </structure>
+            <structure name="portamento" id="32">
+                <number name="s_portamento_on_off" id="33" type="integer" length="1"/>
+                <number name="s_portamento_ctrl" id="34" type="integer" length="1"/>
+                <number name="s_portamento_time" id="35" type="integer" length="1"/>
+            </structure>
+            <structure name="led marks" id="37">
+                <number name="s_displayled" id="38" type="integer" length="1"/>
+                <number name="s_leds" id="39" repeatmin="32" repeatmax="32" type="integer" length="1"/>
+            </structure>
+            <structure name="pitch" id="41">
+                <number name="s_pitch" id="42" type="integer" length="1"/>
+                <number name="s_pitch_bend_sensitivity" id="43" type="integer" length="1"/>
+            </structure>
+            <structure name="adsr" id="45" length="0" alignment="0">
+                <number name="s_adsr_attack" id="46" type="integer" length="1"/>
+                <number name="s_adsr_release" id="47" type="integer" length="1"/>
+            </structure>
+            <structure name="wah" id="49" length="0" alignment="0">
+                <number name="s_wah_type" id="50" type="integer" length="1"/>
+                <number name="s_wah_freq" id="51" type="integer" length="1"/>
+                <number name="s_wah_res" id="52" type="integer" length="1"/>
+            </structure>
+            <structure name="multi-note" id="54">
+                <number name="s_multinote_act" id="55" type="integer" length="1"/>
+                <number name="s_multinote" id="56" repeatmin="4" repeatmax="4" type="integer" length="1" signed="yes"/>
+            </structure>
+            <structure name="arpeggiator" id="58">
+                <number name="s_arpegiator_type" id="59" type="integer" length="1"/>
+                <number name="s_arpegiator_beat" id="60" type="integer" length="1"/>
+            </structure>
+            <structure name="auto pitch" id="62">
+                <number name="s_autopitch_rate" id="63" type="integer" length="1"/>
+                <number name="s_autopitch_range" id="64" type="integer" length="1"/>
+            </structure>
+            <structure name="tremolo" id="66">
+                <number name="s_tremolo_rate" id="67" type="integer" length="1"/>
+                <number name="s_tremolo_range" id="68" type="integer" length="1"/>
+            </structure>
+            <structure name="autopan" id="70">
+                <number name="s_autopan_rate" id="71" type="integer" length="1"/>
+                <number name="s_autopan_range" id="72" type="integer" length="1"/>
+            </structure>
+            <structure name="auto wah" id="74">
+                <number name="s_autowah_rate" id="75" type="integer" length="1"/>
+                <number name="s_autowah_range" id="76" type="integer" length="1"/>
+            </structure>
+            <structure name="FX structs" id="78">
+                <number name="s_chorus_preset" id="79" type="integer" length="1"/>
+                <number name="s_compressor_onoff" id="80" type="integer" length="1"/>
+                <number name="s_delay_onoff" id="81" type="integer" length="1"/>
+                <number name="s_distortion_onoff" id="82" type="integer" length="1"/>
+                <number name="s_eq_onoff" id="83" type="integer" length="1"/>
+                <number name="s_chorus_onoff" id="84" type="integer" length="1"/>
+                <number name="s_reverb_onoff" id="85" type="integer" length="1"/>
+                <binary name="s_dummystruct" id="86" length="5"/>
+            </structure>
+            <grammarref name="s_mix" id="88" filename="FX_mix.grammar"/>
+            <structref name="s_distortion" id="90" structure="id:89"/>
+            <structref name="s_compressor" id="92" structure="id:91"/>
+            <structref name="s_equalizer" id="94" structure="id:93"/>
+            <structref name="s_delay" id="96" structure="id:95"/>
+            <structref name="s_chorus" id="98" repeatmin="3" repeatmax="3" structure="id:97"/>
+            <binary name="s_extra" id="99" length="76"/>
+        </structure>
+        <structure name="FX_distortion" id="89" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="d_on_off" id="101" type="integer" length="1"/>
+            <number name="d_pre_gain" id="102" type="integer" length="1"/>
+            <number name="d_type" id="103" type="integer" length="1"/>
+            <number name="d_lowpassfilterfreq" id="104" type="integer" length="1"/>
+            <number name="d_lowpassfilterres" id="105" type="integer" length="1"/>
+            <number name="d_postgain" id="106" type="integer" length="1"/>
+            <number name="d_drive" id="107" type="integer" length="1"/>
+            <binary name="d_dummy" id="108" length="1"/>
+        </structure>
+        <structure name="FX_compressor" id="91" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="c_on_off" id="110" type="integer" length="1"/>
+            <number name="c_attacktime" id="111" type="integer" length="1"/>
+            <number name="c_releasetime" id="112" type="integer" length="1"/>
+            <number name="c_threshold" id="113" type="integer" length="1"/>
+            <number name="c_ratio" id="114" type="integer" length="1"/>
+            <number name="c_boost" id="115" type="integer" length="1"/>
+            <number name="c_kneetype" id="116" type="integer" length="1"/>
+            <binary name="c_dummy" id="117" length="1"/>
+        </structure>
+        <structure name="FX_equalizer" id="93" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="e_on_off" id="119" type="integer" length="1"/>
+            <number name="e_lowbandgain" id="120" type="integer" length="1"/>
+            <number name="e_lowmidbandgain" id="121" type="integer" length="1"/>
+            <number name="e_highmidbandgain" id="122" type="integer" length="1"/>
+            <number name="e_highbandgain" id="123" type="integer" length="1"/>
+            <number name="e_lowbandfrequency" id="124" type="integer" length="1"/>
+            <number name="e_lowmidbandfrequency" id="125" type="integer" length="1"/>
+            <number name="e_highmidbandfrequency" id="126" type="integer" length="1"/>
+            <number name="e_highbandfrequency" id="127" type="integer" length="1"/>
+            <number name="e_lowmidbandQ" id="128" type="integer" length="1"/>
+            <number name="e_highmidbandQ" id="129" type="integer" length="1"/>
+            <binary name="e_dummy" id="130" length="1"/>
+        </structure>
+        <structure name="FX_delay" id="95" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="d_on_off" id="132" type="integer" length="1"/>
+            <number name="d_mode" id="133" type="integer" length="1"/>
+            <number name="d_prelp" id="134" type="integer" length="1"/>
+            <number name="d_level" id="135" type="integer" length="1"/>
+            <number name="d_time" id="136" type="integer" length="1"/>
+            <number name="d_feedback" id="137" type="integer" length="1"/>
+            <number name="d_hdamp" id="138" type="integer" length="1"/>
+            <binary name="d_dummy" id="139" length="1"/>
+        </structure>
+        <structure name="FX_chorus" id="97" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="c_mode" id="141" type="integer" length="1"/>
+            <number name="c_effectlevel" id="142" type="integer" length="1"/>
+            <number name="c_delaytime" id="143" type="integer" length="1"/>
+            <number name="c_feedback" id="144" type="integer" length="1"/>
+            <number name="c_inputhighpassfilter" id="145" type="integer" length="1"/>
+            <number name="c_hdamp" id="146" type="integer" length="1"/>
+            <number name="c_modulationdepth" id="147" type="integer" length="1"/>
+            <number name="c_modulationrate" id="148" type="integer" length="1"/>
+            <number name="c_tremoloshape" id="149" type="integer" length="1"/>
+            <number name="c_rotaryspeed" id="150" type="integer" length="1"/>
+        </structure>
+    </grammar>
+</ufwb>

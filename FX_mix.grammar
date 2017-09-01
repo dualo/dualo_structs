@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="FX_mix" start="id:6" author="Kniebihler Nicolas" complete="yes">
+        <description>Grammar for the FX_mix structure</description>
+        <structure name="FX_mix" id="6" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="m_inputgain" id="7" type="integer" length="1"/>
+            <number name="m_locutfilterfrequency" id="8" type="integer" length="1"/>
+            <number name="m_hicutfilterfrequency" id="9" type="integer" length="1"/>
+            <number name="m_ouputlevel" id="10" type="integer" length="1"/>
+            <number name="m_outputpanning" id="11" type="integer" length="1"/>
+            <number name="m_ouputfrontrear" id="12" type="integer" length="1"/>
+            <number name="m_sendtoreverb" id="13" type="integer" length="1"/>
+            <number name="m_sendtochorus" id="14" type="integer" length="1"/>
+        </structure>
+    </grammar>
+</ufwb>

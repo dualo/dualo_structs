@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="FX_reverb" start="id:6" author="Kniebihler Nicolas" complete="yes">
+        <description>Grammar for FX_reverb structure</description>
+        <structure name="FX_reverb" id="6" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="r_level" id="7" type="integer" length="1"/>
+            <number name="r_directlevel" id="8" type="integer" length="1"/>
+            <number name="r_revsend" id="9" type="integer" length="1"/>
+            <number name="r_tonegain" id="10" type="integer" length="1"/>
+            <number name="r_tonefreq" id="11" type="integer" length="1"/>
+            <number name="r_prehp" id="12" type="integer" length="1"/>
+            <number name="r_time" id="13" type="integer" length="1"/>
+            <number name="r_echofeedback" id="14" type="integer" length="1"/>
+            <number name="r_hdamp" id="15" type="integer" length="1"/>
+            <number name="r_thresgate" id="16" type="integer" length="1"/>
+            <number name="r_predelaytime" id="17" type="integer" length="1"/>
+            <binary name="r_dummy" id="18" length="1"/>
+            <string name="r_name" id="19" type="fixed-length" length="12"/>
+        </structure>
+    </grammar>
+</ufwb>

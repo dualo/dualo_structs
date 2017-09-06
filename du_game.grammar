@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="du-game" start="id:888" author="Saubanere " fileextension="dumusic" uti="du-game">
+        <description>Grammar for du-music file format for du game</description>
+        <structure name="DUGAME file" id="888" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <grammarref name="s_total_buffer" id="895" filename="du-music.grammar"/>
+            <structref name="local_metadata" id="897" strokecolor="BB2CC8" structure="id:896"/>
+        </structure>
+        <structure name="metadata" id="896" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <string name="meta_key" mustmatch="yes" id="1314" type="fixed-length" length="8">
+                <fixedvalues>
+                    <fixedvalue name="key" value="METADATA"/>
+                </fixedvalues>
+            </string>
+            <structref name="header_metadata" id="1316" structure="id:1315"/>
+            <structref name="arrangement_struct" id="1318" structure="id:1317"/>
+        </structure>
+        <structure name="s_metadata" id="1315" repeatmin="128" repeatmax="128" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <number name="meta_type" id="1320" type="integer" length="4"/>
+            <number name="meta_size" id="1321" type="integer" length="4"/>
+            <number name="meta_adress" id="1322" type="integer" length="4"/>
+        </structure>
+        <structure name="s_arrangement" id="1317" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <number name="as_grade" id="1324" type="integer" length="4"/>
+            <number name="as_numevent" id="1325" type="integer" length="4"/>
+            <number name="as_currentevent" id="1326" type="integer" length="4"/>
+            <structref name="as_eventlist" id="1328" structure="id:1327"/>
+        </structure>
+        <structure name="s_arrangement_event" id="1327" repeatmax="256" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <structref name="ae_intro_msg" id="1331" structure="id:1330"/>
+            <structref name="ae_intro_cmt" id="1332" structure="id:1330"/>
+            <structref name="ae_actionlist" id="1334" structure="id:1333"/>
+            <structref name="ae_exit_condition" id="1336" structure="id:1335"/>
+            <number name="s_arrangement_led" id="1337" repeatmin="32" repeatmax="32" type="integer" length="1"/>
+        </structure>
+        <structure name="s_arrangement_msg" id="1330" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <string name="am_line1" id="1339" type="fixed-length" length="32"/>
+            <string name="am_line2" id="1340" type="fixed-length" length="32"/>
+            <string name="am_line3" id="1341" type="fixed-length" length="32"/>
+        </structure>
+        <structure name="s_arrangement_event_action" id="1333" repeatmin="64" repeatmax="64" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <number name="aea_type" id="1343" type="integer" length="1"/>
+            <number name="aea_loop" id="1344" type="integer" length="1"/>
+            <number name="aea_cmd" id="1345" type="integer" length="1"/>
+            <number name="aea_value" id="1346" type="integer" length="1"/>
+        </structure>
+        <structure name="s_arrangement_exit_condition" id="1335" encoding="ISO_8859-1:1987" endian="big" signed="no">
+            <number name="aec_type" id="1348" type="integer" length="4"/>
+            <number name="aec_value" id="1349" type="integer" length="4"/>
+        </structure>
+    </grammar>
+</ufwb>

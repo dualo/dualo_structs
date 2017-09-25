@@ -11,6 +11,12 @@
 
 #include "parameters_mng.h"
 
+#ifdef __LPC177X_8X__
+#include "lpc_types.h"
+#else
+#include <stdint.h>
+#endif // __LPC177X_8X__
+
 
 /***************** arrangement event action **********************/
 #define ARRANGEMENT_MAXEVENTACTION	64

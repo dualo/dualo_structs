@@ -9,6 +9,11 @@
 #ifndef METADATA_STRUCTS_H_
 #define METADATA_STRUCTS_H_
 
+#ifdef __LPC177X_8X__
+#include "lpc_types.h"
+#else
+#include <stdint.h>
+#endif // __LPC177X_8X__
 
 #define MUSIC_METADATAHEADERSIZE	12
 

@@ -15,27 +15,23 @@
 #include <stdint.h>
 #endif // __LPC177X_8X__
 
-#define MUSIC_METADATAHEADERSIZE	12
+#define METADATA_CURRENT_VERSION 1
+#define METADATA_SIGNATURE 0x4154454D // META
 
-/***************** metadata type list **********************/
+#define MUSICMETADATA_ARRANGEMENT_CURRENT_VERSION 1
+#define MUSICMETADATA_ARRANGEMENT_SIGNATURE 0x47525241 // ARRG
 
-enum MUSICMETADATA_TYPE {
-	MUSICMETADATA_TYPE_NONE,
-	MUSICMETADATA_TYPE_ARRANGEMENT = 0x47525241,//ARRG
-	MUSICMETADATA_TYPE_TAGS,
-	NUM_MUSICMETADATA_TYPE
-};
+#define MUSICMETADATA_GAME_CURRENT_VERSION 1
+#define MUSICMETADATA_GAME_SIGNATURE 0x454D4147 // GAME
 
-/***************** metadata entry list **********************/
 typedef struct
 {
-	uint32_t meta_type;
-	uint32_t meta_size;
-	uint32_t meta_address;
-} s_metadata;
+    uint32_t meta_signature;
+    uint32_t meta_version;
+    uint32_t meta_size;
+} s_metadata_header;
 
-#define MUSIC_METADATAENTRYSIZE	(3 * 4)
-
+#define METADATA_HEADER_SIZE (3 * 4)
 
 
 #endif // METADATA_STRUCTS_H_

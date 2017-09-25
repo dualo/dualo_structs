@@ -32,7 +32,7 @@ typedef struct
 #define ARRANGEMENT_EVENTACTION_SIZE	4
 
 enum ARRANGEMENT_EVENTACTION {
-	ARRANGEMENTEVENTACTION_NONE = NUM_PARAMETERSTRUCT,
+    ARRANGEMENTEVENTACTION_NONE = NUM_PARAMETERSTRUCT, //33
 	ARRANGEMENTEVENTACTION_DULOOP,
 	ARRANGEMENTEVENTACTION_TEMPO,
 	ARRANGEMENTEVENTACTION_SCALE,
@@ -101,14 +101,15 @@ typedef struct
 	s_arrangement_msg ae_intro_msg;
 	s_arrangement_msg ae_intro_cmt;
 
+    uint32_t ae_nb_actions;
 	s_arrangement_event_action ae_actionlist[ARRANGEMENT_MAXEVENTACTION];
 
 	s_arrangement_exit_condition ae_exit_condition; // num of loop player or result of test or none if we add it to the next event...
 
-	uint8_t s_arrangement_led[NUM_LED_VALUE];
+    uint8_t ae_led[NUM_LED_VALUE];
 } s_arrangement_event;
 
-#define ARRANGEMENT_EVENT_SIZE	((2*ARRANGEMENT_MSG_SIZE) + (ARRANGEMENT_MAXEVENTACTION*ARRANGEMENT_EVENTACTION_SIZE) + ARRANGEMENT_EXITCONDITION_SIZE)//456
+#define ARRANGEMENT_EVENT_SIZE	((2*ARRANGEMENT_MSG_SIZE) + 4 + (ARRANGEMENT_MAXEVENTACTION*ARRANGEMENT_EVENTACTION_SIZE) + ARRANGEMENT_EXITCONDITION_SIZE + NUM_LED_VALUE) //456
 
 /***************** arrangement struct **********************/
 #define ARRANGEMENT_MAXEVENT	256 //64

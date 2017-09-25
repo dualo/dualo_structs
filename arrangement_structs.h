@@ -9,13 +9,7 @@
 #ifndef ARRANGEMENT_STRUCTS_H_
 #define ARRANGEMENT_STRUCTS_H_
 
-#include "parameters_mng.h"
-
-#ifdef __LPC177X_8X__
-#include "lpc_types.h"
-#else
-#include <stdint.h>
-#endif // __LPC177X_8X__
+#include "parameters_structs.h"
 
 
 /***************** arrangement event action **********************/
@@ -32,7 +26,7 @@ typedef struct
 #define ARRANGEMENT_EVENTACTION_SIZE	4
 
 enum ARRANGEMENT_EVENTACTION {
-    ARRANGEMENTEVENTACTION_NONE = NUM_PARAMETERSTRUCT, //33
+    ARRANGEMENTEVENTACTION_NONE = NUM_PARAMETERSTRUCT,
 	ARRANGEMENTEVENTACTION_DULOOP,
 	ARRANGEMENTEVENTACTION_TEMPO,
 	ARRANGEMENTEVENTACTION_SCALE,

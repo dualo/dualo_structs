@@ -2,12 +2,12 @@
 <ufwb version="1.17">
     <grammar name="du-music-bundle" start="id:6" author="Kniebihler Nicolas" email="nicolas.kniebihler@dualo.org" fileextension="dumusic" complete="yes">
         <description>Grammar for du-music bundles</description>
-        <structure name="BUNDLE" id="6" length="0" encoding="ISO_8859-1:1987" endian="big" signed="no">
+        <structure name="BUNDLE" id="6" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <structref name="Header" id="8" structure="id:7"/>
             <structref name="du-music" id="10" structure="id:9"/>
             <structref name="du-sound" id="12" repeatmin="0" repeatmax="-1" structure="id:11"/>
         </structure>
-        <structure name="Header" id="7" encoding="ISO_8859-1:1987" endian="big" signed="no">
+        <structure name="Header" id="7" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <string name="signature" mustmatch="yes" id="14" type="fixed-length" length="4">
                 <fixedvalues>
                     <fixedvalue value="DUMB"/>
@@ -15,7 +15,7 @@
             </string>
             <number name="version" id="15" type="integer" length="4"/>
         </structure>
-        <structure name="Chunk" id="17" encoding="ISO_8859-1:1987" endian="big" signed="no">
+        <structure name="Chunk" id="17" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <string name="type" id="18" type="fixed-length" length="4"/>
             <number name="length" id="19" type="integer" length="4"/>
             <structure name="data" id="20" length="previous.length"/>

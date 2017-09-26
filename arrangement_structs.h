@@ -9,7 +9,6 @@
 #ifndef ARRANGEMENT_STRUCTS_H_
 #define ARRANGEMENT_STRUCTS_H_
 
-#include "parameters_structs.h"
 #include "g_structs.h"
 
 

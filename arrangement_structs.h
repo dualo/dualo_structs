@@ -13,6 +13,23 @@
 #include "g_structs.h"
 
 
+#ifdef __cplusplus
+#include <QMetaObject>
+#include <QtGlobal>
+
+// inline namespaces not handled before MSVC 14.0 (Visual Studio 2015)
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+inline
+#endif // _MSC_VER
+namespace ArrangementStructs {
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+Q_NAMESPACE
+#endif // QT_VERSION
+
+#endif // __cplusplus
+
+
 /***************** arrangement event action **********************/
 #define ARRANGEMENT_MAXEVENTACTION	64
 
@@ -158,5 +175,22 @@ s_arrangement_event	arrangement_eventlist[] =
 		}
 };
 */
+
+
+#ifdef __cplusplus
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+Q_ENUM_NS(ARRANGEMENT_EVENTACTION)
+Q_ENUM_NS(ARRANGEMENT_EXITCONDITION)
+#endif // QT_VERSION
+
+} // namespace ArrangementStructs
+
+// inline namespaces not handled before MSVC 14.0 (Visual Studio 2015)
+#if defined(_MSC_VER) && _MSC_VER < 1900
+using namespace ArrangementStructs;
+#endif // _MSC_VER
+
+#endif // __cplusplus
 
 #endif // ARRANGEMENT_STRUCTS_H_

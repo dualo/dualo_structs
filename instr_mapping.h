@@ -35,6 +35,24 @@
 
 #define INSTRUMENT_MAPPING_MAX  31
 
+
+#ifdef __cplusplus
+#include <QMetaObject>
+#include <QtGlobal>
+
+// inline namespaces not handled before MSVC 14.0 (Visual Studio 2015)
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+inline
+#endif // _MSC_VER
+namespace InstrMapping {
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+Q_NAMESPACE
+#endif // QT_VERSION
+
+#endif // __cplusplus
+
+
 // structure
 enum INSTRUMENT_TYPE {
 	INSTR_HARMONIC,
@@ -42,6 +60,23 @@ enum INSTRUMENT_TYPE {
 	INSTR_SAMPLE,
 	NUM_INSTR_TYPE
 };
+
+
+#ifdef __cplusplus
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+Q_ENUM_NS(INSTRUMENT_TYPE)
+#endif // QT_VERSION
+
+} // namespace InstrMapping
+
+// inline namespaces not handled before MSVC 14.0 (Visual Studio 2015)
+#if defined(_MSC_VER) && _MSC_VER < 1900
+using namespace InstrMapping;
+#endif // _MSC_VER
+
+#endif // __cplusplus
+
 
 #if 0
 typedef struct

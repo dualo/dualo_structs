@@ -12,6 +12,13 @@
 #include "g_structs.h"
 
 
+#ifdef __LPC177X_8X__
+#include "lpc_types.h"
+#else
+#include <stdint.h>
+#endif // __LPC177X_8X__
+
+
 #ifdef __cplusplus
 #include <QMetaObject>
 #include <QtGlobal>

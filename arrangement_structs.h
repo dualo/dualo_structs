@@ -10,6 +10,7 @@
 #define ARRANGEMENT_STRUCTS_H_
 
 #include "parameters_structs.h"
+#include "g_structs.h"
 
 
 /***************** arrangement event action **********************/

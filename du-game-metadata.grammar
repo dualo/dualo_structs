@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ufwb version="1.17">
-    <grammar name="du-game" start="id:2" author="Saubanere " fileextension="dumusic" uti="du-game">
-        <description>Grammar for du-music file format for du game</description>
-        <structure name="DUGAME file" id="2" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <grammarref name="s_total_buffer" id="3" filename="du-music.grammar"/>
-            <structref name="s_metadata" id="5" structure="id:4"/>
-        </structure>
+    <grammar name="du-game-metadata" start="id:7" author="Nicolas Kniebihler">
+        <description>Grammar for du-game metadata</description>
         <structure name="s_arrangement" id="7" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="as_grade" id="8" type="integer" length="4"/>
             <number name="as_numevent" id="9" type="integer" length="4"/>
@@ -34,32 +30,6 @@
         <structure name="s_arrangement_exit_condition" id="20" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="aec_type" id="33" type="integer" length="4"/>
             <number name="aec_value" id="34" type="integer" length="4"/>
-        </structure>
-        <structure name="Chunk" id="36" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <string name="SIGN" id="37" type="fixed-length" length="4"/>
-            <number name="Version" id="38" type="integer" length="4"/>
-            <number name="Size" id="39" type="integer" length="4"/>
-            <structure name="Data" id="40" length="previous.Size"/>
-        </structure>
-        <structure name="Metadata" id="4" extends="id:36">
-            <string name="SIGN" mustmatch="yes" id="43" type="fixed-length">
-                <fixedvalues>
-                    <fixedvalue name="" value="META"/>
-                </fixedvalues>
-            </string>
-            <structure name="Data" id="44" order="variable">
-                <structref name="Arrangement_Chunk" id="48" structure="id:47"/>
-            </structure>
-        </structure>
-        <structure name="Arrangement_Chunk" id="47" extends="id:36">
-            <string name="SIGN" mustmatch="yes" id="51" type="fixed-length">
-                <fixedvalues>
-                    <fixedvalue name="" value="GAME"/>
-                </fixedvalues>
-            </string>
-            <structure name="Data" id="52">
-                <structref name="Arrangement" id="55" structure="id:7"/>
-            </structure>
         </structure>
     </grammar>
 </ufwb>

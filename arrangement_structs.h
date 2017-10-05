@@ -101,20 +101,7 @@ typedef struct
 
 #define ARRANGEMENT_MSG_SIZE	(3*ARRANGEMENT_MSG_MAXSIZE)//96
 
-
 /***************** arrangement event **********************/
-//typedef struct
-//{
-//	s_arrangement_msg ae_intro_msg;
-//	s_arrangement_msg ae_intro_cmt;
-//
-//	s_arrangement_exit_condition ae_exit_condition; // num of loop player or result of test or none if we add it to the next event...
-//
-//	uint8_t s_arrangement_led[NUM_LED_VALUE];
-//
-//	uint32_t s_arrangement_nb_actions;
-//	s_arrangement_event_action *ae_actionlist;
-//} s_arrangement_event;
 
 typedef struct
 {
@@ -133,14 +120,6 @@ typedef struct
 
 /***************** arrangement struct **********************/
 #define ARRANGEMENT_MAXEVENT	256 //64
-
-//typedef struct
-//{
-//	uint32_t as_grade;
-//	uint32_t as_numevent;
-//	uint32_t as_currentevent;
-//	s_arrangement_event as_eventlist[ARRANGEMENT_MAXEVENT];
-//} s_arrangement;
 
 typedef struct
 {

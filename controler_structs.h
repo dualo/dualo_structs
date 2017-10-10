@@ -53,7 +53,8 @@ typedef struct
 	uint8_t	c_pressure_curve;
 	uint8_t	c_circle_time;
 	uint8_t c_midiout_keysens;
-	uint8_t dummy[5];
+	uint8_t c_mono_stereo;
+	uint8_t dummy[4];
 
 }param_controler;
 
@@ -85,6 +86,7 @@ enum{
 	CONTROLER_PRESSURECURVE,
 	CONTROLER_CIRCLETIME,
 	CONTROLER_MIDIOUTKEYSENSIBILITY,
+	CONTROLER_MONO_STEREO,
 };
 
 #define CONTROLER_PARAM_SIZE	32
@@ -201,4 +203,8 @@ typedef struct
 #define LED_DISPLAY_MINVALUE			0
 #define LED_DISPLAY_MAXVALUE			1
 #define LED_DISPLAY_DEFAULTVALUE		1
+
+#define MONO_STEREO_MINVALUE			0
+#define MONO_STEREO_MAXVALUE			1
+#define MONO_STEREO_DEFAULTVALUE		1
 #endif /* PARAMETERS_DUALO_STRUCTS_CONTROLER_STRUCTS_H_ */

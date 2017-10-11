@@ -8,8 +8,7 @@
 #ifndef DUGAME_STRUCTS_H_
 #define DUGAME_STRUCTS_H_
 
-#include "g_structs.h"
-#include "dualo_structs/arrangement_structs.h"
+#include "arrangement_structs.h"
 
 #ifdef __LPC177X_8X__
 #include "lpc_types.h"

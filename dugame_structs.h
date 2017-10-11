@@ -5,8 +5,8 @@
  *      Author: charly
  */
 
-#ifndef PARAMETERS_DUALO_STRUCTS_DUGAME_STRUCTS_H_
-#define PARAMETERS_DUALO_STRUCTS_DUGAME_STRUCTS_H_
+#ifndef DUGAME_STRUCTS_H_
+#define DUGAME_STRUCTS_H_
 
 #include "g_structs.h"
 #include "dualo_structs/arrangement_structs.h"
@@ -74,4 +74,4 @@ using namespace ArrangementStructs;
 
 #endif // __cplusplus
 
-#endif /* PARAMETERS_DUALO_STRUCTS_DUGAME_STRUCTS_H_ */
+#endif /* DUGAME_STRUCTS_H_ */

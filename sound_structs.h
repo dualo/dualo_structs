@@ -761,10 +761,7 @@ void init_dream_sp(dream_sp* sp_struct);
 #define	FX_DELAY_LEVEL_MAXVALUE			127
 #define	FX_DELAY_LEVEL_DEFAULTVALUE		50
 
-#define	FX_DELAY_TIME_MINVALUE			0
-#define	FX_DELAY_TIME_MAXVALUE			127
-#define	FX_DELAY_TIME_DEFAULTVALUE		20
-
+// d_time
 #define	FX_DELAY_BPM_MINVALUE			0
 #define	FX_DELAY_BPM_MAXVALUE			255
 #define	FX_DELAY_BPM_DEFAULTVALUE		81

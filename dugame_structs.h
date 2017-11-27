@@ -34,11 +34,15 @@ typedef struct
 	uint32_t dg_grade;
 	uint32_t dg_numevent;
 	uint32_t dg_currentevent;
+	uint32_t dg_unlocker_event;
+	uint32_t dg_version;
+	uint32_t dg_id;
+	uint32_t dummy[3];
 	s_dugame_sound dg_sound[MAX_DUGAME_SOUND];
 	s_arrangement_event *dg_eventlist;
 } s_dugame;
 
-#define DUGAME_HEADER		(4 + 4 + 4 + (DUGAME_SOUND_STRUCT_SIZE*MAX_DUGAME_SOUND))//52
+#define DUGAME_HEADER		((9*4) + (DUGAME_SOUND_STRUCT_SIZE*MAX_DUGAME_SOUND))//52
 
 
 #endif /* DUGAME_STRUCTS_H_ */

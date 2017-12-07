@@ -106,7 +106,11 @@ typedef struct
 typedef struct
 {
 	s_arrangement_msg ae_intro_msg;
-	s_arrangement_msg ae_intro_cmt;
+
+	uint8_t ae_wait_for_loop_start;
+
+	uint8_t ae_short_dummy[31];
+	uint32_t ae_long_dummy[16];
 
     uint32_t ae_nb_actions;
 	s_arrangement_event_action ae_actionlist[ARRANGEMENT_MAXEVENTACTION];

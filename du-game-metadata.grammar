@@ -17,30 +17,32 @@
         </structure>
         <structure name="s_arrangement_event" id="15" repeatmax="256" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <structref name="ae_intro_msg" id="19" structure="id:18"/>
-            <structref name="ae_intro_cmt" id="20" structure="id:18"/>
-            <number name="ae_nb_actions" id="21" type="integer" length="4"/>
-            <structref name="ae_actionlist" id="23" structure="id:22"/>
-            <structref name="ae_exit_condition" id="25" structure="id:24"/>
-            <number name="ae_led" id="26" repeatmin="32" repeatmax="32" type="integer" length="1"/>
+            <number name="ae_wait_for_loop_start" id="20" type="integer" length="1"/>
+            <binary name="ae_short_dummy" id="21" length="31"/>
+            <binary name="ae_long_dummy" id="22" length="64"/>
+            <number name="ae_nb_actions" id="23" type="integer" length="4"/>
+            <structref name="ae_actionlist" id="25" structure="id:24"/>
+            <structref name="ae_exit_condition" id="27" structure="id:26"/>
+            <number name="ae_led" id="28" repeatmin="32" repeatmax="32" type="integer" length="1"/>
         </structure>
         <structure name="s_arrangement_msg" id="18" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <string name="am_line1" id="28" type="fixed-length" length="32"/>
-            <string name="am_line2" id="29" type="fixed-length" length="32"/>
-            <string name="am_line3" id="30" type="fixed-length" length="32"/>
+            <string name="am_line1" id="30" type="fixed-length" length="32"/>
+            <string name="am_line2" id="31" type="fixed-length" length="32"/>
+            <string name="am_line3" id="32" type="fixed-length" length="32"/>
         </structure>
-        <structure name="s_arrangement_event_action" id="22" repeatmin="64" repeatmax="64" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="aea_type" id="32" type="integer" length="1"/>
-            <number name="aea_loop" id="33" type="integer" length="1"/>
-            <number name="aea_cmd" id="34" type="integer" length="1"/>
-            <number name="aea_value" id="35" type="integer" length="1"/>
+        <structure name="s_arrangement_event_action" id="24" repeatmin="64" repeatmax="64" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="aea_type" id="34" type="integer" length="1"/>
+            <number name="aea_loop" id="35" type="integer" length="1"/>
+            <number name="aea_cmd" id="36" type="integer" length="1"/>
+            <number name="aea_value" id="37" type="integer" length="1"/>
         </structure>
-        <structure name="s_arrangement_exit_condition" id="24" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="aec_type" id="37" type="integer" length="4"/>
-            <number name="aec_value" id="38" type="integer" length="4"/>
+        <structure name="s_arrangement_exit_condition" id="26" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="aec_type" id="39" type="integer" length="4"/>
+            <number name="aec_value" id="40" type="integer" length="4"/>
         </structure>
         <structure name="s_dugame_sound" id="13" repeatmin="5" repeatmax="5" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="dg_sound_id" id="40" type="integer" length="4"/>
-            <number name="dg_sound_user_id" id="41" type="integer" length="4"/>
+            <number name="dg_sound_id" id="42" type="integer" length="4"/>
+            <number name="dg_sound_user_id" id="43" type="integer" length="4"/>
         </structure>
     </grammar>
 </ufwb>

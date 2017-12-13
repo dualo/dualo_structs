@@ -74,7 +74,8 @@ enum
 typedef struct
 {
 	uint32_t aec_type;
-	uint32_t aec_value;
+	uint16_t aec_value_1;
+	uint16_t aec_value_2;
 } s_arrangement_exit_condition;
 
 #define ARRANGEMENT_EXITCONDITION_SIZE	8

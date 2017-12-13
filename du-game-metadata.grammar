@@ -38,11 +38,12 @@
         </structure>
         <structure name="s_arrangement_exit_condition" id="26" encoding="ISO_8859-1:1987" endian="little" signed="no">
             <number name="aec_type" id="39" type="integer" length="4"/>
-            <number name="aec_value" id="40" type="integer" length="4"/>
+            <number name="aec_value_1" id="40" type="integer" length="2"/>
+            <number name="aec_value_2" id="41" type="integer" length="2"/>
         </structure>
         <structure name="s_dugame_sound" id="13" repeatmin="5" repeatmax="5" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="dg_sound_id" id="42" type="integer" length="4"/>
-            <number name="dg_sound_user_id" id="43" type="integer" length="4"/>
+            <number name="dg_sound_id" id="43" type="integer" length="4"/>
+            <number name="dg_sound_user_id" id="44" type="integer" length="4"/>
         </structure>
     </grammar>
 </ufwb>

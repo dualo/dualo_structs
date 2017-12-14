@@ -67,7 +67,8 @@ enum
 {
 	AEA_CMD_STOP,
 	AEA_CMD_PLAY,
-	AEA_CMD_TEST,
+	AEA_CMD_TEST_STOP,
+	AEA_CMD_TEST_PLAY
 };
 
 /***************** arrangement exit condition **********************/

@@ -71,6 +71,13 @@ enum
 	AEA_CMD_TEST_PLAY
 };
 
+enum AEA_SCALE_TYPE
+{
+    AEA_SCALE_FROM_LOOP,
+    AEA_SCALE_FROM_MUSIC,
+    AEA_SCALE_FROM_SYSTEM_SOUND
+};
+
 /***************** arrangement exit condition **********************/
 typedef struct
 {
@@ -174,6 +181,7 @@ s_arrangement_event	arrangement_eventlist[] =
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
 Q_ENUM_NS(ARRANGEMENT_EVENTACTION)
+Q_ENUM_NS(AEA_SCALE_TYPE)
 Q_ENUM_NS(ARRANGEMENT_EXITCONDITION)
 #endif // QT_VERSION
 

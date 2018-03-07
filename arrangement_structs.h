@@ -73,9 +73,8 @@ enum
 
 enum AEA_SCALE_TYPE
 {
-    AEA_SCALE_FROM_LOOP,
     AEA_SCALE_FROM_MUSIC,
-    AEA_SCALE_FROM_SYSTEM_SOUND
+    AEA_SCALE_FROM_LEDS_MAPPING
 };
 
 /***************** arrangement exit condition **********************/

@@ -117,7 +117,11 @@ typedef struct
 
 	uint8_t ae_wait_for_loop_start;
 
-	uint8_t ae_short_dummy[31];
+	uint8_t ae_nextevent;
+	uint8_t ae_backwardevent;
+	uint8_t ae_forwardevent;
+
+	uint8_t ae_short_dummy[28];
 	uint32_t ae_long_dummy[16];
 
     uint32_t ae_nb_actions;

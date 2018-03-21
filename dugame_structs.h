@@ -46,7 +46,7 @@ typedef struct
 	s_arrangement_event *dg_eventlist;
 } s_dugame;
 
-#define DUGAME_HEADER		((9*4) + (DUGAME_SOUND_STRUCT_SIZE*MAX_DUGAME_SOUND))//52
+#define DUGAME_HEADER		((9*4) + (DUGAME_SOUND_STRUCT_SIZE*MAX_DUGAME_SOUND)) // 76
 
 
 enum DUGAME_MIGRATION_ERROR {

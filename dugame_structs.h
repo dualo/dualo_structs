@@ -33,8 +33,12 @@ typedef struct
 {
 	uint32_t dg_grade;
 	uint32_t dg_numevent;
-	uint32_t dg_currentevent;
-	uint32_t dg_unlocker_event;
+
+    uint16_t dg_currentevent;
+    uint16_t dg_first_star_event;
+    uint16_t dg_second_star_event;
+    uint16_t dg_third_star_event;
+
 	uint32_t dg_version;
 	uint32_t dg_id;
 	uint32_t dummy[3];

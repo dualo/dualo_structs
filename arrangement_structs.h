@@ -116,12 +116,13 @@ typedef struct
 	s_arrangement_msg ae_intro_msg;
 
 	uint8_t ae_wait_for_loop_start;
+	uint8_t align;
 
     uint16_t ae_nextevent;
     uint16_t ae_backwardevent;
     uint16_t ae_forwardevent;
 
-    uint8_t ae_short_dummy[25];
+    uint8_t ae_short_dummy[24];
 	uint32_t ae_long_dummy[16];
 
     uint32_t ae_nb_actions;

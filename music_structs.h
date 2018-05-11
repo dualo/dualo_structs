@@ -153,7 +153,8 @@ typedef struct
 #define MUSIC_METADATA_ADDR_SIZE    4
 
 
-#define RECORD_SAMPLEBUFFERSIZE	0x40000
+#define RECORD_SAMPLEBUFFERSIZE	0x10000
+
 
 typedef struct
 {

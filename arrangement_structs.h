@@ -116,7 +116,7 @@ typedef struct
 	s_arrangement_msg ae_intro_msg;
 
 	uint8_t ae_wait_for_loop_start;
-	uint8_t align;
+	uint8_t ae_reset_at_start;//Reset du-music at event's start
 
     uint16_t ae_nextevent;
     uint16_t ae_backwardevent;

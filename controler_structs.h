@@ -54,7 +54,8 @@ typedef struct
 	uint8_t	c_circle_time;
 	uint8_t c_midiout_keysens;
 	uint8_t c_mono_stereo;
-	uint8_t dummy[4];
+	uint8_t c_instr_page;
+	uint8_t dummy[3];
 
 }param_controler;
 

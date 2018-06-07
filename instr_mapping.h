@@ -27,7 +27,8 @@
 
 #define INSTR_NEWMAPPING	1 //1
 
-#define NUM_NOTE_MAP		32 //8//4
+#define NUM_NOTE_MAP_DTS_L		254//32 //8//4
+#define NUM_NOTE_MAP_DTPRO		32//32 //8//4
 
 #define DUSOUND_HW_VERSION	0
 #define DUSOUND_SW_VERSION	3 //0
@@ -110,6 +111,9 @@ typedef struct
 
 #define INSTR_PC_OFFSET         NAME_CARACT
 #define INSTR_PC_SIZE           1
+
+#define INSTR_KEY_MAP_OFFSET	NAME_CARACT + 2
+#define INSTR_KEYMAP        	1
 
 #define INSTR_USER_ID_OFFSET    INSTR_PC_OFFSET + 4
 #define INSTR_USER_ID_SIZE      4

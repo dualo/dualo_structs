@@ -55,7 +55,8 @@ typedef struct
 	uint8_t c_midiout_keysens;
 	uint8_t c_mono_stereo;
 	uint8_t c_instr_page;
-	uint8_t dummy[3];
+	uint8_t c_song_page;
+	uint8_t dummy[2];
 
 }param_controler;
 

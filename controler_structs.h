@@ -27,7 +27,7 @@ typedef struct
 	uint8_t	c_gyro_curve;
 	uint8_t	c_sliders_curve;
 
-	uint8_t c_instr;
+	uint8_t c_instr_old;
 	uint8_t c_midiout_mode;
 	uint8_t c_song;
 
@@ -54,7 +54,7 @@ typedef struct
 	uint8_t	c_circle_time;
 	uint8_t c_midiout_keysens;
 	uint8_t c_mono_stereo;
-	uint8_t dummy[4];
+	uint32_t c_instr;
 
 }param_controler;
 
@@ -161,7 +161,7 @@ typedef struct
 #define SLIDERS_CURVES_POINT			2048
 
 #define INSTRUMENT_MINVALUE				0
-#define INSTRUMENT_MAXVALUE				(2*NUM_INSTRU_KEYBOARD)
+#define INSTRUMENT_MAXVALUE				NB_INSTR-1
 #define INSTRUMENT_DEFAULTVALUE			68
 
 #define MIDIMODE_MINVALUE				0

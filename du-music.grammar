@@ -1,233 +1,260 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ufwb version="1.17">
-    <grammar name="du-music" start="id:6" author="Kniebihler Nicolas" fileextension="dumusic" uti="du-music">
+    <grammar name="du-music" start="id:7" author="Kniebihler Nicolas" fileextension="dumusic" uti="du-music">
         <description>Grammar for du-music file format</description>
-        <structure name="DUMUSIC file" id="6" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <structure name="s_total_buffer" id="7">
-                <structref name="local_song" id="9" structure="id:8"/>
-                <structref name="local_buffer" id="11" structure="id:10"/>
+        <structure name="DUMUSIC file" id="7" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <structure name="s_total_buffer" id="8">
+                <structref name="local_song" id="10" structure="id:9"/>
+                <structref name="local_buffer" id="12" structure="id:11"/>
+            </structure>
+            <structref name="s_metadata" id="15" structure="id:14"/>
+        </structure>
+        <structure name="music_song" id="9" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="s_version_music" id="17" type="integer" length="4"/>
+            <string name="s_original_sn" id="18" type="fixed-length" length="16"/>
+            <string name="s_original_name" id="19" type="fixed-length" length="16"/>
+            <string name="s_original_user" id="20" type="fixed-length" length="16"/>
+            <string name="s_original_userid" id="21" type="fixed-length" length="16"/>
+            <string name="s_modif_sn" id="22" type="fixed-length" length="16"/>
+            <string name="s_modif_name" id="23" type="fixed-length" length="16"/>
+            <string name="s_modif_user" id="24" type="fixed-length" length="16"/>
+            <string name="s_modif_userid" id="25" type="fixed-length" length="16"/>
+            <number name="s_size" id="26" type="integer" length="4"/>
+            <number name="s_metadata" id="27" type="integer" length="4"/>
+            <number name="s_playhead" id="28" type="integer" length="1"/>
+            <number name="s_transpose" id="29" type="integer" length="1"/>
+            <number name="s_state" id="30" type="integer" length="1"/>
+            <binary name="dummyheader" id="31" length="2"/>
+            <number name="s_direction_gyro_P" id="32" type="integer" length="1"/>
+            <number name="s_direction_gyro_R" id="33" type="integer" length="1"/>
+            <number name="s_direction_gyro_Y" id="34" type="integer" length="1"/>
+            <number name="s_activ_aftertouch" id="35" type="integer" length="2"/>
+            <number name="s_activ_slider_L" id="36" type="integer" length="2"/>
+            <number name="s_activ_slider_R" id="37" type="integer" length="2"/>
+            <number name="s_activ_gyro_P" id="38" type="integer" length="2"/>
+            <number name="s_activ_gyro_R" id="39" type="integer" length="2"/>
+            <number name="s_activ_gyro_Y" id="40" type="integer" length="2"/>
+            <number name="s_id" id="41" type="integer" length="4"/>
+            <string name="s_name" id="42" type="fixed-length" length="32"/>
+            <number name="s_version_song" id="43" type="integer" length="4"/>
+            <number name="s_volume" id="44" type="integer" length="1"/>
+            <number name="s_tempo" id="45" type="integer" length="1"/>
+            <number name="s_voltempo" id="46" type="integer" length="1"/>
+            <number name="s_reftrack" id="47" type="integer" length="1"/>
+            <number name="s_currenttrack" id="48" type="integer" length="1"/>
+            <number name="s_decaltempo" id="49" type="integer" length="1"/>
+            <number name="s_totalsample" id="50" type="integer" length="2"/>
+            <number name="s_looptimer" id="51" type="integer" length="4"/>
+            <structure name="s_leds" id="52" length="32">
+                <number name="s_led" id="53" repeatmax="-1" type="integer" length="1"/>
+            </structure>
+            <grammarref name="s_mix" id="55" filename="FX_mix.grammar"/>
+            <number name="s_quantification" id="56" type="integer" length="4"/>
+            <number name="s_displaynote" id="57" type="integer" length="1"/>
+            <number name="s_scaletonality" id="58" type="integer" length="1"/>
+            <number name="s_timesignature" id="59" type="integer" length="1"/>
+            <number name="s_reverb_preset" id="60" type="integer" length="1"/>
+            <grammarref name="s_reverb" id="61" filename="FX_reverb.grammar"/>
+            <structref name="s_track" id="63" structure="id:62"/>
+        </structure>
+        <structure name="music_sample" id="11" repeatmin="s_totalsample" repeatmax="s_totalsample" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="time" id="65" type="integer" length="4"/>
+            <number name="control" id="66" type="integer" length="1"/>
+            <number name="canal" id="67" type="integer" length="1"/>
+            <number name="note" id="68" type="integer" length="1"/>
+            <number name="value" id="69" type="integer" length="1"/>
+        </structure>
+        <structure name="music_track" id="62" repeatmin="7" repeatmax="7" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="t_midichannel" id="71" type="integer" length="1"/>
+            <number name="t_currentloop" id="72" type="integer" length="1"/>
+            <binary name="dummy" id="73" repeatmin="2" repeatmax="2" length="1"/>
+            <structref name="t_loop" id="75" structure="id:74"/>
+        </structure>
+        <structure name="music_loop" id="74" repeatmin="4" repeatmax="4" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="l_state" id="77" type="integer" length="1"/>
+            <number name="l_loopmod" id="78" type="integer" length="1"/>
+            <number name="l_learn" id="79" type="integer" length="1"/>
+            <number name="l_midioutchannel" id="80" type="integer" length="1"/>
+            <number name="l_savelooptimer" id="81" type="integer" length="4"/>
+            <structref name="l_instr_old" id="83" repeatmin="below(s_version_music, 3)" repeatmax="below(s_version_music, 3)" structure="id:82"/>
+            <structref name="l_instr" id="85" repeatmin="above(s_version_music, 2)" repeatmax="above(s_version_music, 2)" structure="id:84"/>
+            <binary name="l_adress" id="86" length="4"/>
+            <number name="l_numsample" id="87" type="integer" length="2"/>
+            <binary name="dummy2" id="88" repeatmin="2" repeatmax="2" length="1"/>
+        </structure>
+        <structure name="music_instr" id="84" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <grammarref name="i_instrument" id="90" filename="info_instr.grammar"/>
+            <grammarref name="i_preset" id="91" filename="preset_instr.grammar"/>
+        </structure>
+        <structure name="music_instr_old" id="82" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <grammarref name="i_instrument" id="93" filename="info_instr.grammar"/>
+            <structref name="i_preset" id="95" structure="id:94"/>
+            <grammarref name="i_mix" id="96" filename="FX_mix.grammar"/>
+            <structref name="i_distortion" id="98" structure="id:97"/>
+            <binary name="dummy0" id="99" length="16"/>
+            <structref name="i_compressor" id="101" structure="id:100"/>
+            <structref name="i_equalizer" id="103" structure="id:102"/>
+            <structref name="i_delay" id="105" structure="id:104"/>
+            <structref name="i_chorus" id="107" structure="id:106"/>
+            <binary name="dummy1" id="108" length="16"/>
+            <binary name="dummy2" id="109" length="18"/>
+        </structure>
+        <structure name="preset_instr_old" id="94" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no" fillcolor="FF96E1">
+            <structure name="fx_structs" id="111" length="0">
+                <number name="s_volume" id="112" type="integer" length="1"/>
+                <number name="s_panning" id="113" type="integer" length="1"/>
+                <number name="s_sendtorev" id="114" type="integer" length="1"/>
+                <number name="s_instr_octave" id="115" type="integer" length="1"/>
+                <number name="s_portamento_on_off" id="116" type="integer" length="1"/>
+                <number name="s_portamento_ctrl" id="117" type="integer" length="1"/>
+                <number name="s_portamento_time" id="118" type="integer" length="1"/>
+                <number name="s_expression" id="119" type="integer" length="1"/>
+                <number name="s_pitch_bend_sensitivity" id="120" type="integer" length="1"/>
+                <number name="s_key_curve" id="121" type="integer" length="1"/>
+                <binary name="dummy0" id="122" length="1"/>
+                <number name="s_compressor_preset" id="123" type="integer" length="1"/>
+                <number name="s_delay_preset" id="124" type="integer" length="1"/>
+                <number name="s_distortion_preset" id="125" type="integer" length="1"/>
+                <number name="s_eq_preset" id="126" type="integer" length="1"/>
+                <number name="s_chorus_preset" id="127" type="integer" length="1"/>
+                <binary name="dummy1" id="128" length="1"/>
+                <binary name="dummy2" id="129" length="1"/>
+                <number name="s_arpegiator_type" id="130" type="integer" length="1"/>
+                <number name="s_arpegiator_beat" id="131" type="integer" length="1"/>
+            </structure>
+            <binary name="align0" id="133" length="1"/>
+            <structure name="controllers" id="134" length="0">
+                <number name="s_direction_gyro_P" id="135" type="integer" length="1" signed="yes"/>
+                <number name="s_direction_gyro_R" id="136" type="integer" length="1" signed="yes"/>
+                <number name="s_direction_gyro_Y" id="137" type="integer" length="1" signed="yes"/>
+                <number name="s_activ_aftertouch" id="138" type="integer" length="2"/>
+                <number name="s_activ_slider_L" id="139" type="integer" length="2"/>
+                <number name="s_activ_slider_R" id="140" type="integer" length="2"/>
+                <number name="s_activ_gyro_P" id="141" type="integer" length="2"/>
+                <number name="s_activ_gyro_R" id="142" type="integer" length="2"/>
+                <number name="s_activ_gyro_Y" id="143" type="integer" length="2"/>
+            </structure>
+            <structure name="fx_enable" id="145" length="0">
+                <binary name="dummy3" id="146" length="1"/>
+                <number name="s_compressor_onoff" id="147" type="integer" length="1"/>
+                <number name="s_delay_onoff" id="148" type="integer" length="1"/>
+                <number name="s_distortion_onoff" id="149" type="integer" length="1"/>
+                <number name="s_eq_onoff" id="150" type="integer" length="1"/>
+                <number name="s_chorus_onoff" id="151" type="integer" length="1"/>
+                <number name="s_reverb_onoff" id="152" type="integer" length="1"/>
+                <binary name="dummy5" id="153" length="1"/>
+            </structure>
+            <binary name="align1" id="155" length="11"/>
+            <structure name="lfo" id="156" length="0">
+                <number name="s_multinote_act" id="157" type="integer" length="1"/>
+                <number name="s_multinote" id="158" repeatmin="4" repeatmax="4" type="integer" length="1" signed="yes"/>
+                <number name="s_pitch" id="159" type="integer" length="1"/>
+                <number name="s_autopitch_rate" id="160" type="integer" length="1"/>
+                <number name="s_autopitch_range" id="161" type="integer" length="1"/>
+                <number name="s_tremolo_rate" id="162" type="integer" length="1"/>
+                <number name="s_tremolo_range" id="163" type="integer" length="1"/>
+                <number name="s_autopan_rate" id="164" type="integer" length="1"/>
+                <number name="s_autopan_range" id="165" type="integer" length="1"/>
+                <number name="s_autowah_rate" id="166" type="integer" length="1"/>
+                <number name="s_autowah_range" id="167" type="integer" length="1"/>
+            </structure>
+            <structure name="adsr" id="169">
+                <number name="s_adsr_attack" id="170" type="integer" length="1"/>
+                <number name="s_adsr_release" id="171" type="integer" length="1"/>
+            </structure>
+            <structure name="wah" id="173">
+                <number name="s_wah_type" id="174" type="integer" length="1"/>
+                <number name="s_wah_freq" id="175" type="integer" length="1"/>
+                <number name="s_wah_res" id="176" type="integer" length="1"/>
+            </structure>
+            <binary name="align2" id="178" length="54"/>
+        </structure>
+        <structure name="FX_distortion_old" id="97" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="d_on_off" id="180" type="integer" length="1"/>
+            <number name="d_pre_gain" id="181" type="integer" length="1"/>
+            <number name="d_type" id="182" type="integer" length="1"/>
+            <number name="d_lowpassfilterfreq" id="183" type="integer" length="1"/>
+            <number name="d_lowpassfilterres" id="184" type="integer" length="1"/>
+            <number name="d_postgain" id="185" type="integer" length="1"/>
+            <number name="d_drive" id="186" type="integer" length="1"/>
+            <binary name="d_dummy" id="187" length="1"/>
+            <string name="d_name" id="188" type="fixed-length" length="12"/>
+        </structure>
+        <structure name="FX_compressor_old" id="100" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="c_on_off" id="190" type="integer" length="1"/>
+            <number name="c_attacktime" id="191" type="integer" length="1"/>
+            <number name="c_releasetime" id="192" type="integer" length="1"/>
+            <number name="c_threshold" id="193" type="integer" length="1"/>
+            <number name="c_ratio" id="194" type="integer" length="1"/>
+            <number name="c_boost" id="195" type="integer" length="1"/>
+            <number name="c_kneetype" id="196" type="integer" length="1"/>
+            <binary name="c_dummy" id="197" length="1"/>
+            <string name="c_name" id="198" type="fixed-length" length="12"/>
+        </structure>
+        <structure name="FX_equalizer_gen" id="102" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="e_on_off" id="200" type="integer" length="1"/>
+            <number name="e_lowbandgain" id="201" type="integer" length="1"/>
+            <number name="e_lowmidbandgain" id="202" type="integer" length="1"/>
+            <number name="e_highmidbandgain" id="203" type="integer" length="1"/>
+            <number name="e_highbandgain" id="204" type="integer" length="1"/>
+            <number name="e_lowbandfrequency" id="205" type="integer" length="1"/>
+            <number name="e_lowmidbandfrequency" id="206" type="integer" length="1"/>
+            <number name="e_highmidbandfrequency" id="207" type="integer" length="1"/>
+            <number name="e_highbandfrequency" id="208" type="integer" length="1"/>
+            <number name="e_lowmidbandQ" id="209" type="integer" length="1"/>
+            <number name="e_highmidbandQ" id="210" type="integer" length="1"/>
+            <binary name="e_dummy" id="211" length="1"/>
+            <string name="e_name" id="212" type="fixed-length" length="12"/>
+        </structure>
+        <structure name="FX_delay_old" id="104" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="d_on_off" id="214" type="integer" length="1"/>
+            <number name="d_mode" id="215" type="integer" length="1"/>
+            <number name="d_prelp" id="216" type="integer" length="1"/>
+            <number name="d_level" id="217" type="integer" length="1"/>
+            <number name="d_time" id="218" type="integer" length="1"/>
+            <number name="d_feedback" id="219" type="integer" length="1"/>
+            <number name="d_hdamp" id="220" type="integer" length="1"/>
+            <binary name="d_dummy" id="221" length="1"/>
+            <string name="d_name" id="222" type="fixed-length" length="12"/>
+        </structure>
+        <structure name="FX_chorus_old" id="106" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="c_mode" id="224" type="integer" length="1"/>
+            <number name="c_effectlevel" id="225" type="integer" length="1"/>
+            <number name="c_delaytime" id="226" type="integer" length="1"/>
+            <number name="c_feedback" id="227" type="integer" length="1"/>
+            <number name="c_inputhighpassfilter" id="228" type="integer" length="1"/>
+            <number name="c_hdamp" id="229" type="integer" length="1"/>
+            <number name="c_modulationdepth" id="230" type="integer" length="1"/>
+            <number name="c_modulationrate" id="231" type="integer" length="1"/>
+            <number name="c_tremoloshape" id="232" type="integer" length="1"/>
+            <number name="c_rotaryspeed" id="233" type="integer" length="1"/>
+            <string name="c_name" id="234" type="fixed-length" length="12"/>
+        </structure>
+        <structure name="Chunk" id="236" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <string name="SIGN" id="237" type="fixed-length" length="4"/>
+            <number name="Version" id="238" type="integer" length="4"/>
+            <number name="Size" id="239" type="integer" length="4"/>
+            <structure name="Data" id="240" length="Size"/>
+        </structure>
+        <structure name="Metadata" id="14" extends="id:236">
+            <string name="SIGN" mustmatch="yes" id="243" type="fixed-length">
+                <fixedvalues>
+                    <fixedvalue name="" value="META"/>
+                </fixedvalues>
+            </string>
+            <structure name="Data" id="244" order="variable">
+                <structref name="Arrangement_Chunk" id="248" structure="id:247"/>
             </structure>
         </structure>
-        <structure name="music_song" id="8" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="s_version_music" id="14" type="integer" length="4"/>
-            <string name="s_original_sn" id="15" type="fixed-length" length="16"/>
-            <string name="s_original_name" id="16" type="fixed-length" length="16"/>
-            <string name="s_original_user" id="17" type="fixed-length" length="16"/>
-            <string name="s_original_userid" id="18" type="fixed-length" length="16"/>
-            <string name="s_modif_sn" id="19" type="fixed-length" length="16"/>
-            <string name="s_modif_name" id="20" type="fixed-length" length="16"/>
-            <string name="s_modif_user" id="21" type="fixed-length" length="16"/>
-            <string name="s_modif_userid" id="22" type="fixed-length" length="16"/>
-            <number name="s_size" id="23" type="integer" length="4"/>
-            <number name="s_metadata" id="24" type="integer" length="4"/>
-            <number name="s_playhead" id="25" type="integer" length="1"/>
-            <number name="s_transpose" id="26" type="integer" length="1"/>
-            <number name="s_state" id="27" type="integer" length="1"/>
-            <binary name="dummyheader" id="28" length="2"/>
-            <number name="s_direction_gyro_P" id="29" type="integer" length="1"/>
-            <number name="s_direction_gyro_R" id="30" type="integer" length="1"/>
-            <number name="s_direction_gyro_Y" id="31" type="integer" length="1"/>
-            <number name="s_activ_aftertouch" id="32" type="integer" length="2"/>
-            <number name="s_activ_slider_L" id="33" type="integer" length="2"/>
-            <number name="s_activ_slider_R" id="34" type="integer" length="2"/>
-            <number name="s_activ_gyro_P" id="35" type="integer" length="2"/>
-            <number name="s_activ_gyro_R" id="36" type="integer" length="2"/>
-            <number name="s_activ_gyro_Y" id="37" type="integer" length="2"/>
-            <number name="s_id" id="38" type="integer" length="4"/>
-            <string name="s_name" id="39" type="fixed-length" length="32"/>
-            <number name="s_version_song" id="40" type="integer" length="4"/>
-            <number name="s_volume" id="41" type="integer" length="1"/>
-            <number name="s_tempo" id="42" type="integer" length="1"/>
-            <number name="s_voltempo" id="43" type="integer" length="1"/>
-            <number name="s_reftrack" id="44" type="integer" length="1"/>
-            <number name="s_currenttrack" id="45" type="integer" length="1"/>
-            <number name="s_decaltempo" id="46" type="integer" length="1"/>
-            <number name="s_totalsample" id="47" type="integer" length="2"/>
-            <number name="s_looptimer" id="48" type="integer" length="4"/>
-            <structure name="s_leds" id="49" length="32">
-                <number name="s_led" id="50" repeatmax="-1" type="integer" length="1"/>
+        <structure name="Arrangement_Chunk" id="247" extends="id:236">
+            <string name="SIGN" mustmatch="yes" id="251" type="fixed-length">
+                <fixedvalues>
+                    <fixedvalue name="" value="GAME"/>
+                </fixedvalues>
+            </string>
+            <structure name="Data" id="252">
+                <grammarref name="data" id="255" filename="du-game-metadata.grammar"/>
             </structure>
-            <grammarref name="s_mix" id="52" filename="FX_mix.grammar"/>
-            <number name="s_quantification" id="53" type="integer" length="4"/>
-            <number name="s_displaynote" id="54" type="integer" length="1"/>
-            <number name="s_scaletonality" id="55" type="integer" length="1"/>
-            <number name="s_timesignature" id="56" type="integer" length="1"/>
-            <number name="s_reverb_preset" id="57" type="integer" length="1"/>
-            <grammarref name="s_reverb" id="444" filename="FX_reverb.grammar"/>
-            <structref name="s_track" id="61" structure="id:60"/>
-        </structure>
-        <structure name="music_sample" id="10" repeatmin="s_totalsample" repeatmax="s_totalsample" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="time" id="63" type="integer" length="4"/>
-            <number name="control" id="64" type="integer" length="1"/>
-            <number name="canal" id="65" type="integer" length="1"/>
-            <number name="note" id="66" type="integer" length="1"/>
-            <number name="value" id="67" type="integer" length="1"/>
-        </structure>
-        <structure name="music_track" id="60" repeatmin="7" repeatmax="7" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="t_midichannel" id="83" type="integer" length="1"/>
-            <number name="t_currentloop" id="84" type="integer" length="1"/>
-            <binary name="dummy" id="85" repeatmin="2" repeatmax="2" length="1"/>
-            <structref name="t_loop" id="87" structure="id:86"/>
-        </structure>
-        <structure name="music_loop" id="86" repeatmin="4" repeatmax="4" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="l_state" id="89" type="integer" length="1"/>
-            <number name="l_loopmod" id="90" type="integer" length="1"/>
-            <number name="l_learn" id="91" type="integer" length="1"/>
-            <number name="l_midioutchannel" id="92" type="integer" length="1"/>
-            <number name="l_savelooptimer" id="93" type="integer" length="4"/>
-            <structref name="l_instr_old" id="95" repeatmin="below(s_version_music, 3)" repeatmax="below(s_version_music, 3)" structure="id:94"/>
-            <structref name="l_instr" id="97" repeatmin="above(s_version_music, 2)" repeatmax="above(s_version_music, 2)" structure="id:96"/>
-            <binary name="l_adress" id="98" length="4"/>
-            <number name="l_numsample" id="99" type="integer" length="2"/>
-            <binary name="dummy2" id="100" repeatmin="2" repeatmax="2" length="1"/>
-        </structure>
-        <structure name="music_instr" id="96" length="0" alignment="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <grammarref name="i_instrument" id="102" filename="info_instr.grammar"/>
-            <grammarref name="i_preset" id="103" filename="preset_instr.grammar"/>
-        </structure>
-        <structure name="music_instr_old" id="94" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <grammarref name="i_instrument" id="105" filename="info_instr.grammar"/>
-            <structref name="i_preset" id="107" structure="id:106"/>
-            <grammarref name="i_mix" id="108" filename="FX_mix.grammar"/>
-            <structref name="i_distortion" id="110" structure="id:109"/>
-            <binary name="dummy0" id="111" length="16"/>
-            <structref name="i_compressor" id="113" structure="id:112"/>
-            <structref name="i_equalizer" id="115" structure="id:114"/>
-            <structref name="i_delay" id="117" structure="id:116"/>
-            <structref name="i_chorus" id="119" structure="id:118"/>
-            <binary name="dummy1" id="120" length="16"/>
-            <binary name="dummy2" id="121" length="18"/>
-        </structure>
-        <structure name="preset_instr_old" id="106" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no" fillcolor="FF96E1">
-            <structure name="fx_structs" id="123" length="0">
-                <number name="s_volume" id="124" type="integer" length="1"/>
-                <number name="s_panning" id="125" type="integer" length="1"/>
-                <number name="s_sendtorev" id="126" type="integer" length="1"/>
-                <number name="s_instr_octave" id="127" type="integer" length="1"/>
-                <number name="s_portamento_on_off" id="128" type="integer" length="1"/>
-                <number name="s_portamento_ctrl" id="129" type="integer" length="1"/>
-                <number name="s_portamento_time" id="130" type="integer" length="1"/>
-                <number name="s_expression" id="131" type="integer" length="1"/>
-                <number name="s_pitch_bend_sensitivity" id="132" type="integer" length="1"/>
-                <number name="s_key_curve" id="133" type="integer" length="1"/>
-                <binary name="dummy0" id="134" length="1"/>
-                <number name="s_compressor_preset" id="135" type="integer" length="1"/>
-                <number name="s_delay_preset" id="136" type="integer" length="1"/>
-                <number name="s_distortion_preset" id="137" type="integer" length="1"/>
-                <number name="s_eq_preset" id="138" type="integer" length="1"/>
-                <number name="s_chorus_preset" id="139" type="integer" length="1"/>
-                <binary name="dummy1" id="140" length="1"/>
-                <binary name="dummy2" id="141" length="1"/>
-                <number name="s_arpegiator_type" id="142" type="integer" length="1"/>
-                <number name="s_arpegiator_beat" id="143" type="integer" length="1"/>
-            </structure>
-            <binary name="align0" id="145" length="1"/>
-            <structure name="controllers" id="146" length="0">
-                <number name="s_direction_gyro_P" id="147" type="integer" length="1" signed="yes"/>
-                <number name="s_direction_gyro_R" id="148" type="integer" length="1" signed="yes"/>
-                <number name="s_direction_gyro_Y" id="149" type="integer" length="1" signed="yes"/>
-                <number name="s_activ_aftertouch" id="150" type="integer" length="2"/>
-                <number name="s_activ_slider_L" id="151" type="integer" length="2"/>
-                <number name="s_activ_slider_R" id="152" type="integer" length="2"/>
-                <number name="s_activ_gyro_P" id="153" type="integer" length="2"/>
-                <number name="s_activ_gyro_R" id="154" type="integer" length="2"/>
-                <number name="s_activ_gyro_Y" id="155" type="integer" length="2"/>
-            </structure>
-            <structure name="fx_enable" id="157" length="0">
-                <binary name="dummy3" id="158" length="1"/>
-                <number name="s_compressor_onoff" id="159" type="integer" length="1"/>
-                <number name="s_delay_onoff" id="160" type="integer" length="1"/>
-                <number name="s_distortion_onoff" id="161" type="integer" length="1"/>
-                <number name="s_eq_onoff" id="162" type="integer" length="1"/>
-                <number name="s_chorus_onoff" id="163" type="integer" length="1"/>
-                <number name="s_reverb_onoff" id="164" type="integer" length="1"/>
-                <binary name="dummy5" id="165" length="1"/>
-            </structure>
-            <binary name="align1" id="167" length="11"/>
-            <structure name="lfo" id="168" length="0">
-                <number name="s_multinote_act" id="169" type="integer" length="1"/>
-                <number name="s_multinote" id="170" repeatmin="4" repeatmax="4" type="integer" length="1" signed="yes"/>
-                <number name="s_pitch" id="171" type="integer" length="1"/>
-                <number name="s_autopitch_rate" id="172" type="integer" length="1"/>
-                <number name="s_autopitch_range" id="173" type="integer" length="1"/>
-                <number name="s_tremolo_rate" id="174" type="integer" length="1"/>
-                <number name="s_tremolo_range" id="175" type="integer" length="1"/>
-                <number name="s_autopan_rate" id="176" type="integer" length="1"/>
-                <number name="s_autopan_range" id="177" type="integer" length="1"/>
-                <number name="s_autowah_rate" id="178" type="integer" length="1"/>
-                <number name="s_autowah_range" id="179" type="integer" length="1"/>
-            </structure>
-            <structure name="adsr" id="181">
-                <number name="s_adsr_attack" id="182" type="integer" length="1"/>
-                <number name="s_adsr_release" id="183" type="integer" length="1"/>
-            </structure>
-            <structure name="wah" id="185">
-                <number name="s_wah_type" id="186" type="integer" length="1"/>
-                <number name="s_wah_freq" id="187" type="integer" length="1"/>
-                <number name="s_wah_res" id="188" type="integer" length="1"/>
-            </structure>
-            <binary name="align2" id="190" length="54"/>
-        </structure>
-        <structure name="FX_distortion_old" id="109" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="d_on_off" id="192" type="integer" length="1"/>
-            <number name="d_pre_gain" id="193" type="integer" length="1"/>
-            <number name="d_type" id="194" type="integer" length="1"/>
-            <number name="d_lowpassfilterfreq" id="195" type="integer" length="1"/>
-            <number name="d_lowpassfilterres" id="196" type="integer" length="1"/>
-            <number name="d_postgain" id="197" type="integer" length="1"/>
-            <number name="d_drive" id="198" type="integer" length="1"/>
-            <binary name="d_dummy" id="199" length="1"/>
-            <string name="d_name" id="200" type="fixed-length" length="12"/>
-        </structure>
-        <structure name="FX_compressor_old" id="112" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="c_on_off" id="202" type="integer" length="1"/>
-            <number name="c_attacktime" id="203" type="integer" length="1"/>
-            <number name="c_releasetime" id="204" type="integer" length="1"/>
-            <number name="c_threshold" id="205" type="integer" length="1"/>
-            <number name="c_ratio" id="206" type="integer" length="1"/>
-            <number name="c_boost" id="207" type="integer" length="1"/>
-            <number name="c_kneetype" id="208" type="integer" length="1"/>
-            <binary name="c_dummy" id="209" length="1"/>
-            <string name="c_name" id="210" type="fixed-length" length="12"/>
-        </structure>
-        <structure name="FX_equalizer_gen" id="114" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="e_on_off" id="212" type="integer" length="1"/>
-            <number name="e_lowbandgain" id="213" type="integer" length="1"/>
-            <number name="e_lowmidbandgain" id="214" type="integer" length="1"/>
-            <number name="e_highmidbandgain" id="215" type="integer" length="1"/>
-            <number name="e_highbandgain" id="216" type="integer" length="1"/>
-            <number name="e_lowbandfrequency" id="217" type="integer" length="1"/>
-            <number name="e_lowmidbandfrequency" id="218" type="integer" length="1"/>
-            <number name="e_highmidbandfrequency" id="219" type="integer" length="1"/>
-            <number name="e_highbandfrequency" id="220" type="integer" length="1"/>
-            <number name="e_lowmidbandQ" id="221" type="integer" length="1"/>
-            <number name="e_highmidbandQ" id="222" type="integer" length="1"/>
-            <binary name="e_dummy" id="223" length="1"/>
-            <string name="e_name" id="224" type="fixed-length" length="12"/>
-        </structure>
-        <structure name="FX_delay_old" id="116" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="d_on_off" id="226" type="integer" length="1"/>
-            <number name="d_mode" id="227" type="integer" length="1"/>
-            <number name="d_prelp" id="228" type="integer" length="1"/>
-            <number name="d_level" id="229" type="integer" length="1"/>
-            <number name="d_time" id="230" type="integer" length="1"/>
-            <number name="d_feedback" id="231" type="integer" length="1"/>
-            <number name="d_hdamp" id="232" type="integer" length="1"/>
-            <binary name="d_dummy" id="233" length="1"/>
-            <string name="d_name" id="234" type="fixed-length" length="12"/>
-        </structure>
-        <structure name="FX_chorus_old" id="118" encoding="ISO_8859-1:1987" endian="little" signed="no">
-            <number name="c_mode" id="236" type="integer" length="1"/>
-            <number name="c_effectlevel" id="237" type="integer" length="1"/>
-            <number name="c_delaytime" id="238" type="integer" length="1"/>
-            <number name="c_feedback" id="239" type="integer" length="1"/>
-            <number name="c_inputhighpassfilter" id="240" type="integer" length="1"/>
-            <number name="c_hdamp" id="241" type="integer" length="1"/>
-            <number name="c_modulationdepth" id="242" type="integer" length="1"/>
-            <number name="c_modulationrate" id="243" type="integer" length="1"/>
-            <number name="c_tremoloshape" id="244" type="integer" length="1"/>
-            <number name="c_rotaryspeed" id="245" type="integer" length="1"/>
-            <string name="c_name" id="246" type="fixed-length" length="12"/>
         </structure>
     </grammar>
 </ufwb>

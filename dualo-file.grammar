@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.17">
+    <grammar name="dualo file" start="id:7" author="Kniebihler Nicolas" email="nicolas.kniebihler@dualo.org" fileextension="dumusic, dugame, dusound">
+        <description>Grammar for dualo files (du-musics, du-sounds and du-games)</description>
+        <structure name="BUNDLE" id="7" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <structref name="Header" id="9" structure="id:8"/>
+            <structref name="du-music" id="11" structure="id:10"/>
+            <structref name="du-sound" id="13" repeatmin="0" repeatmax="-1" structure="id:12"/>
+            <structref name="system du-sound" id="15" repeatmin="0" repeatmax="-1" structure="id:14"/>
+        </structure>
+        <structure name="Header" id="8" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <string name="signature" mustmatch="yes" id="17" type="fixed-length" length="4">
+                <fixedvalues>
+                    <fixedvalue name="du-music" value="DUMB"/>
+                    <fixedvalue name="du-game" value="DUGM"/>
+                </fixedvalues>
+            </string>
+            <number name="version" id="18" type="integer" length="4"/>
+        </structure>
+        <structure name="Chunk" id="20" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <string name="type" id="21" type="fixed-length" length="4"/>
+            <number name="length" id="22" type="integer" length="4"/>
+            <structure name="data" id="23" length="length"/>
+            <binary name="CRC" id="25" length="2"/>
+        </structure>
+        <structure name="du-music" id="10" extends="id:20">
+            <string name="type" mustmatch="yes" id="27" type="fixed-length">
+                <fixedvalues>
+                    <fixedvalue name="du-music" value="DMSC"/>
+                </fixedvalues>
+            </string>
+            <structure name="data" id="28">
+                <grammarref name="data" id="30" filename="du-music.grammar"/>
+            </structure>
+        </structure>
+        <structure name="du-sound" id="12" extends="id:20">
+            <string name="type" mustmatch="yes" id="34" type="fixed-length">
+                <fixedvalues>
+                    <fixedvalue name="du-sound" value="DSND"/>
+                </fixedvalues>
+            </string>
+            <structure name="data" id="35">
+                <grammarref name="data" id="37" filename="du-sound.grammar"/>
+            </structure>
+        </structure>
+        <structure name="system du-sound" id="14" extends="id:12">
+            <string name="type" id="41" type="fixed-length">
+                <fixedvalues>
+                    <fixedvalue name="system du-sound" value="SDSM"/>
+                </fixedvalues>
+            </string>
+        </structure>
+    </grammar>
+</ufwb>

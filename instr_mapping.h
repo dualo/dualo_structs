@@ -27,13 +27,32 @@
 
 #define INSTR_NEWMAPPING	1 //1
 
-#define NUM_NOTE_MAP		32 //8//4
+#define NUM_NOTE_MAP_DTS_L		254//32 //8//4
+#define NUM_NOTE_MAP_DTPRO		32//32 //8//4
 
 #define DUSOUND_HW_VERSION	0
 #define DUSOUND_SW_VERSION	3 //0
 #define MAX_MIGRATABLE_DUSOUND_VERSION_BY_DT	2
 
 #define INSTRUMENT_MAPPING_MAX  31
+
+
+#ifdef __cplusplus
+#include <QMetaObject>
+#include <QtGlobal>
+
+// inline namespaces not handled before MSVC 14.0 (Visual Studio 2015)
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+inline
+#endif // _MSC_VER
+namespace InstrMapping {
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+Q_NAMESPACE
+#endif // QT_VERSION
+
+#endif // __cplusplus
+
 
 // structure
 enum INSTRUMENT_TYPE {
@@ -42,6 +61,23 @@ enum INSTRUMENT_TYPE {
 	INSTR_SAMPLE,
 	NUM_INSTR_TYPE
 };
+
+
+#ifdef __cplusplus
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+Q_ENUM_NS(INSTRUMENT_TYPE)
+#endif // QT_VERSION
+
+} // namespace InstrMapping
+
+// inline namespaces not handled before MSVC 14.0 (Visual Studio 2015)
+#if defined(_MSC_VER) && _MSC_VER < 1900
+using namespace InstrMapping;
+#endif // _MSC_VER
+
+#endif // __cplusplus
+
 
 #if 0
 typedef struct
@@ -111,19 +147,22 @@ typedef struct
 #define INSTR_PC_OFFSET         NAME_CARACT
 #define INSTR_PC_SIZE           1
 
+#define INSTR_KEY_MAP_OFFSET	NAME_CARACT + 2
+#define INSTR_KEYMAP        	1
+
 #define INSTR_USER_ID_OFFSET    INSTR_PC_OFFSET + 4
 #define INSTR_USER_ID_SIZE      4
 
-#define INSTR_ID_OFFSET         INSTR_USER_ID_OFFSET + 4
+#define INSTR_ID_OFFSET         (INSTR_USER_ID_OFFSET + 4)
 #define INSTR_ID_SIZE           4
 
-#define INSTR_FORMAT_ID_OFFSET  INSTR_ID_OFFSET + 2*4 + 1 + NAME_CARACT + 1
+#define INSTR_FORMAT_ID_OFFSET  (INSTR_ID_OFFSET + 2*4 + 1 + NAME_CARACT + 1)
 #define INSTR_FORMAT_ID_SIZE    1
 
-#define INSTR_TYPE_OFFSET       INSTR_FORMAT_ID_OFFSET + 2 + 2*2 + 4
+#define INSTR_TYPE_OFFSET       (INSTR_FORMAT_ID_OFFSET + 2 + 2*2 + 4)
 #define INSTR_TYPE_SIZE         1
 
-#define INSTR_VERSION_OFFSET    INSTR_TYPE_OFFSET + 4 + 2*2
+#define INSTR_VERSION_OFFSET    (INSTR_TYPE_OFFSET + 4 + 2*2)
 #define INSTR_VERSION_SIZE      4
 
 #endif
